@@ -1,0 +1,8 @@
+bin\Debug\USBCAN.exe
+bin\Debug\USBCAN.pdb
+obj\Debug\ResolveAssemblyReference.cache
+obj\Debug\USBCAN.Form1.resources
+obj\Debug\USBCAN.Properties.Resources.resources
+obj\Debug\USBCAN.csproj.GenerateResource.Cache
+obj\Debug\USBCAN.exe
+obj\Debug\USBCAN.pdb

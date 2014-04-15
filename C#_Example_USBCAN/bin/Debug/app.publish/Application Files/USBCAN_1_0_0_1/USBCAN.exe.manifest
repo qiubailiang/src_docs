@@ -1,0 +1,70 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<asmv1:assembly xsi:schemaLocation="urn:schemas-microsoft-com:asm.v1 assembly.adaptive.xsd" manifestVersion="1.0" xmlns:asmv3="urn:schemas-microsoft-com:asm.v3" xmlns:dsig="http://www.w3.org/2000/09/xmldsig#" xmlns:co.v2="urn:schemas-microsoft-com:clickonce.v2" xmlns="urn:schemas-microsoft-com:asm.v2" xmlns:asmv1="urn:schemas-microsoft-com:asm.v1" xmlns:asmv2="urn:schemas-microsoft-com:asm.v2" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:co.v1="urn:schemas-microsoft-com:clickonce.v1">
+  <asmv1:assemblyIdentity name="USBCAN.exe" version="1.0.0.1" publicKeyToken="1ea24684ce73d8af" language="neutral" processorArchitecture="msil" type="win32" />
+  <application />
+  <entryPoint>
+    <assemblyIdentity name="USBCAN" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+    <commandLine file="USBCAN.exe" parameters="" />
+  </entryPoint>
+  <trustInfo>
+    <security>
+      <applicationRequestMinimum>
+        <PermissionSet Unrestricted="true" ID="Custom" SameSite="site" />
+        <defaultAssemblyRequest permissionSetReference="Custom" />
+      </applicationRequestMinimum>
+      <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
+        <!--
+          UAC 清单选项
+          如果要更改 Windows 用户帐户控制级别，请用以下节点之一替换
+          requestedExecutionLevel 节点。
+
+        <requestedExecutionLevel  level="asInvoker" uiAccess="false" />
+        <requestedExecutionLevel  level="requireAdministrator" uiAccess="false" />
+        <requestedExecutionLevel  level="highestAvailable" uiAccess="false" />
+
+          如果要利用文件和注册表虚拟化提供
+          向后兼容性，请删除 requestedExecutionLevel 节点。
+    -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
+      </requestedPrivileges>
+    </security>
+  </trustInfo>
+  <dependency>
+    <dependentOS>
+      <osVersionInfo>
+        <os majorVersion="5" minorVersion="1" buildNumber="2600" servicePackMajor="0" />
+      </osVersionInfo>
+    </dependentOS>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="Microsoft.Windows.CommonLanguageRuntime" version="2.0.50727.0" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="preRequisite" allowDelayedBinding="true">
+      <assemblyIdentity name="WindowsBase" version="3.0.0.0" publicKeyToken="31bf3856ad364e35" language="neutral" processorArchitecture="msil" />
+    </dependentAssembly>
+  </dependency>
+  <dependency>
+    <dependentAssembly dependencyType="install" allowDelayedBinding="true" codebase="USBCAN.exe" size="128000">
+      <assemblyIdentity name="USBCAN" version="1.0.0.0" language="neutral" processorArchitecture="msil" />
+      <hash>
+        <dsig:Transforms>
+          <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+        </dsig:Transforms>
+        <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+        <dsig:DigestValue>FE/zIENk2qtpJ+S1UK59c/wGyvI=</dsig:DigestValue>
+      </hash>
+    </dependentAssembly>
+  </dependency>
+  <file name="USBCAN.exe.config" size="117">
+    <hash>
+      <dsig:Transforms>
+        <dsig:Transform Algorithm="urn:schemas-microsoft-com:HashTransforms.Identity" />
+      </dsig:Transforms>
+      <dsig:DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" />
+      <dsig:DigestValue>a3Forh+i+nzyaONrpGeK7Sudu10=</dsig:DigestValue>
+    </hash>
+  </file>
+<publisherIdentity name="CN=er\Android" issuerKeyHash="e450417c702875927fc92d01b3477a14bbefbd30" /><Signature Id="StrongNameSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>wqcw6I9RXmFwuTeV7edbvTAqgsY=</DigestValue></Reference></SignedInfo><SignatureValue>V51a/mD5NAQCPORCIpIFQyByMurj6xC1bXoZxUwbgVPrLXD+Svl6S2pnP24c4r7GFZDNCZptg/Zfz47GX2AWHAa6eu3Jt5avRY1yWee5mlPQKtdCF6XbGfHA2hOPNqRgjpL56AIr9njrQek/JWpAbz/51LMxv5nGmhdmdbrAjMw=</SignatureValue><KeyInfo Id="StrongNameKeyInfo"><KeyValue><RSAKeyValue><Modulus>yH2Dgivm1Sps7+dNNTJLOxhlpvrOsvAJCmlEgX2sZid9S9dMOJOtXEVtFvaIHKmN1UKQfG95uxL049kuXSwQw3OHU2vUNLZ6ZJxdM+guc6Hc2MPEm44OKzsAGq4Sb/HUddd9dGh+cKijd+s+DKVT5O8LCiTmPIV6z1pIPfSJh1U=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><msrel:RelData xmlns:msrel="http://schemas.microsoft.com/windows/rel/2005/reldata"><r:license xmlns:r="urn:mpeg:mpeg21:2003:01-REL-R-NS" xmlns:as="http://schemas.microsoft.com/windows/pki/2005/Authenticode"><r:grant><as:ManifestInformation Hash="c6822a30bd5be7ed9537b970615e518fe830a7c2" Description="" Url=""><as:assemblyIdentity name="USBCAN.exe" version="1.0.0.1" publicKeyToken="1ea24684ce73d8af" language="neutral" processorArchitecture="msil" type="win32" /></as:ManifestInformation><as:SignedBy /><as:AuthenticodePublisher><as:X509SubjectName>CN=er\Android</as:X509SubjectName></as:AuthenticodePublisher></r:grant><r:issuer><Signature Id="AuthenticodeSignature" xmlns="http://www.w3.org/2000/09/xmldsig#"><SignedInfo><CanonicalizationMethod Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /><SignatureMethod Algorithm="http://www.w3.org/2000/09/xmldsig#rsa-sha1" /><Reference URI=""><Transforms><Transform Algorithm="http://www.w3.org/2000/09/xmldsig#enveloped-signature" /><Transform Algorithm="http://www.w3.org/2001/10/xml-exc-c14n#" /></Transforms><DigestMethod Algorithm="http://www.w3.org/2000/09/xmldsig#sha1" /><DigestValue>EfcwUj8k2iYAjvMwyGBL9D5fH1c=</DigestValue></Reference></SignedInfo><SignatureValue>LkiqJKXs5VcxdStlGVk65yQ+FsBa5052tQzCyrLPs8lPW45OM9k0nPpPqIvCD/bAwF+W7j/MJaBcGhfpCXlNI7qEkERMbHgOjdQXiqBEvEFguB8CXKNYNItmp8CVerFIerfXraw1h9xufXvlCA6mp2D1ia1/5NYXnvXIu8K8VKI=</SignatureValue><KeyInfo><KeyValue><RSAKeyValue><Modulus>yH2Dgivm1Sps7+dNNTJLOxhlpvrOsvAJCmlEgX2sZid9S9dMOJOtXEVtFvaIHKmN1UKQfG95uxL049kuXSwQw3OHU2vUNLZ6ZJxdM+guc6Hc2MPEm44OKzsAGq4Sb/HUddd9dGh+cKijd+s+DKVT5O8LCiTmPIV6z1pIPfSJh1U=</Modulus><Exponent>AQAB</Exponent></RSAKeyValue></KeyValue><X509Data><X509Certificate>MIIBwTCCASqgAwIBAgIQYv9rVqK004FHNBAG7v4yCTANBgkqhkiG9w0BAQUFADAfMR0wGwYDVQQDHhQAZQByAFwAQQBuAGQAcgBvAGkAZDAeFw0xMjA1MjQwNDM2MzJaFw0xMzA1MjQxMDM2MzJaMB8xHTAbBgNVBAMeFABlAHIAXABBAG4AZAByAG8AaQBkMIGfMA0GCSqGSIb3DQEBAQUAA4GNADCBiQKBgQDIfYOCK+bVKmzv5001Mks7GGWm+s6y8AkKaUSBfaxmJ31L10w4k61cRW0W9ogcqY3VQpB8b3m7EvTj2S5dLBDDc4dTa9Q0tnpknF0z6C5zodzYw8Sbjg4rOwAarhJv8dR11310aH5wqKN36z4MpVPk7wsKJOY8hXrPWkg99ImHVQIDAQABMA0GCSqGSIb3DQEBBQUAA4GBAMQXhov954ddZhXol7Gl+q1QTj7UwPVqllCE555aJaOUgUUP6K2V1lh1Sy9IOPTFevmZOHH8YX6m1ECDM06D0lgzgXe3KGfckZcPNlxay5SYfn4Q3JnYKh9Q7fi2B/Twz0oTEXzY+BX1x4OagtAjxF90+JRN9w3mEuiAQ03m8WiS</X509Certificate></X509Data></KeyInfo></Signature></r:issuer></r:license></msrel:RelData></KeyInfo></Signature></asmv1:assembly>

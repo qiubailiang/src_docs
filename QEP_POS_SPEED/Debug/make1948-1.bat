@@ -1,0 +1,2 @@
+@echo off
+echo 'Flags: -v28 -ml -g --define="_DEBUG" --define="LARGE_MODEL" --diag_warning=225 --float_support=fpu32 --obj_directory="F://Xeuns 1116 CAN-QEP-POS-SPEED/Debug" -z -m"F:/baoyujian/QEP_POS_SPEED/Debug/QEP_POS_SPEED.map" --stack_size=1000 --heap_size=1000 --warn_sections -i"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/lib" -i"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/include" -i"F:/baoyujian/QEP_POS_SPEED" -i"F://Xeuns 1116 CAN-QEP-POS-SPEED" --reread_libs --rom_model'

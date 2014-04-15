@@ -1,0 +1,59 @@
+; Code Composer Project File, Version 2.0 (do not modify or remove this line)
+
+[Project Settings]
+ProjectDir="I:\Xeuns 5.30 CAN-QEP-POS-SPEED\"
+ProjectType=Executable
+CPUFamily=TMS320C28XX
+Tool="Compiler"
+Tool="CustomBuilder"
+Tool="DspBiosBuilder"
+Tool="Linker"
+Config="Debug"
+Config="Release"
+
+[Source Files]
+Source="IQmath_fpu32.lib"
+Source="source\DSP2833x_ADC_cal.asm"
+Source="source\DSP2833x_CodeStartBranch.asm"
+Source="source\DSP2833x_DefaultIsr.c"
+Source="source\DSP2833x_ECan.c"
+Source="source\DSP2833x_EPwm.c"
+Source="source\DSP2833x_EQep.c"
+Source="source\DSP2833x_GlobalVariableDefs.c"
+Source="source\DSP2833x_PieCtrl.c"
+Source="source\DSP2833x_PieVect.c"
+Source="source\DSP2833x_Spi.c"
+Source="source\DSP2833x_SysCtrl.c"
+Source="source\DSP2833x_usDelay.asm"
+Source="source\Example_2833xEqep_pos_speed.c"
+Source="source\Example_EPwmSetup.c"
+Source="source\Example_posspeed.c"
+Source="SRC\DSP2833x_CpuTimers.c"
+Source="SRC\DSP2833x_Xintf.c"
+Source="cmd\DSP2833x_Headers_nonBIOS.cmd"
+Source="cmd\F28335.cmd"
+
+["Compiler" Settings: "Debug"]
+Options=-g -pdsw225 -fr"$(Proj_dir)\Debug" -i"..\include" -d"_DEBUG" -d"LARGE_MODEL" -ml -v28 --float_support=fpu32
+
+["Compiler" Settings: "Release"]
+Options=-pdsw225 -o3 -fr"$(Proj_dir)\Release" -d"LARGE_MODEL" -ml -v28
+
+["Linker" Settings: "Debug"]
+Options=-c -heap1000 -m"I:\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\QEP_POS_SPEED.map" -o"I:\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\QEP_POS_SPEED.out" -stack1000 -w -x -l"rts2800_fpu32.lib"
+
+["Linker" Settings: "Release"]
+Options=-c -m".\Release\QEP_POS_SPEED.map" -o".\Release\QEP_POS_SPEED.out" -w -x
+
+["cmd\DSP2833x_Headers_nonBIOS.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["cmd\DSP2833x_Headers_nonBIOS.cmd" Settings: "Release"]
+LinkOrder=1
+
+["cmd\F28335.cmd" Settings: "Debug"]
+LinkOrder=1
+
+["cmd\F28335.cmd" Settings: "Release"]
+LinkOrder=1
+

@@ -1,0 +1,441 @@
+###############################################################################
+#                                                                             #
+# IAR ELF Linker V5.40.0.51500/W32 for ARM              18/Mar/2014  16:21:38 #
+# Copyright (C) 2007-2009 IAR Systems AB.                                     #
+#                                                                             #
+#    Output file  =  C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Exe #
+#                    \STM3210C-EVAL.out                                       #
+#    Map file     =  C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Lis #
+#                    t\STM3210C-EVAL.map                                      #
+#    Command line =  C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \core_cm3.o C:\Users\MeAndroid\Desktop\Wireless_data_Rec #
+#                    evie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\STM32 #
+#                    10C-EVAL\Obj\hw_config.o C:\Users\MeAndroid\Desktop\Wire #
+#                    less_data_Recevie\LED_DRIVER_STM32F107\Project\Template\ #
+#                    EWARMv5\STM3210C-EVAL\Obj\main.o                         #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \misc.o C:\Users\MeAndroid\Desktop\Wireless_data_Recevie #
+#                    \LED_DRIVER_STM32F107\Project\Template\EWARMv5\STM3210C- #
+#                    EVAL\Obj\startup_stm32f10x_cl.o                          #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \stm32f10x_adc.o C:\Users\MeAndroid\Desktop\Wireless_dat #
+#                    a_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\ #
+#                    STM3210C-EVAL\Obj\stm32f10x_bkp.o                        #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \stm32f10x_can.o C:\Users\MeAndroid\Desktop\Wireless_dat #
+#                    a_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\ #
+#                    STM3210C-EVAL\Obj\stm32f10x_dac.o                        #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \stm32f10x_dma.o C:\Users\MeAndroid\Desktop\Wireless_dat #
+#                    a_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\ #
+#                    STM3210C-EVAL\Obj\stm32f10x_exti.o                       #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \stm32f10x_fsmc.o C:\Users\MeAndroid\Desktop\Wireless_da #
+#                    ta_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5 #
+#                    \STM3210C-EVAL\Obj\stm32f10x_gpio.o                      #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \stm32f10x_it.o C:\Users\MeAndroid\Desktop\Wireless_data #
+#                    _Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\S #
+#                    TM3210C-EVAL\Obj\stm32f10x_pwr.o                         #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \stm32f10x_rcc.o C:\Users\MeAndroid\Desktop\Wireless_dat #
+#                    a_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\ #
+#                    STM3210C-EVAL\Obj\stm32f10x_rtc.o                        #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \stm32f10x_spi.o C:\Users\MeAndroid\Desktop\Wireless_dat #
+#                    a_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\ #
+#                    STM3210C-EVAL\Obj\stm32f10x_tim.o                        #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj #
+#                    \stm32f10x_usart.o C:\Users\MeAndroid\Desktop\Wireless_d #
+#                    ata_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv #
+#                    5\STM3210C-EVAL\Obj\system_stm32f10x.o -o                #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Exe #
+#                    \STM3210C-EVAL.out --map C:\Users\MeAndroid\Desktop\Wire #
+#                    less_data_Recevie\LED_DRIVER_STM32F107\Project\Template\ #
+#                    EWARMv5\STM3210C-EVAL\List\STM3210C-EVAL.map --config    #
+#                    C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRI #
+#                    VER_STM32F107\Project\Template\EWARMv5\STM32F10x_FLASH.i #
+#                    cf --semihosting --entry __iar_program_start             #
+#                                                                             #
+#                                                                             #
+###############################################################################
+
+*******************************************************************************
+*** RUNTIME MODEL ATTRIBUTES
+***
+
+__endian      = little
+__thumb_aware = enabled
+
+
+*******************************************************************************
+*** PLACEMENT SUMMARY
+***
+
+"A1":  place at 0x08000000 { ro section .intvec };
+"P1":  place in [from 0x08000000 to 0x0807ffff] { ro };
+"P2":  place in [from 0x20000000 to 0x2000ffff] {
+          rw, block CSTACK, block HEAP };
+
+  Section            Kind        Address    Size  Object
+  -------            ----        -------    ----  ------
+"A1":                                      0x150
+  .intvec            ro code  0x08000000   0x150  startup_stm32f10x_cl.o [1]
+                            - 0x08000150   0x150
+
+"P1":                                     0x1378
+  .text              ro code  0x08000150   0x4a0  stm32f10x_can.o [1]
+  .text              ro code  0x080005f0   0x478  main.o [1]
+  .text              ro code  0x08000a68   0x250  stm32f10x_rcc.o [1]
+  .text              ro code  0x08000cb8   0x19c  system_stm32f10x.o [1]
+  .text              ro code  0x08000e54   0x164  stm32f10x_usart.o [1]
+  .text              ro code  0x08000fb8   0x150  stm32f10x_gpio.o [1]
+  .text              ro code  0x08001108   0x124  stm32f10x_it.o [1]
+  .text              ro code  0x0800122c    0x90  misc.o [1]
+  .text              ro code  0x080012bc    0x24  copy_init2.o [4]
+  .iar.init_table    const    0x080012e0    0x24  - Linker created -
+  .text              ro code  0x08001304    0x20  data_init2.o [4]
+  .text              ro code  0x08001324    0x1c  iarwstd.o [5]
+  .text              ro code  0x08001340    0x1a  zero_init2.o [4]
+  .text              ro code  0x0800135c    0x18  cmain.o [4]
+  .text              ro code  0x08001374    0x14  exit.o [5]
+  .text              ro code  0x08001388     0xa  cexit.o [4]
+  .text              ro code  0x08001392     0x6  exit.o [3]
+  .text              ro code  0x08001398     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800139c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013a0     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013a4     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013a8     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013ac     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013b0     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013b4     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013b8     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013bc     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013c0     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013c4     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013c8     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013cc     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013d0     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013d4     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013d8     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013dc     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013e0     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013e4     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013e8     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013ec     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013f0     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013f4     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013f8     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080013fc     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001400     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001404     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001408     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800140c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001410     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001414     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001418     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800141c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001420     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001424     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001428     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800142c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001430     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001434     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001438     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800143c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001440     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001444     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001448     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800144c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001450     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001454     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001458     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800145c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001460     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001464     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001468     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800146c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001470     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001474     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001478     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800147c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001480     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001484     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001488     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800148c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001490     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001494     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x08001498     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x0800149c     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080014a0     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080014a4     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080014a8     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080014ac     0x4  startup_stm32f10x_cl.o [1]
+  .text              ro code  0x080014b0     0x4  low_level_init.o [3]
+  Initializer bytes  ro data  0x080014b4    0x14  <for P2 s0>
+                            - 0x080014c8  0x1378
+
+"P2", part 1 of 3:                         0x400
+  CSTACK                      0x20000000   0x400  <Block>
+    CSTACK           uninit   0x20000000   0x400  <Block tail>
+                            - 0x20000400   0x400
+
+"P2", part 2 of 3:                          0x44
+  .bss               zero     0x20000400    0x14  stm32f10x_it.o [1]
+  .bss               zero     0x20000414    0x10  main.o [1]
+  .bss               zero     0x20000424    0x10  main.o [1]
+  .bss               zero     0x20000434     0x4  main.o [1]
+  .bss               zero     0x20000438     0x4  main.o [1]
+  .bss               zero     0x2000043c     0x4  iarwstd.o [5]
+  .bss               zero     0x20000440     0x2  stm32f10x_it.o [1]
+  .bss               zero     0x20000442     0x1  main.o [1]
+  .bss               zero     0x20000443     0x1  main.o [1]
+                            - 0x20000444    0x44
+
+"P2", part 3 of 3:                          0x14
+  P2 s0                       0x20000444    0x14  <Init block>
+    .data            inited   0x20000444    0x10  stm32f10x_rcc.o [1]
+    .data            inited   0x20000454     0x4  stm32f10x_rcc.o [1]
+                            - 0x20000458    0x14
+
+
+*******************************************************************************
+*** INIT TABLE
+***
+
+          Address     Size
+          -------     ----
+Zero (__iar_zero_init2)
+    1 destination range, total size 0x44:
+          0x20000400  0x44
+
+Copy (__iar_copy_init2)
+    1 source range, total size 0x14 (100% of destination):
+          0x080014b4  0x14
+    1 destination range, total size 0x14:
+          0x20000444  0x14
+
+
+*******************************************************************************
+*** MODULE SUMMARY
+***
+
+    Module                  ro code  ro data  rw data
+    ------                  -------  -------  -------
+C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj: [1]
+    main.o                    1 144                42
+    misc.o                      144
+    startup_stm32f10x_cl.o      616
+    stm32f10x_can.o           1 184
+    stm32f10x_gpio.o            336
+    stm32f10x_it.o              292                22
+    stm32f10x_rcc.o             592       20       20
+    stm32f10x_usart.o           356
+    system_stm32f10x.o          412
+    -------------------------------------------------
+    Total:                    5 076       20       84
+
+command line: [2]
+    -------------------------------------------------
+    Total:
+
+dl7M_tl_in.a: [3]
+    exit.o                        6
+    low_level_init.o              4
+    -------------------------------------------------
+    Total:                       10
+
+rt7M_tl.a: [4]
+    cexit.o                      10
+    cmain.o                      24
+    copy_init2.o                 36
+    data_init2.o                 32
+    zero_init2.o                 26
+    -------------------------------------------------
+    Total:                      128
+
+shb_l.a: [5]
+    exit.o                       20
+    iarwstd.o                    28                 4
+    -------------------------------------------------
+    Total:                       48                 4
+
+    Gaps                          2
+    Linker created                        36    1 024
+-----------------------------------------------------
+    Grand Total:              5 264       56    1 112
+
+
+*******************************************************************************
+*** ENTRY LIST
+***
+
+Entry                      Address   Size  Type      Object
+-----                      -------   ----  ----      ------
+ADC1_2_IRQHandler       0x08001405         Code  Wk  startup_stm32f10x_cl.o [1]
+ADCPrescTable           0x20000454    0x4  Data  Lc  stm32f10x_rcc.o [1]
+APBAHBPrescTable        0x20000444   0x10  Data  Lc  stm32f10x_rcc.o [1]
+BusFault_Handler        0x0800110f    0x2  Code  Gb  stm32f10x_it.o [1]
+CAN1_RX0_IRQHandler     0x080011d5    0x2  Code  Gb  stm32f10x_it.o [1]
+CAN1_RX1_IRQHandler     0x08001411         Code  Wk  startup_stm32f10x_cl.o [1]
+CAN1_SCE_IRQHandler     0x08001415         Code  Wk  startup_stm32f10x_cl.o [1]
+CAN1_TX_IRQHandler      0x08001409         Code  Wk  startup_stm32f10x_cl.o [1]
+CAN2_RX0_IRQHandler     0x080011e1   0x18  Code  Gb  stm32f10x_it.o [1]
+CAN2_RX1_IRQHandler     0x080014a5         Code  Wk  startup_stm32f10x_cl.o [1]
+CAN2_SCE_IRQHandler     0x080014a9         Code  Wk  startup_stm32f10x_cl.o [1]
+CAN2_TX_IRQHandler      0x0800149d         Code  Wk  startup_stm32f10x_cl.o [1]
+CAN_Configuration       0x08000929  0x11c  Code  Gb  main.o [1]
+CAN_DeInit              0x08000151   0x3c  Code  Gb  stm32f10x_can.o [1]
+CAN_FIFORelease         0x080004fd   0x12  Code  Gb  stm32f10x_can.o [1]
+CAN_FilterInit          0x080002a9   0xf8  Code  Gb  stm32f10x_can.o [1]
+CAN_Init                0x0800018d  0x11c  Code  Gb  stm32f10x_can.o [1]
+CAN_Receive             0x0800050f   0xe2  Code  Gb  stm32f10x_can.o [1]
+CAN_StructInit          0x080003a1   0x2e  Code  Gb  stm32f10x_can.o [1]
+CAN_Transmit            0x080003d5  0x128  Code  Gb  stm32f10x_can.o [1]
+CSTACK$$Base            0x20000000          --   Gb  - Linker created -
+CSTACK$$Limit           0x20000400          --   Gb  - Linker created -
+DMA1_Channel1_IRQHandler
+                        0x080013e9         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA1_Channel2_IRQHandler
+                        0x080013ed         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA1_Channel3_IRQHandler
+                        0x080013f1         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA1_Channel4_IRQHandler
+                        0x080013f5         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA1_Channel5_IRQHandler
+                        0x080013f9         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA1_Channel6_IRQHandler
+                        0x080013fd         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA1_Channel7_IRQHandler
+                        0x08001401         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA2_Channel1_IRQHandler
+                        0x08001481         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA2_Channel2_IRQHandler
+                        0x08001485         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA2_Channel3_IRQHandler
+                        0x08001489         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA2_Channel4_IRQHandler
+                        0x0800148d         Code  Wk  startup_stm32f10x_cl.o [1]
+DMA2_Channel5_IRQHandler
+                        0x08001491         Code  Wk  startup_stm32f10x_cl.o [1]
+DebugMon_Handler        0x08001115    0x2  Code  Gb  stm32f10x_it.o [1]
+Delay                   0x08000a51   0x14  Code  Gb  main.o [1]
+ETH_IRQHandler          0x08001495         Code  Wk  startup_stm32f10x_cl.o [1]
+ETH_WKUP_IRQHandler     0x08001499         Code  Wk  startup_stm32f10x_cl.o [1]
+EXTI0_IRQHandler        0x080013d5         Code  Wk  startup_stm32f10x_cl.o [1]
+EXTI15_10_IRQHandler    0x0800145d         Code  Wk  startup_stm32f10x_cl.o [1]
+EXTI1_IRQHandler        0x080013d9         Code  Wk  startup_stm32f10x_cl.o [1]
+EXTI2_IRQHandler        0x080013dd         Code  Wk  startup_stm32f10x_cl.o [1]
+EXTI3_IRQHandler        0x080013e1         Code  Wk  startup_stm32f10x_cl.o [1]
+EXTI4_IRQHandler        0x080013e5         Code  Wk  startup_stm32f10x_cl.o [1]
+EXTI9_5_IRQHandler      0x08001419         Code  Wk  startup_stm32f10x_cl.o [1]
+FLASH_IRQHandler        0x080013cd         Code  Wk  startup_stm32f10x_cl.o [1]
+GPIO_Configuration      0x08000701  0x12e  Code  Gb  main.o [1]
+GPIO_Init               0x08000fb9  0x150  Code  Gb  stm32f10x_gpio.o [1]
+HardFault_Handler       0x0800110b    0x2  Code  Gb  stm32f10x_it.o [1]
+I2C1_ER_IRQHandler      0x0800143d         Code  Wk  startup_stm32f10x_cl.o [1]
+I2C1_EV_IRQHandler      0x08001439         Code  Wk  startup_stm32f10x_cl.o [1]
+I2C2_ER_IRQHandler      0x08001445         Code  Wk  startup_stm32f10x_cl.o [1]
+I2C2_EV_IRQHandler      0x08001441         Code  Wk  startup_stm32f10x_cl.o [1]
+MemManage_Handler       0x0800110d    0x2  Code  Gb  stm32f10x_it.o [1]
+NMI_Handler             0x08001109    0x2  Code  Gb  stm32f10x_it.o [1]
+NVIC_Configuration      0x08000869   0xc0  Code  Gb  main.o [1]
+NVIC_Init               0x0800123d   0x7c  Code  Gb  misc.o [1]
+NVIC_PriorityGroupConfig
+                        0x0800122d   0x10  Code  Gb  misc.o [1]
+OTG_FS_IRQHandler       0x080014ad         Code  Wk  startup_stm32f10x_cl.o [1]
+OTG_FS_WKUP_IRQHandler  0x08001465         Code  Wk  startup_stm32f10x_cl.o [1]
+PVD_IRQHandler          0x080013c1         Code  Wk  startup_stm32f10x_cl.o [1]
+PendSV_Handler          0x08001117    0x2  Code  Gb  stm32f10x_it.o [1]
+RCC_APB1PeriphClockCmd  0x08000c71   0x24  Code  Gb  stm32f10x_rcc.o [1]
+RCC_APB1PeriphResetCmd  0x08000c95   0x24  Code  Gb  stm32f10x_rcc.o [1]
+RCC_APB2PeriphClockCmd  0x08000c4d   0x24  Code  Gb  stm32f10x_rcc.o [1]
+RCC_Configuration       0x080006e1   0x20  Code  Gb  main.o [1]
+RCC_GetClocksFreq       0x08000a69  0x1dc  Code  Gb  stm32f10x_rcc.o [1]
+RCC_IRQHandler          0x080013d1         Code  Wk  startup_stm32f10x_cl.o [1]
+RTCAlarm_IRQHandler     0x08001461         Code  Wk  startup_stm32f10x_cl.o [1]
+RTC_IRQHandler          0x080013c9         Code  Wk  startup_stm32f10x_cl.o [1]
+Region$$Table$$Base     0x080012e0          --   Gb  - Linker created -
+Region$$Table$$Limit    0x08001304          --   Gb  - Linker created -
+RxBuffer1               0x20000414   0x10  Data  Gb  main.o [1]
+RxCounter1              0x20000442    0x1  Data  Gb  main.o [1]
+SPI1_IRQHandler         0x08001449         Code  Wk  startup_stm32f10x_cl.o [1]
+SPI2_IRQHandler         0x0800144d         Code  Wk  startup_stm32f10x_cl.o [1]
+SPI3_IRQHandler         0x0800146d         Code  Wk  startup_stm32f10x_cl.o [1]
+SVC_Handler             0x08001113    0x2  Code  Gb  stm32f10x_it.o [1]
+SetSysClock             0x08000d25    0x8  Code  Lc  system_stm32f10x.o [1]
+SetSysClockTo72         0x08000d2d  0x11c  Code  Lc  system_stm32f10x.o [1]
+SysTick_Handler         0x08001119    0x2  Code  Gb  stm32f10x_it.o [1]
+SystemInit              0x08000cb9   0x6c  Code  Gb  system_stm32f10x.o [1]
+TAMPER_IRQHandler       0x080013c5         Code  Wk  startup_stm32f10x_cl.o [1]
+TIM1_BRK_IRQHandler     0x0800141d         Code  Wk  startup_stm32f10x_cl.o [1]
+TIM1_CC_IRQHandler      0x08001429         Code  Wk  startup_stm32f10x_cl.o [1]
+TIM1_TRG_COM_IRQHandler
+                        0x08001425         Code  Wk  startup_stm32f10x_cl.o [1]
+TIM1_UP_IRQHandler      0x08001421         Code  Wk  startup_stm32f10x_cl.o [1]
+TIM2_IRQHandler         0x080011d9    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM3_IRQHandler         0x080011db    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM4_IRQHandler         0x080011dd    0x2  Code  Gb  stm32f10x_it.o [1]
+TIM5_IRQHandler         0x08001469         Code  Wk  startup_stm32f10x_cl.o [1]
+TIM6_IRQHandler         0x08001479         Code  Wk  startup_stm32f10x_cl.o [1]
+TIM7_IRQHandler         0x0800147d         Code  Wk  startup_stm32f10x_cl.o [1]
+TxMessage               0x20000400   0x14  Data  Gb  stm32f10x_it.o [1]
+UART4_IRQHandler        0x080011f9   0x2a  Code  Gb  stm32f10x_it.o [1]
+UART5_IRQHandler        0x08001475         Code  Wk  startup_stm32f10x_cl.o [1]
+USART1_IRQHandler       0x0800111d   0x90  Code  Gb  stm32f10x_it.o [1]
+USART2_IRQHandler       0x080011ad   0x28  Code  Gb  stm32f10x_it.o [1]
+USART3_IRQHandler       0x080011d7    0x2  Code  Gb  stm32f10x_it.o [1]
+USART_ClearFlag         0x08000fad    0xc  Code  Gb  stm32f10x_usart.o [1]
+USART_Cmd               0x08000f09   0x1c  Code  Gb  stm32f10x_usart.o [1]
+USART_Config            0x08000831   0x38  Code  Gb  main.o [1]
+USART_GetFlagStatus     0x08000f8b   0x22  Code  Gb  stm32f10x_usart.o [1]
+USART_ITConfig          0x08000f25   0x5e  Code  Gb  stm32f10x_usart.o [1]
+USART_Init              0x08000e55   0xb0  Code  Gb  stm32f10x_usart.o [1]
+USART_InitStructure     0x20000424   0x10  Data  Gb  main.o [1]
+USART_ReceiveData       0x08000f83    0x8  Code  Gb  stm32f10x_usart.o [1]
+UsageFault_Handler      0x08001111    0x2  Code  Gb  stm32f10x_it.o [1]
+WWDG_IRQHandler         0x080013bd         Code  Wk  startup_stm32f10x_cl.o [1]
+__exit                  0x08001375   0x14  Code  Gb  exit.o [5]
+__iar_copy_init2        0x080012bd   0x24  Code  Gb  copy_init2.o [4]
+__iar_data_init2        0x08001305   0x20  Code  Gb  data_init2.o [4]
+__iar_program_start     0x0800135d         Code  Gb  cmain.o [4]
+__iar_sh_stdout_close   0x08001325   0x16  Code  Gb  iarwstd.o [5]
+__iar_sh_stdout_handle  0x2000043c    0x4  Data  Lc  iarwstd.o [5]
+__iar_zero_init2        0x08001341   0x1a  Code  Gb  zero_init2.o [4]
+__low_level_init        0x080014b1    0x4  Code  Gb  low_level_init.o [3]
+__vector_table          0x08000000         Data  Gb  startup_stm32f10x_cl.o [1]
+_exit                   0x08001389         Code  Gb  cexit.o [4]
+_main                   0x0800136f         Code  Gb  cmain.o [4]
+aa                      0x20000440    0x2  Data  Gb  stm32f10x_it.o [1]
+distance_valid_flag     0x20000434    0x4  Data  Gb  main.o [1]
+exit                    0x08001393    0x6  Code  Gb  exit.o [3]
+main                    0x080005f1   0xf0  Code  Gb  main.o [1]
+send_data_flag          0x20000438    0x4  Data  Gb  main.o [1]
+y_bias                  0x20000443    0x1  Data  Gb  main.o [1]
+
+
+[1] = C:\Users\MeAndroid\Desktop\Wireless_data_Recevie\LED_DRIVER_STM32F107\Project\Template\EWARMv5\STM3210C-EVAL\Obj
+[2] = command line
+[3] = dl7M_tl_in.a
+[4] = rt7M_tl.a
+[5] = shb_l.a
+
+  5 264 bytes of readonly  code memory
+     56 bytes of readonly  data memory
+  1 112 bytes of readwrite data memory
+
+Errors: none
+Warnings: none

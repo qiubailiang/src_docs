@@ -1,0 +1,6 @@
+a0//position vertical too high
+a1//positon valid vertical too low
+b0//position valid vertical normal
+b1//
+ff//position invaild 
+c1
