@@ -4,6 +4,6 @@
 
 # Add inputs and outputs from these tool invocations to the build variables 
 LIB_SRCS += \
-D:/ccsproject/IQmath_fpu32.lib 
+F:/baoyujian/src_docs/Xeuns\ 5.30\ CAN-QEP-POS-SPEED/IQmath_fpu32.lib 
 
 

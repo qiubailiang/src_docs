@@ -439,9 +439,18 @@ void main(void)
             }
             else
             {
-            	if(CAN_RxBuffer[1]==0xff)
+            	if(CAN_RxBuffer[1]==0xf1)////lost  on the left should turn right
             	{
+            		dir_flag_for_guidence=0;/////
             		distance_valid_flag=FALSE;
+            	}
+            	else
+            	{
+	            	if(CAN_RxBuffer[1]==0xf3)
+	            	{
+	            		dir_flag_for_guidence=1;/////
+	            		distance_valid_flag=FALSE;
+	            	}
             	}
             	
            	}
@@ -513,16 +522,18 @@ void main(void)
 		
 		  }
 		  else{
-		  		if(dir==0){
-		  			dir=1;
-		  		}
-		  		else
-		  		{
-		  		if(dir==1)
-		  		{
-		  			dir=0;
-		  		}
-		  		}
+		  	if(dir_flag_for_guidence==0)
+		  	{
+		  		dir=1;
+		  	}
+		  	else
+		  	{
+			  	if(dir_flag_for_guidence==1)
+			  	{
+			  		dir=0;
+			  	}
+		  	
+		  	}/////
 		  		AutoMode=AutoModeON;
 			 //scan();//if failed to capture the target,then scan for it 
 		  		}

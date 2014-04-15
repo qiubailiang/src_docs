@@ -10,27 +10,27 @@ CG_TOOL_ROOT := C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000
 
 ORDERED_OBJS += \
 $(GEN_CMDS_QUOTED) \
-"D:/ccsproject/cmd/F28335.cmd" \
-"D:/ccsproject/Debug/DSP2833x_Xintf.obj" \
-"D:/ccsproject/Debug/DSP2833x_CpuTimers.obj" \
-"D:/ccsproject/Debug/Example_posspeed.obj" \
-"D:/ccsproject/Debug/Example_EPwmSetup.obj" \
-"D:/ccsproject/Debug/Example_2833xEqep_pos_speed.obj" \
-"D:/ccsproject/Debug/DSP2833x_usDelay.obj" \
-"D:/ccsproject/Debug/DSP2833x_SysCtrl.obj" \
-"D:/ccsproject/Debug/DSP2833x_Spi.obj" \
-"D:/ccsproject/Debug/DSP2833x_PieVect.obj" \
-"D:/ccsproject/Debug/DSP2833x_PieCtrl.obj" \
-"D:/ccsproject/Debug/DSP2833x_GlobalVariableDefs.obj" \
-"D:/ccsproject/Debug/DSP2833x_EQep.obj" \
-"D:/ccsproject/Debug/DSP2833x_EPwm.obj" \
-"D:/ccsproject/Debug/DSP2833x_ECan.obj" \
-"D:/ccsproject/Debug/DSP2833x_DefaultIsr.obj" \
-"D:/ccsproject/Debug/DSP2833x_CodeStartBranch.obj" \
-"D:/ccsproject/Debug/DSP2833x_ADC_cal.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/cmd/F28335.cmd" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_Xintf.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_CpuTimers.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/Example_posspeed.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/Example_EPwmSetup.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/Example_2833xEqep_pos_speed.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_usDelay.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_SysCtrl.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_Spi.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_PieVect.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_PieCtrl.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_GlobalVariableDefs.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_EQep.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_EPwm.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_ECan.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_DefaultIsr.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_CodeStartBranch.obj" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/DSP2833x_ADC_cal.obj" \
 -l"rts2800_fpu32.lib" \
-"D:/ccsproject/cmd/DSP2833x_Headers_nonBIOS.cmd" \
-"D:/ccsproject/IQmath_fpu32.lib" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/cmd/DSP2833x_Headers_nonBIOS.cmd" \
+"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/IQmath_fpu32.lib" \
 
 -include ../makefile.init
 
@@ -132,20 +132,24 @@ endif
 # Add inputs and outputs from these tool invocations to the build variables 
 
 # All Target
-all: I:/Xeuns\ 5.30\ CAN-QEP-POS-SPEED/Debug/QEP_POS_SPEED.out
+all: F:/baoyujian/Xeuns\ 5.30\ CAN-QEP-POS-SPEED/QEP_POS_SPEED.out
 
 # Tool invocations
-I:/Xeuns\ 5.30\ CAN-QEP-POS-SPEED/Debug/QEP_POS_SPEED.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
+F:/baoyujian/Xeuns\ 5.30\ CAN-QEP-POS-SPEED/QEP_POS_SPEED.out: $(OBJS) $(CMD_SRCS) $(LIB_SRCS) $(GEN_CMDS)
 	@echo 'Building target: $@'
 	@echo 'Invoking: Linker'
-	"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/bin/cl2000" -v28 -ml -g --define="_DEBUG" --define="LARGE_MODEL" --diag_warning=225 --float_support=fpu32 --obj_directory="D:/ccsproject/Debug" -z -m"I:/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/QEP_POS_SPEED.map" --stack_size=1000 --heap_size=1000 --warn_sections -i"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/lib" -i"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/include" -i"F:/baoyujian/Xeuns 5.30 CAN-QEP-POS-SPEED/QEP_POS_SPEED" -i"D:/ccsproject" --reread_libs --rom_model -o "I:/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug/QEP_POS_SPEED.out" $(ORDERED_OBJS)
+	@echo 'Flags: -v28 -ml -g --define="_DEBUG" --define="LARGE_MODEL" --diag_warning=225 --float_support=fpu32 --obj_directory="F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug" -z -m"F:/baoyujian/Xeuns 5.30 CAN-QEP-POS-SPEED/QEP_POS_SPEED.map" --stack_size=1000 --heap_size=1000 --warn_sections -i"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/lib" -i"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/include" -i"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/QEP_POS_SPEED" -i"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED" --reread_libs --rom_model'
+	$(shell echo -v28 -ml -g --define="_DEBUG" --define="LARGE_MODEL" --diag_warning=225 --float_support=fpu32 --obj_directory="F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/Debug" -z -m"F:/baoyujian/Xeuns 5.30 CAN-QEP-POS-SPEED/QEP_POS_SPEED.map" --stack_size=1000 --heap_size=1000 --warn_sections -i"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/lib" -i"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/include" -i"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED/QEP_POS_SPEED" -i"F:/baoyujian/src_docs/Xeuns 5.30 CAN-QEP-POS-SPEED" --reread_libs --rom_model > "ccsLinker.opt")
+	$(shell type "ccsObjs.opt" >> "ccsLinker.opt")
+	"C:/Program Files/Texas Instruments/ccsv4/tools/compiler/c2000/bin/cl2000" -@"ccsLinker.opt" -o "F:/baoyujian/Xeuns 5.30 CAN-QEP-POS-SPEED/QEP_POS_SPEED.out"
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 # Other Targets
 clean:
-	-$(RM) $(C2000_EXECUTABLE_OUTPUTS__QTD) "I:\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\QEP_POS_SPEED.out"
-	-$(RM) "D:\ccsproject\Debug\DSP2833x_ADC_cal.obj" "D:\ccsproject\Debug\DSP2833x_CodeStartBranch.obj" "D:\ccsproject\Debug\DSP2833x_DefaultIsr.obj" "D:\ccsproject\Debug\DSP2833x_ECan.obj" "D:\ccsproject\Debug\DSP2833x_EPwm.obj" "D:\ccsproject\Debug\DSP2833x_EQep.obj" "D:\ccsproject\Debug\DSP2833x_GlobalVariableDefs.obj" "D:\ccsproject\Debug\DSP2833x_PieCtrl.obj" "D:\ccsproject\Debug\DSP2833x_PieVect.obj" "D:\ccsproject\Debug\DSP2833x_Spi.obj" "D:\ccsproject\Debug\DSP2833x_SysCtrl.obj" "D:\ccsproject\Debug\DSP2833x_usDelay.obj" "D:\ccsproject\Debug\Example_2833xEqep_pos_speed.obj" "D:\ccsproject\Debug\Example_EPwmSetup.obj" "D:\ccsproject\Debug\Example_posspeed.obj" "D:\ccsproject\Debug\DSP2833x_CpuTimers.obj" "D:\ccsproject\Debug\DSP2833x_Xintf.obj" 
+	-$(RM) $(C2000_EXECUTABLE_OUTPUTS__QTD) "F:\baoyujian\Xeuns 5.30 CAN-QEP-POS-SPEED\QEP_POS_SPEED.out"
+	-$(RM) "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_ADC_cal.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_CodeStartBranch.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_DefaultIsr.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_ECan.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_EPwm.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_EQep.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_GlobalVariableDefs.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieCtrl.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieVect.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_Spi.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_SysCtrl.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_usDelay.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\Example_2833xEqep_pos_speed.obj" 
+	-$(RM) "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\Example_EPwmSetup.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\Example_posspeed.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_CpuTimers.obj" "F:\baoyujian\src_docs\Xeuns 5.30 CAN-QEP-POS-SPEED\Debug\DSP2833x_Xintf.obj" 
 	-$(RM) ".\source\DSP2833x_ADC_cal.pp" ".\source\DSP2833x_CodeStartBranch.pp" ".\source\DSP2833x_usDelay.pp" 
 	-$(RM) ".\source\DSP2833x_DefaultIsr.pp" ".\source\DSP2833x_ECan.pp" ".\source\DSP2833x_EPwm.pp" ".\source\DSP2833x_EQep.pp" ".\source\DSP2833x_GlobalVariableDefs.pp" ".\source\DSP2833x_PieCtrl.pp" ".\source\DSP2833x_PieVect.pp" ".\source\DSP2833x_Spi.pp" ".\source\DSP2833x_SysCtrl.pp" ".\source\Example_2833xEqep_pos_speed.pp" ".\source\Example_EPwmSetup.pp" ".\source\Example_posspeed.pp" ".\SRC\DSP2833x_CpuTimers.pp" ".\SRC\DSP2833x_Xintf.pp" 
 	-@echo ' '

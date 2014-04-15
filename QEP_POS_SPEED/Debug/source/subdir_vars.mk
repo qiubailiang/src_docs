@@ -33,23 +33,23 @@ ASM_DEPS += \
 ./source/DSP2833x_usDelay.pp 
 
 OBJS += \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_ADC_cal.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_CodeStartBranch.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_CpuTimers.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_DefaultIsr.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_ECan.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_EPwm.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_EQep.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_GlobalVariableDefs.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_PieCtrl.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_PieVect.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_Spi.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_SysCtrl.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_Xintf.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_usDelay.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_2833xEqep_pos_speed.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_EPwmSetup.obj \
-F://Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_posspeed.obj 
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_ADC_cal.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_CodeStartBranch.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_CpuTimers.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_DefaultIsr.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_ECan.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_EPwm.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_EQep.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_GlobalVariableDefs.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_PieCtrl.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_PieVect.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_Spi.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_SysCtrl.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_Xintf.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_usDelay.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_2833xEqep_pos_speed.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_EPwmSetup.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_posspeed.obj 
 
 C_DEPS += \
 ./source/DSP2833x_CpuTimers.pp \
@@ -68,23 +68,23 @@ C_DEPS += \
 ./source/Example_posspeed.pp 
 
 OBJS__QTD += \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_ADC_cal.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_CodeStartBranch.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_CpuTimers.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_DefaultIsr.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_ECan.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_EPwm.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_EQep.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_GlobalVariableDefs.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieCtrl.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieVect.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_Spi.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_SysCtrl.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_Xintf.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_usDelay.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_2833xEqep_pos_speed.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_EPwmSetup.obj" \
-"F:\\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_posspeed.obj" 
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_ADC_cal.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_CodeStartBranch.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_CpuTimers.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_DefaultIsr.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_ECan.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_EPwm.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_EQep.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_GlobalVariableDefs.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieCtrl.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieVect.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_Spi.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_SysCtrl.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_Xintf.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_usDelay.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_2833xEqep_pos_speed.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_EPwmSetup.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_posspeed.obj" 
 
 ASM_DEPS__QTD += \
 ".\source\DSP2833x_ADC_cal.pp" \
