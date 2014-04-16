@@ -90,3 +90,17 @@ F:\baoyujian\C#_Example_USBCAN\obj\Debug\USBCAN.Properties.Resource1.resources
 F:\baoyujian\C#_Example_USBCAN\obj\Debug\USBCAN.Properties.Resources.resources
 F:\baoyujian\C#_Example_USBCAN\obj\Debug\USBCAN.Resource1.resources
 F:\baoyujian\C#_Example_USBCAN\obj\Debug\USBCAN.csproj.GenerateResource.Cache
+F:\baoyujian\src_docs\C#_Example_USBCAN\bin\Debug\USBCAN.exe.config
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.exe
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.pdb
+F:\baoyujian\src_docs\C#_Example_USBCAN\bin\Debug\USBCAN.exe
+F:\baoyujian\src_docs\C#_Example_USBCAN\bin\Debug\USBCAN.pdb
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.csprojResolveAssemblyReference.cache
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.Form1.resources
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.FormControl.resources
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.FormGear.resources
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.FormMeters.resources
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.Properties.Resource1.resources
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.Properties.Resources.resources
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.Resource1.resources
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.csproj.GenerateResource.Cache

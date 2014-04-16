@@ -136,7 +136,20 @@ namespace USBCAN
         {
             InitializeComponent();
         }
-
+        public void DrawCoorodinates_withColor(int x, int y, Color col)
+        {
+            // //pen 画线
+            Pen myPen = new Pen(col);
+            Graphics g = this.CreateGraphics();
+            g.DrawEllipse(myPen, x, y, 5, 5);
+        }
+        public void DrawAxis(int org_x, int org_y, int length, Color col)
+        {
+            Pen myPen = new Pen(col, 3);
+            Graphics g = this.CreateGraphics();
+            g.DrawLine(myPen, (float)org_x, (float)org_y, (float)(org_x + length), (float)org_y);
+            g.DrawLine(myPen, (float)org_x, (float)org_y, (float)(org_x), ((float)org_y + length));
+        }
         private void label1_Click(object sender, EventArgs e)
         {
         }
@@ -191,6 +204,7 @@ namespace USBCAN
             
             this.Controls.Add(TempVpOnMain);
             this.Controls.Add(OilHeightVpOnMain);
+            DrawAxis(ORG_X, ORG_Y, 500, Color.Blue);
         }
         /// <summary>
         /// 
@@ -1532,6 +1546,8 @@ namespace USBCAN
             x_org_label.Text = ORG_X.ToString();
             y_org_label.Text = ORG_Y.ToString();
             DrawCoorodinates_with_pen(ORG_X, ORG_Y,new Pen(Color.Red));
+            DrawAxis(ORG_X, ORG_Y, 500, Color.Blue);
+
         }
 
         private void textBox1_TextChanged(object sender, EventArgs e)

@@ -194,18 +194,13 @@ void main(void)
 { 
 	
 	int i=0;
-	for(i=0;i<20;i++)
+	for(i=0;i<10;i++)
 	{
 			Map[i].x=36000-i*3600;
-			Map[i].y=-200;
-			
+			//Map[i].y=-800+1600/9*i;
+			Map[i].y=-600;
 	}
-		for(i=0;i<20;i=i+2)
-	{
-			//Map[i].x=36000-i*3600;
-			Map[i].y=-200;
-			
-	}
+	
    InitSysCtrl();
    InitECan();
    
@@ -441,14 +436,14 @@ void main(void)
             {
             	if(CAN_RxBuffer[1]==0xf1)////lost  on the left should turn right
             	{
-            		dir_flag_for_guidence=0;/////
+            		dir_flag_for_guidence=1;/////
             		distance_valid_flag=FALSE;
             	}
             	else
             	{
 	            	if(CAN_RxBuffer[1]==0xf3)
 	            	{
-	            		dir_flag_for_guidence=1;/////
+	            		dir_flag_for_guidence=0;/////
 	            		distance_valid_flag=FALSE;
 	            	}
             	}
