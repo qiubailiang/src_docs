@@ -71,6 +71,7 @@
             this.label13 = new System.Windows.Forms.Label();
             this.label14 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
+            this.button3 = new System.Windows.Forms.Button();
             this.groupBox1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -322,7 +323,7 @@
             // 
             this.button6.Location = new System.Drawing.Point(883, 35);
             this.button6.Name = "button6";
-            this.button6.Size = new System.Drawing.Size(103, 23);
+            this.button6.Size = new System.Drawing.Size(116, 23);
             this.button6.TabIndex = 27;
             this.button6.Text = "illume laser";
             this.button6.UseVisualStyleBackColor = true;
@@ -447,11 +448,22 @@
             this.label15.TabIndex = 40;
             this.label15.Text = "MAP POINT NUM";
             // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(883, 62);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(116, 23);
+            this.button3.TabIndex = 41;
+            this.button3.Text = "disable laser";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click_1);
+            // 
             // Form1
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(1204, 534);
+            this.Controls.Add(this.button3);
             this.Controls.Add(this.label15);
             this.Controls.Add(this.label14);
             this.Controls.Add(this.label13);
@@ -536,6 +548,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.Label label14;
         private System.Windows.Forms.Label label15;
+        private System.Windows.Forms.Button button3;
 
 
     }

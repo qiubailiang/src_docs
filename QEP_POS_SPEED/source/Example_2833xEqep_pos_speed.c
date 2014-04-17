@@ -109,7 +109,7 @@
 #define FINISH 0
 #define NOTFINISH 1
 #define WidthOfScreen 100
-#define K 100
+#define K 10000
 #define AutoModeOFF 0
 #define AutoModeON 1
 #define FALSE 0
@@ -152,6 +152,7 @@ long angle=0;
 long distance;
 long polar_angle_count;
 long scale=5;
+long swing_speed=0;
 float Arc2Degree(float arc);
 float GetCountFromDegree(float deg);
 float GetDegreeFromCount(long cnt);
@@ -198,8 +199,16 @@ void main(void)
 	{
 			Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=-600;
+			Map[i].y=-200;
 	}
+	for(i=0;i<10;i=i+2)
+	{
+			//Map[i].x=36000-i*3600;
+			//Map[i].y=-800+1600/9*i;
+			Map[i].y=+200;
+	}
+	//Map[9].x=2410;
+	//Map[9].y=500;
 	
    InitSysCtrl();
    InitECan();
@@ -369,13 +378,10 @@ void main(void)
 				CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
 				//CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
-			
-		 //long =CAN_RxBuffer[4]*65536+CAN_RxBuffer[5]*256+CAN_RxBuffer[6];// 1000000个脉冲电机转动360°
-         // int dir=CAN_RxBuffer[3];
-          // int dir1=CAN_RxBuffer[7];
+			 	swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+				EPwm1Regs.TBPRD=swing_speed;
           
-      	  DegreeOfSwing = atan((WidthOfScreen/2)/distance);
-          stepcount=GetCountFromDegree(DegreeOfSwing);
+      	 
 		 }
 		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 //from distance detector
 		{
@@ -607,7 +613,7 @@ void Driver1(int D,Uint32 Deg)//D stand for direction Deg stands for  degrees to
 	EALLOW;
 	DIR=D;
 	EDIS;
-	EPwm1Regs.CMPA.half.CMPA =(PRD/2);
+	EPwm1Regs.CMPA.half.CMPA =(swing_speed/2);
 
 }
 void Driver2(int D,Uint32 Deg)//D stand for direction Deg stands for  degrees to rotate 
@@ -618,7 +624,7 @@ void Driver2(int D,Uint32 Deg)//D stand for direction Deg stands for  degrees to
 	EALLOW;
 	DIR1=D;
 	EDIS;
-	EPwm2Regs.CMPA.half.CMPA =(PRD/2);
+	EPwm2Regs.CMPA.half.CMPA =(65000/4);
 
 }
 
