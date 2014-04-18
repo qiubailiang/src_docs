@@ -666,7 +666,7 @@ namespace USBCAN
                 {
                     CurrentBuff.ID[i] = (byte)((CurrentBuff.ID[i])>> 3);
                 }
-                ////////////////Recive the data from the dsp /////valid distance 
+                ////////////////Recive the data from the dsp /////recive data of valid distance and draw on board ////the ID is 00 11 12 19
                 if (CurrentBuff.ID[0] == 0x00 && CurrentBuff.ID[1] == 0x11 && CurrentBuff.ID[2] == 0x12 && CurrentBuff.ID[3] == 0x19)
                 {
                     Int32[] temp = new Int32[8];
@@ -712,7 +712,7 @@ namespace USBCAN
                     //write_file("E:\\trail.txt","","X "+valid_coord.X.ToString()+"Y "+valid_coord.Y.ToString()+"\n\r");
 
                     //"D:\\trail.txt"
-                    DrawCoorodinates_with_pen(ORG_X + (valid_coord.X) / 100, ORG_Y + (valid_coord.Y) / 100,new Pen(Color.Blue));
+                    DrawCoorodinates_with_pen(ORG_X + (valid_coord.X) / 100, ORG_Y + (valid_coord.Y) / 100,new Pen(Color.Red));
 
                 }
          
@@ -1615,6 +1615,12 @@ namespace USBCAN
         private void button3_Click_1(object sender, EventArgs e)
         {
             TransmitACanMsg("00 00 00 01", "00 00 00 00 00 00 f0 00");
+        }
+
+        private void button4_Click_1(object sender, EventArgs e)
+        {
+            PathDisplayForm pdForm = new PathDisplayForm();
+            pdForm.Show();
         }
     }
 }
