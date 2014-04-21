@@ -121,12 +121,12 @@ int main(void)
   USART_Config(USART1);
   USART_Config(USART3);
   CAN_Configuration();	
-  TIM4_Configuration();
-  TIM3_Configuration();
+  //TIM4_Configuration();
+  //TIM3_Configuration();
   NVIC_Configuration();
 
   
-  //CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
+  CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
   //CAN_ITConfig(CAN2, CAN_IT_FMP0, ENABLE);
   
   USART_Cmd(USART1, ENABLE);
@@ -180,7 +180,7 @@ int main(void)
       Delay(100);
       //USART_SendData(USART1,(uint16_t)y_bias);
       send_wireless_flag=FALSE;
-       //CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
+      CAN_ITConfig(CAN1, CAN_IT_FMP0, ENABLE);
     }
 //    USART_SendData(USART1,msg);
 //    msg++;
