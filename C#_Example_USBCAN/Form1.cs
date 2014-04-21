@@ -1614,7 +1614,7 @@ namespace USBCAN
 
         private void button3_Click_1(object sender, EventArgs e)
         {
-            TransmitACanMsg("00 00 00 01", "00 00 00 00 00 00 f0 00");
+            TransmitACanMsg("00 00 00 02", "00 00 00 00 00 00 f0 00");
         }
     }
 }
