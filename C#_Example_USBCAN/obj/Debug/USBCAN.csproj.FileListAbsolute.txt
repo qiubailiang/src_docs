@@ -122,3 +122,4 @@ F:\Users\Android\Documents\GitHub\src_docs\C#_Example_USBCAN\obj\Debug\GenerateR
 F:\Users\Android\Documents\GitHub\src_docs\C#_Example_USBCAN\obj\Debug\GenerateResource-ResGen.write.1.tlog
 F:\Users\Android\Documents\GitHub\src_docs\C#_Example_USBCAN\obj\Debug\GenerateResource.write.1.tlog
 F:\Users\Android\Documents\GitHub\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.PathDisplayForm.resources
+F:\baoyujian\src_docs\C#_Example_USBCAN\obj\Debug\USBCAN.PathDisplayForm.resources

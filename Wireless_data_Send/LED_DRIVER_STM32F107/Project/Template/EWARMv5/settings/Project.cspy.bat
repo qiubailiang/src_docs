@@ -22,12 +22,12 @@
 @REM but they are listed at the end of this file for reference.
 
 
-"F:\Program Files\IAR Systems\Embedded Workbench 5.4\common\bin\cspybat" "F:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\bin\armproc.dll" "F:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\bin\armstlink.dll"  %1 --plugin "F:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\bin\<libsupport_plugin>" --backend -B "--endian=little" "--cpu=Cortex-M3" "--fpu=None" "-p" "F:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\CONFIG\debugger\ST\iostm32f107xx.ddf" "--semihosting" "--device=STM32F107xC" "-d" "stlink" 
+"C:\Program Files\IAR Systems\Embedded Workbench 5.4\common\bin\cspybat" "C:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\bin\armproc.dll" "C:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\bin\armstlink.dll"  %1 --plugin "C:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\bin\<libsupport_plugin>" --backend -B "--endian=little" "--cpu=Cortex-M3" "--fpu=None" "-p" "C:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\CONFIG\debugger\ST\iostm32f107xx.ddf" "--semihosting" "--device=STM32F107xC" "-d" "stlink" 
 
 
 @REM Loaded plugins:
-@REM    F:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\bin\armlibsupport.dll
-@REM    F:\Program Files\IAR Systems\Embedded Workbench 5.4\common\plugins\CodeCoverage\CodeCoverage.dll
-@REM    F:\Program Files\IAR Systems\Embedded Workbench 5.4\common\plugins\Profiling\Profiling.dll
-@REM    F:\Program Files\IAR Systems\Embedded Workbench 5.4\common\plugins\stack\stack.dll
-@REM    F:\Program Files\IAR Systems\Embedded Workbench 5.4\common\plugins\SymList\SymList.dll
+@REM    C:\Program Files\IAR Systems\Embedded Workbench 5.4\arm\bin\armlibsupport.dll
+@REM    C:\Program Files\IAR Systems\Embedded Workbench 5.4\common\plugins\CodeCoverage\CodeCoverage.dll
+@REM    C:\Program Files\IAR Systems\Embedded Workbench 5.4\common\plugins\Profiling\Profiling.dll
+@REM    C:\Program Files\IAR Systems\Embedded Workbench 5.4\common\plugins\stack\stack.dll
+@REM    C:\Program Files\IAR Systems\Embedded Workbench 5.4\common\plugins\SymList\SymList.dll

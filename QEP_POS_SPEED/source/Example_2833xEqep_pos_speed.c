@@ -199,13 +199,13 @@ void main(void)
 	{
 			Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=-200;
+			Map[i].y=-90;
 	}
-	for(i=0;i<10;i=i+2)
+	for(i=0;i<10;i++)
 	{
 			//Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=+200;
+			Map[i].y=450;
 	}
 	//Map[9].x=2410;
 	//Map[9].y=500;
@@ -378,7 +378,7 @@ void main(void)
 				CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
 				//CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
-			 	swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+			 	swing_speed = ((float)distance/(float)(PRD/6+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 				EPwm1Regs.TBPRD=swing_speed;
           
       	 
