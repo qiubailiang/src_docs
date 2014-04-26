@@ -13,8 +13,8 @@ namespace USBCAN
 {
     public partial class PathDisplayForm : Form
     {
-        int OrgX = 10;
-        int OrgY = 10;
+        int OrgX = 100;
+        int OrgY = 100;
         String fileContent;
         ArrayList path_list;
         public void DrawCoorodinates_withColor(int x, int y, Color col)
@@ -92,15 +92,24 @@ namespace USBCAN
                     if (path_list[i].ToString().Contains("Map"))
                     {
                         path_list[i] = path_list[i].ToString().Replace("Map", "");
-                        x_y = path_list[i].ToString().Split(',');
-                        DrawCoorodinates_withColor(Convert.ToInt32(x_y[0]), Convert.ToInt32(x_y[1]), Color.Blue);
+                        x_y = path_list[i].ToString().Split(' ');
+                        DrawCoorodinates_withColor(Convert.ToInt32(x_y[1]), Convert.ToInt32(x_y[3]), Color.Blue);
 
                     }
                     else
                     {
-                        x_y = path_list[i].ToString().Split(',');
-                        DrawCoorodinates_withColor(Convert.ToInt32(x_y[0]), Convert.ToInt32(x_y[1]), Color.Black);
+                        path_list[i] = path_list[i].ToString().Replace("Real ", "");
+                        
+                        x_y = path_list[i].ToString().Split(' ');
+                        if (x_y.GetLength(0) >= 4)
+                        {
+                            if (x_y[1]!=""&&!x_y[1].Contains("\n")&&x_y[3]!=""&&!x_y[3].Contains("\n"))
+                            {
+                                DrawCoorodinates_withColor(Convert.ToInt32(x_y[1])/100+OrgX, Convert.ToInt32(x_y[3])/100+OrgY, Color.Black);
+                            }
 
+                          
+                        }
 
                     }
 

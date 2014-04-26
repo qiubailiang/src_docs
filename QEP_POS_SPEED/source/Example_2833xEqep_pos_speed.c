@@ -195,17 +195,17 @@ void main(void)
 { 
 	
 	int i=0;
-	for(i=0;i<10;i++)
+		for(i=0;i<10;i++)
 	{
 			Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=-90;
+			Map[i].y=-80;
 	}
-	for(i=0;i<10;i++)
+	for(i=0;i<10;i=i+2)
 	{
 			//Map[i].x=36000-i*3600;
-			//Map[i].y=-800+1600/9*i;
-			Map[i].y=450;
+			
+			Map[i].y=+80;
 	}
 	//Map[9].x=2410;
 	//Map[9].y=500;

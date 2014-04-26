@@ -159,8 +159,6 @@ namespace USBCAN
             file_txt = "";
             ORG_X = 1000;
             ORG_Y = 500;
-
-            string A = "00";
             string B = "00";
             string C = "1";
             string R = "0"+ B + C;
@@ -1483,8 +1481,8 @@ namespace USBCAN
         {
             Coor tempCoor = new Coor();
 
-            tempCoor.X = (int)(dis *(float)Math.Cos(angle));
-            tempCoor.Y = (int)(dis * (float)Math.Sin(angle));
+            tempCoor.X = (int)(dis *(float)Math.Cos(3.14159*angle/180));
+            tempCoor.Y = (int)(dis * (float)Math.Sin(3.14159*angle/180));
             return tempCoor;
         }
 
