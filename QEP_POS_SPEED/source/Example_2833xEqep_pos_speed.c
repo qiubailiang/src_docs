@@ -149,6 +149,7 @@ void initEpwm2A();
 void initGpio_pwm();
 
 long angle=0;
+long angle_sendout=0;
 long distance;
 long polar_angle_count;
 long scale=5;
@@ -195,17 +196,17 @@ void main(void)
 { 
 	
 	int i=0;
-		for(i=0;i<10;i++)
+	for(i=0;i<10;i++)
 	{
 			Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=-80;
+			Map[i].y=-200;
 	}
 	for(i=0;i<10;i=i+2)
 	{
 			//Map[i].x=36000-i*3600;
-			
-			Map[i].y=+80;
+			//Map[i].y=-800+1600/9*i;
+			Map[i].y=+200;
 	}
 	//Map[9].x=2410;
 	//Map[9].y=500;
@@ -378,7 +379,7 @@ void main(void)
 				CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
 				//CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
-			 	swing_speed = ((float)distance/(float)(PRD/6+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+			 	swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 				EPwm1Regs.TBPRD=swing_speed;
           
       	 
@@ -414,11 +415,19 @@ void main(void)
 	    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
 	    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
 	    
-	   
+	    if(angle<0)
+	    {
+	   		angle_sendout=angle+1152000;
 		
-		ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle;
-		ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle>>8;
-		ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle>>16;
+	    }
+	    else
+	    {
+	    	angle_sendout=angle;
+	    }
+	    
+		ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
+		ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
+		ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
 		
 		ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
 		ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
