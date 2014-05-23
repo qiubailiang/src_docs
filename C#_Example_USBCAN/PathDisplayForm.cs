@@ -17,6 +17,10 @@ namespace USBCAN
         int OrgY = 100;
         String fileContent;
         ArrayList path_list;
+        String writebuf="";
+        Coor[] Maps = new Coor[10];
+        Coor[] Mapz = new Coor[10];
+
         public void DrawCoorodinates_withColor(int x, int y, Color col)
         {
             //    //pen 画线
@@ -44,6 +48,32 @@ namespace USBCAN
   
         private void PathDisplayForm_Load(object sender, EventArgs e)
         {
+            for (int i = 0; i < 10; i++)
+            {
+                Mapz[i] = new Coor();
+                Mapz[i].X = 36000 - i * 3600;
+                //Map[i].y=-800+1600/9*i;
+//                Map[i].y = -90;
+                Mapz[i].Y = -80;
+            }
+    
+                for ( int i = 0; i < 10; i = i + 2)
+                {
+
+                    Mapz[i].Y = +80;
+                }
+
+
+                for (int i = 0; i < 10; i++)
+                {
+                    Maps[i] = new Coor();
+                    Maps[i].X = 36000 - i * 3600;
+                    //Map[i].y=-800+1600/9*i;
+                    //                Map[i].y = -90;
+                    Maps[i].Y = 450;
+                }
+
+
             path_list = new ArrayList();
             DrawAxis(OrgX, OrgY, 1000, Color.Blue);
 
@@ -58,9 +88,29 @@ namespace USBCAN
 
         private void button1_Click_1(object sender, EventArgs e)
         {
-            System.Windows.Forms.OpenFileDialog openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            FileStream fs1;
 
-            openFileDialog1.Filter = "文本文件(*.txt)|*.txt|所有文件(*.*)|*.*";
+            if (!File.Exists("D:\\processed.txt"))
+            {
+                //StreamWriter sw = new StreamWriter("D:\\processed.txt", false);
+
+                fs1 = new FileStream("D:\\processed.txt", FileMode.Create, FileAccess.Write);//创建写入文件 
+                
+
+            }
+            else
+            {
+                fs1 = new FileStream("D:\\processed.txt", FileMode.Open, FileAccess.Write);
+              
+                
+            }
+            StreamWriter sw = new StreamWriter(fs1);
+            
+            
+            System.Windows.Forms.OpenFileDialog openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+             //StreamWriter sw = new StreamWriter("txtwriter.txt", false);
+
+                  openFileDialog1.Filter = "文本文件(*.txt)|*.txt|所有文件(*.*)|*.*";
 
             if (openFileDialog1.ShowDialog() == DialogResult.OK)
             {
@@ -105,7 +155,19 @@ namespace USBCAN
                         {
                             if (x_y[1]!=""&&!x_y[1].Contains("\n")&&x_y[3]!=""&&!x_y[3].Contains("\n"))
                             {
+                                if (Convert.ToInt32( x_y[1])>Convert.ToInt32( x_y[3]))
+                                {
+                                    String tempswap = "";
+                                    tempswap = x_y[3];
+                                    x_y[3] = x_y[1];
+                                    x_y[1]=tempswap;
+
+                                }
                                 DrawCoorodinates_withColor(Convert.ToInt32(x_y[1])/100+OrgX, Convert.ToInt32(x_y[3])/100+OrgY, Color.Black);
+                                writebuf =  x_y[1] + " " + x_y[3] ;  
+                                sw.WriteLine(writebuf);
+
+
                             }
 
                           
@@ -116,6 +178,9 @@ namespace USBCAN
                 }
 
             }
+            sw.Close();
+            fs1.Close();
+            //sw.Close();
         }
     }
 }
