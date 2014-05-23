@@ -487,6 +487,7 @@ void main(void)
    	{
    		 
    	 	scan();
+   	 	scanY();
    	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
 	  	{
 	  		AutoMode=AutoModeOFF;
