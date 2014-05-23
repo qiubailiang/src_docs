@@ -148,11 +148,15 @@ void initEpwm1B();
 void initEpwm2A();
 void initGpio_pwm();
 
-long angle=0;
+long angle=0;  //horizatal degree counter 
 long angle_sendout=0;
+
+long angleY=0;  //vertical degree counter
+
 long distance;
 long polar_angle_count;
 long scale=5;
+long scaleY=10;
 long swing_speed=0;
 float Arc2Degree(float arc);
 float GetCountFromDegree(float deg);
@@ -166,10 +170,13 @@ typedef struct Coor{
  }Coor;
 Coor Get_Position(float a,float d);
 Coor get_next_point_on_trace(struct Coor map [],int length);
+
 float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step);
 float calulate_from_edges(float a,float b,float c);
 void drive(float degree);
-void scan();
+void driveY(float degree);
+void scan();//x scaning
+void scanY();//y scaning
 int PwmOneStepFinishFlag=0;
 int Pwm2OneStepFinishFlag=0;
 int FinishStepFlag2=FINISH;
@@ -706,7 +713,22 @@ interrupt  void EPWM2_int(void)
 	
 	EPwm2Regs.ETCLR.bit.INT=1;///////////////////////////////////
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;////the two statments are used to clear the flags of interrupt
-	
+	if(EPwm2Regs.CMPA.half.CMPA !=0)
+	{
+		
+		//PwmOneStepFinishFlag++;
+		if(dir1==0)
+			{
+				angleY--;	
+			}
+			else
+			{
+				if(dir1==1)
+				{
+					angleY++;
+				}
+			}
+	}
 	if(Pwm2OneStepFinishFlag>=N2)
 	{
 	Pwm2OneStepFinishFlag=0;	
@@ -765,6 +787,13 @@ void drive(float degree)//the degree passed in should be in arcs
 	Driver1(dir,degree_count);
 
 }
+void driveY(float degree)//the degree passed in should be in arcs 
+{
+	float degree_in_degrees=degree/3.14*180;
+	long degree_count=degree_in_degrees/((float)360)*1152000;
+	Driver2(dir1,degree_count);
+
+}
 void scan()
 {
 		if(GetDegreeFromCount(angle)>scale)
@@ -781,6 +810,23 @@ void scan()
    	 		}
    	 	}
    	 	drive(3.14/180);
+}
+void scanY()
+{
+		if(GetDegreeFromCount(angleY)>scaleY)
+   	 	{
+   	 		dir1=0;
+   	 		
+   	 	} 
+   	 	else
+   	 	{
+   	 		if(GetDegreeFromCount(angleY)<-scaleY)
+   	 		{
+	   	 		dir1=1;
+	   	 		
+   	 		}
+   	 	}
+   	 	driveY(3.14/180);
 }
 float Arc2Degree(float arc)
 {
