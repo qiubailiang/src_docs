@@ -212,10 +212,10 @@ if(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) != RESET)
 void CAN1_RX0_IRQHandler(void)
 
 {      
-     CanRxMsg RxMessage;	 
+       
 	//u8 dw=0,wd=0;
 	//TIM_Configuration();
-     Delay(100);
+     //Delay(100);
      RxMessage.StdId=0x7FF;
      RxMessage.ExtId=0x1FFFFFFF;
         CAN_Receive(CAN1,CAN_FIFO0, &RxMessage);
@@ -246,7 +246,7 @@ void CAN1_RX0_IRQHandler(void)
                  
                   
                 }
-               y_bias =(RxMessage.Data[4]>>5);
+               y_bias =(RxMessage.Data[4]>>3);
                
                y_dir=y_dir|((int)x_bias<<3);
                y_dir=y_dir|((int)y_bias<<0);

@@ -544,18 +544,24 @@ void main(void)
 			drive(get_angle(current_pos,next_map_pos,walkstep));
 			float turning = ((float)y_bias)/1000;
 			turning=180*turning/3.14159;
-			swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+			if(y_bias==0){
+				swing_speed_y=0;
+			}else{
+			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+			swing_speed_y=PRD*((float)y_bias/60);
+			
+			}
 			EPwm2Regs.TBPRD=swing_speed_y;
 			EPwm2Regs.CMPA.half.CMPA=swing_speed_y/2;
 			if(y_bias_dir==0)
 			{
 					
-				Driver2(0x01,(Uint32)turning);
+				Driver2(0x00,1);
 			}
 			else
 			{
 		
-				Driver2(0x00,(Uint32)turning);
+				Driver2(0x01,1);
 				
 			}
 		
