@@ -158,6 +158,7 @@ long polar_angle_count;
 long scale=5;
 long scaleY=10;
 long swing_speed=0;
+long swing_speed_y=0;
 float Arc2Degree(float arc);
 float GetCountFromDegree(float deg);
 float GetDegreeFromCount(long cnt);
@@ -173,10 +174,17 @@ Coor get_next_point_on_trace(struct Coor map [],int length);
 
 float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step);
 float calulate_from_edges(float a,float b,float c);
+int x_bias=0;
+int y_bias=0;
+
+int  x_bias_dir;
+int y_bias_dir;
+
 void drive(float degree);
 void driveY(float degree);
 void scan();//x scaning
 void scanY();//y scaning
+
 int PwmOneStepFinishFlag=0;
 int Pwm2OneStepFinishFlag=0;
 int FinishStepFlag2=FINISH;
@@ -188,6 +196,7 @@ float DegreeOfSwing=200;
 int distance_valid_flag=FALSE;
 
 int dir_flag_for_guidence;
+int dir1_flag_for_guidence;
 Coor current_pos;
 Coor next_map_pos;
 struct Coor Map [10]; 
@@ -195,7 +204,7 @@ float baseX=0;
 float baseY=0;
 
 float walkstep=1;
-int y_bias=0;
+
 
 
 int AutoMode=AutoModeON;
@@ -391,7 +400,7 @@ void main(void)
           
       	 
 		 }
-		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 //from distance detector
+		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 
 		{
 		  	
 	       ECanaShadow.CANRMP.all = 0;
@@ -407,75 +416,93 @@ void main(void)
 				CAN_RxBuffer[5]=ECanaMboxes.MBOX2.MDH.byte.BYTE5;
 				CAN_RxBuffer[6]=ECanaMboxes.MBOX2.MDH.byte.BYTE6;
 				CAN_RxBuffer[7]=ECanaMboxes.MBOX2.MDH.byte.BYTE7;
-		
-          if(CAN_RxBuffer[1]==0xa0||CAN_RxBuffer[1]==0xa1||CAN_RxBuffer[1]==0xb0)/////switch work mode
+				
+				distance_valid_flag  =(CAN_RxBuffer[1]>>7);
+				x_bias_dir=CAN_RxBuffer[1]&0x40;
+				y_bias_dir=CAN_RxBuffer[1]&0x20;
+				
+				x_bias=CAN_RxBuffer[1]&(0x18);////0001 1000
+				y_bias=CAN_RxBuffer[1]&(0x07);/////0000 0111
+				
+          if(distance_valid_flag==1)/////distance valid 
             {
            		distance_valid_flag=TRUE;
            		
-////////////////////////////
-///////send out can msg
-
-		ECanaMboxes.MBOX26.MDL.all = 0;
-	    ECanaMboxes.MBOX26.MDH.all = 0;
-	    
-	    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
-	    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
-	    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
-	    
-	    if(angle<0)
-	    {
-	   		angle_sendout=angle+1152000;
+		////////////////////////////
+		///////send out can msg
 		
-	    }
-	    else
-	    {
-	    	angle_sendout=angle;
-	    }
-	    
-		ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
-		ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
-		ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
-		
-		ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
-		ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
-	    ECanaShadow.CANTRS.all = 0;
-	    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
-	    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-	    do // Send 00110000
-	    {
-	      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-	    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
-	    ECanaShadow.CANTA.all = 0;
-	    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
-	    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-/////////////////
-////////////////          		
+				ECanaMboxes.MBOX26.MDL.all = 0;
+			    ECanaMboxes.MBOX26.MDH.all = 0;
+			    
+			    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
+			    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
+			    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
+			    
+			    if(angle<0)
+			    {
+			   		angle_sendout=angle+1152000;
+				
+			    }
+			    else
+			    {
+			    	angle_sendout=angle;
+			    }
+			    
+				ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
+				ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
+				ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
+				
+				ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
+				ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
+			    ECanaShadow.CANTRS.all = 0;
+			    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
+			    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+			    do // Send 00110000
+			    {
+			      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+			    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
+			    ECanaShadow.CANTA.all = 0;
+			    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
+			    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+		/////////////////
+		////////////////          		
            		
            		
            		
             }
-            else
+            else    /////distance not valid
             {
-            	if(CAN_RxBuffer[1]==0xf1)////lost  on the left should turn right
+            	distance_valid_flag=FALSE;
+            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
+				//y_bais_dir=CAN_RxBuffer[1]&0x20;
+            	if(x_bias_dir!=0)////lost  on the left should turn right
             	{
             		dir_flag_for_guidence=1;/////
-            		distance_valid_flag=FALSE;
+            		
             	}
             	else
             	{
-	            	if(CAN_RxBuffer[1]==0xf3)
-	            	{
+	            	
 	            		dir_flag_for_guidence=0;/////
-	            		distance_valid_flag=FALSE;
-	            	}
+	            		
+	            	
             	}
+            	if(y_bias_dir!=0)////lost  on the top should turn down
+            	{
+            		dir1_flag_for_guidence=1;/////
+            		
+            	}
+            	else
+            	{
+	            	
+	           		dir1_flag_for_guidence=0;/////
+	            		
+            	}
+            	
             	
            	}
           
-           		y_bias=CAN_RxBuffer[1];
-           
-         
-            
+
 		 }
 		 
 		 
@@ -487,7 +514,7 @@ void main(void)
    	{
    		 
    	 	scan();
-   	 	scanY();
+   	 	//scanY();
    	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
 	  	{
 	  		AutoMode=AutoModeOFF;
@@ -496,19 +523,8 @@ void main(void)
 			  //first get angle ,get ho many angles should turn;
 			  //then drive 
 			drive(get_angle(current_pos,next_map_pos,walkstep));
-			if(y_bias==0xa0)
-			{
-				Driver2(0x01,1);
-			}
-			else
-			{
-				if(y_bias==0xa1)
-				{
-					Driver2(0x00,1);
-				}
-			}
-		
-		  }
+			
+		 }
 		  else{
 		  		
 		  		
@@ -526,20 +542,26 @@ void main(void)
 			  //first get angle ,get ho many angles should turn;
 			  //then drive 
 			drive(get_angle(current_pos,next_map_pos,walkstep));
-			if(y_bias==0xa0)
+			float turning = ((float)y_bias)/1000;
+			turning=180*turning/3.14159;
+			swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+			EPwm2Regs.TBPRD=swing_speed_y;
+			EPwm2Regs.CMPA.half.CMPA=swing_speed_y/2;
+			if(y_bias_dir==0)
 			{
-				Driver2(0x01,1);
+					
+				Driver2(0x01,(Uint32)turning);
 			}
 			else
 			{
-				if(y_bias==0xa1)
-				{
-					Driver2(0x00,1);
-				}
+		
+				Driver2(0x00,(Uint32)turning);
+				
 			}
 		
 		  }
-		  else{
+		  else
+		  {
 		  	if(dir_flag_for_guidence==0)
 		  	{
 		  		dir=1;
@@ -554,8 +576,11 @@ void main(void)
 		  	}/////
 		  		AutoMode=AutoModeON;
 			 //scan();//if failed to capture the target,then scan for it 
-		  		}
+		  }
 	  }
+	  
+	  
+	  
    }
 }
 int get_nearest_point(struct Coor map [],int length)//the current position we refferenced here is a global variable
@@ -641,7 +666,7 @@ void Driver2(int D,Uint32 Deg)//D stand for direction Deg stands for  degrees to
 	EALLOW;
 	DIR1=D;
 	EDIS;
-	EPwm2Regs.CMPA.half.CMPA =(65000/4);
+	EPwm2Regs.CMPA.half.CMPA =swing_speed_y/2;
 
 }
 

@@ -251,7 +251,7 @@ if(USART_GetFlagStatus(USART2, USART_FLAG_RXNE) != RESET)
 }
 
 
-void CAN1_RX0_IRQHandler(void)
+void USB_LP_CAN1_RX0_IRQnHandler(void)
 
 {      
 

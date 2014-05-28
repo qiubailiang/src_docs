@@ -216,53 +216,60 @@ void CAN1_RX0_IRQHandler(void)
 	//u8 dw=0,wd=0;
 	//TIM_Configuration();
      Delay(100);
+     RxMessage.StdId=0x7FF;
+     RxMessage.ExtId=0x1FFFFFFF;
         CAN_Receive(CAN1,CAN_FIFO0, &RxMessage);
      
     
          if(RxMessage.ExtId == 0x00111217)
          {
-           
+           y_dir=0;
              if(RxMessage.Data[2]==0x01&&RxMessage.Data[6]==0x14)
              {
-                if(RxMessage.Data[5]==0x01)
+               
+               y_dir=(y_dir|(1<<7));
+               x_bias =(RxMessage.Data[0]>>6);
+               if(RxMessage.Data[1]==0x01)////x bais
+               {
+                  y_dir=(y_dir|(1<<6));;//
+               }
+               else 
+               {
+               ;
+               }
+                if(RxMessage.Data[5]==0x01) //y vertical bias direction
                 {
-                  y_dir=0xa0;//position valid vertical too high
+                 y_dir=(y_dir|(1<<5));//position valid vertical too high
                 }
                 else
                 {
-                  if(RxMessage.Data[5]==0x03)
-                  {
-                    y_dir=0xa1;//positon valid vertical too low
-                  }else{
-                     if(RxMessage.Data[5]==0x02)
-                  {
-                    y_dir=0xb0;//position valid vertical normal
-                  }
-                  }
+                 
+                  
                 }
+               y_bias =(RxMessage.Data[4]>>5);
+               
+               y_dir=y_dir|((int)x_bias<<3);
+               y_dir=y_dir|((int)y_bias<<0);
+               
                 distance_vaild_flag=TRUE;         
              }
-             else
-             {
-               if(RxMessage.Data[2]==0x00&&RxMessage.Data[6]==0x14)
+             else if(RxMessage.Data[2]==0x00&&RxMessage.Data[6]==0x14)
                {
+                 
                  if(RxMessage.Data[3]==0x01)////lost  on the left should turn right
                  {
-                    y_dir=0xf1;
+                     y_dir=(y_dir|(1<<6));
                  }
-                 else
+                 if(RxMessage.Data[7]==0x01)////lost  on the right should turn right
                  {
-                    if(RxMessage.Data[3]==0x03)////lost  on the right should turn right
-                    {
-                        y_dir=0xf3;
-                    }
+                        y_dir=(y_dir|(1<<5));
                  }
                  distance_vaild_flag=FALSE;     
                }
                
-             }
+             
            
-          y_bias=RxMessage.Data[4];
+         // y_bias=RxMessage.Data[4];
           send_wireless_flag=TRUE;
            CAN_ITConfig(CAN1, CAN_IT_FMP0, DISABLE);
          }
