@@ -395,7 +395,7 @@ void main(void)
 				CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
 				//CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
-			 	swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+			 	swing_speed = ((float)distance/(float)(PRD/6+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 				EPwm1Regs.TBPRD=swing_speed;
           
       	 
@@ -422,7 +422,7 @@ void main(void)
 				y_bias_dir=CAN_RxBuffer[1]&0x20;
 				
 				x_bias=CAN_RxBuffer[1]&(0x18);////0001 1000
-				y_bias=CAN_RxBuffer[1]&(0x07);/////0000 0111
+				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
 				
           if(distance_valid_flag==1)/////distance valid 
             {
@@ -544,18 +544,18 @@ void main(void)
 			drive(get_angle(current_pos,next_map_pos,walkstep));
 			float turning = ((float)y_bias)/1000;
 			turning=180*turning/3.14159;
-			if(y_bias==0){
+			if(y_bias<=2){
 				swing_speed_y=0;
 			}else{
 			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-			swing_speed_y=PRD*((float)y_bias/60);
+			swing_speed_y=PRD*((float)y_bias/18);
 			
 			}
 			EPwm2Regs.TBPRD=swing_speed_y;
-			EPwm2Regs.CMPA.half.CMPA=swing_speed_y/2;
+			EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
 			if(y_bias_dir==0)
 			{
-					
+				
 				Driver2(0x00,1);
 			}
 			else
