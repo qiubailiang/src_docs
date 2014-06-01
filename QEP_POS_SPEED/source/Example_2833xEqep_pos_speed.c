@@ -421,7 +421,7 @@ void main(void)
 				x_bias_dir=CAN_RxBuffer[1]&0x40;
 				y_bias_dir=CAN_RxBuffer[1]&0x20;
 				
-				x_bias=CAN_RxBuffer[1]&(0x18);////0001 1000
+				x_bias=CAN_RxBuffer[7];////
 				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
 				
           if(distance_valid_flag==1)/////distance valid 
@@ -539,8 +539,12 @@ void main(void)
 	  		//AutoMode=AutoModeOFF;
 	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
-			  //first get angle ,get ho many angles should turn;
-			  //then drive 
+			//first get angle ,get ho many angles should turn;
+		    //then drive 
+			if(x_bias>0xf)
+			{
+			swing_speed=0;
+			}
 			drive(get_angle(current_pos,next_map_pos,walkstep));
 			float turning = ((float)y_bias)/1000;
 			turning=180*turning/3.14159;
