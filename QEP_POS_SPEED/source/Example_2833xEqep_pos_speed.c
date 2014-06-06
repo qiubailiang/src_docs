@@ -114,6 +114,7 @@
 #define AutoModeON 1
 #define FALSE 0
 #define TRUE 1
+#define TotalLoopCount 3200000
 
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
@@ -395,7 +396,7 @@ void main(void)
 				CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
 				//CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
-			 	swing_speed = ((float)distance/(float)(PRD/6+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+			 	swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 				EPwm1Regs.TBPRD=swing_speed;
           
       	 
@@ -440,7 +441,7 @@ void main(void)
 			    
 			    if(angle<0)
 			    {
-			   		angle_sendout=angle+1152000;
+			   		angle_sendout=angle+TotalLoopCount;
 				
 			    }
 			    else
@@ -506,7 +507,7 @@ void main(void)
 		 }
 		 
 		 
-		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*1152000);
+		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*TotalLoopCount);
 		 
 	
 		 
@@ -541,7 +542,7 @@ void main(void)
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 			//first get angle ,get ho many angles should turn;
 		    //then drive 
-			if(x_bias>0xf)
+			if(x_bias>0x3f)
 			{
 			swing_speed=0;
 			}
@@ -560,12 +561,12 @@ void main(void)
 			if(y_bias_dir==0)
 			{
 				
-				Driver2(0x00,1);
+				Driver2(0x01,1);
 			}
 			else
 			{
 		
-				Driver2(0x01,1);
+				Driver2(0x00,1);
 				
 			}
 		
@@ -819,14 +820,14 @@ float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step)////return in arcs
 void drive(float degree)//the degree passed in should be in arcs 
 {
 	float degree_in_degrees=degree/3.14*180;
-	long degree_count=degree_in_degrees/((float)360)*1152000;
+	long degree_count=degree_in_degrees/((float)360)*TotalLoopCount;
 	Driver1(dir,degree_count);
 
 }
 void driveY(float degree)//the degree passed in should be in arcs 
 {
 	float degree_in_degrees=degree/3.14*180;
-	long degree_count=degree_in_degrees/((float)360)*1152000;
+	long degree_count=degree_in_degrees/((float)360)*TotalLoopCount;
 	Driver2(dir1,degree_count);
 
 }
@@ -871,6 +872,6 @@ return arc/3.1415927*180;
 }
 float GetDegreeFromCount(long cnt)
 {
-return (float)cnt/((float)1152000)*360;
+return (float)cnt/((float)TotalLoopCount)*360;
 }
 

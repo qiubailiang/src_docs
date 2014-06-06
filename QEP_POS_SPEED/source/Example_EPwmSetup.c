@@ -82,8 +82,8 @@ void initEpwm1A()
    EPwm1Regs.ETPS.bit.INTPRD = ET_1ST;           // Generate INT on 1st event
    
 
-   EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV4 ;   // Clock ratio to SYSCLKOUT
-   EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV4;     //TBCLK=SYSCLKOUT/(HSPCLKDIV*CLKDIV)
+   EPwm1Regs.TBCTL.bit.HSPCLKDIV = TB_DIV1 ;   // Clock ratio to SYSCLKOUT
+   EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV2;     //TBCLK=SYSCLKOUT/(HSPCLKDIV*CLKDIV)
 //   EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV2;
 
    // Setup shadow register load on ZERO
@@ -213,7 +213,7 @@ void initEpwm2A()
    
 
    EPwm2Regs.TBCTL.bit.HSPCLKDIV = TB_DIV2 ;   // Clock ratio to SYSCLKOUT
-   EPwm2Regs.TBCTL.bit.CLKDIV = TB_DIV2;     //TBCLK=SYSCLKOUT/(HSPCLKDIV*CLKDIV)
+   EPwm2Regs.TBCTL.bit.CLKDIV = TB_DIV1;     //TBCLK=SYSCLKOUT/(HSPCLKDIV*CLKDIV)
 //   EPwm1Regs.TBCTL.bit.CLKDIV = TB_DIV2;
 
    // Setup shadow register load on ZERO
