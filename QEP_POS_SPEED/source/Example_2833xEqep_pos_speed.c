@@ -204,6 +204,12 @@ struct Coor Map [10];
 float baseX=0;
 float baseY=0;
 
+float initAngle2Y=0;///
+
+float Hx=0;
+float Hy=2000;
+
+
 float walkstep=1;
 
 
@@ -787,8 +793,8 @@ Coor Get_Position(float a,float d)//a is in degrees
 	Coor tempCoor;
 	a=(float)a;
 	d=(float)d;
-	tempCoor.x=d*cos(a/((float)180)*3.141593);
-	tempCoor.y=d*sin(a/((float)180)*3.141593);
+	tempCoor.x=d*sin(initAngle2Y+a/((float)180)*3.141593)+Hx;
+	tempCoor.y=d*cos(initAngle2Y+a/((float)180)*3.141593)+Hy;
 	return tempCoor;
 }
 float calulate_from_edges(float a,float b,float c)
