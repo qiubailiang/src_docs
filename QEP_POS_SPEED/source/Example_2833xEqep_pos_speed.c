@@ -185,6 +185,7 @@ void drive(float degree);
 void driveY(float degree);
 void scan();//x scaning
 void scanY();//y scaning
+int TargetInWorkingZone(Coor c);
 
 int PwmOneStepFinishFlag=0;
 int Pwm2OneStepFinishFlag=0;
@@ -212,7 +213,7 @@ float Hy=2000;
 
 float walkstep=1;
 
-
+int shouldTurnOffFlag=FALSE;
 
 int AutoMode=AutoModeON;
 void main(void)
@@ -283,6 +284,8 @@ void main(void)
      ECanaRegs.CANME.bit.ME0 = 0;//使能邮箱0
      ECanaRegs.CANME.bit.ME1 = 0;//使能邮箱1
      ECanaRegs.CANME.bit.ME2 = 0;//使能邮箱2
+     ECanaRegs.CANME.bit.ME3 = 0;//enable mailbox 3 for reciving msg from other base for target location infor 
+
     // Mailboxs can be written to 16-bits or 32-bits at a time
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_L =0x1213 ;//扩展帧ID：0x00111213
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_H=0x01;
@@ -302,20 +305,28 @@ void main(void)
      ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x04;//04
      ECanaMboxes.MBOX2.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX2.MSGID.bit.AME=0;//屏蔽位
-	 
+
+	   ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x1216;//扩展帧ID：0x00111216
+     ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_H=0x01;
+     ECanaMboxes.MBOX3.MSGID.bit.STDMSGID=0x04;//04
+     ECanaMboxes.MBOX3.MSGID.bit.IDE=1;//扩展帧，如为0
+	 ECanaMboxes.MBOX3.MSGID.bit.AME=0;//屏蔽位
 	 
      ECanaRegs.CANMD.bit.MD0 = 1; //邮箱0设置为接收
      ECanaRegs.CANMD.bit.MD1 = 1; //邮箱1设置为接收
      ECanaRegs.CANMD.bit.MD2 = 1; //邮箱2设置为接收
+     ECanaRegs.CANMD.bit.MD3 = 1; //Mail box3 set as recive box
      
      ECanaRegs.CANME.bit.ME0 = 1;//使能邮箱0
      ECanaRegs.CANME.bit.ME1 = 1;//使能邮箱2
      ECanaRegs.CANME.bit.ME2 = 1;//使能邮箱2
+     ECanaRegs.CANME.bit.ME3 = 1;//使能邮箱3
      
      // Specify that 8 bits will be sent/received
      ECanaMboxes.MBOX0.MSGCTRL.bit.DLC = 8;
      ECanaMboxes.MBOX1.MSGCTRL.bit.DLC = 8;
    	 ECanaMboxes.MBOX2.MSGCTRL.bit.DLC = 8;	
+   	 ECanaMboxes.MBOX3.MSGCTRL.bit.DLC = 8;	
    	 
    	 
    	 
@@ -407,6 +418,7 @@ void main(void)
           
       	 
 		 }
+		 
 		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 
 		{
 		  	
@@ -431,87 +443,133 @@ void main(void)
 				x_bias=CAN_RxBuffer[7];////
 				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
 				
-          if(distance_valid_flag==1)/////distance valid 
-            {
-           		distance_valid_flag=TRUE;
-           		
-		////////////////////////////
-		///////send out can msg
-		
-				ECanaMboxes.MBOX26.MDL.all = 0;
-			    ECanaMboxes.MBOX26.MDH.all = 0;
-			    
-			    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
-			    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
-			    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
-			    
-			    if(angle<0)
-			    {
-			   		angle_sendout=angle+TotalLoopCount;
-				
-			    }
-			    else
-			    {
-			    	angle_sendout=angle;
-			    }
-			    
-				ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
-				ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
-				ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
-				
-				ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
-				ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
-			    ECanaShadow.CANTRS.all = 0;
-			    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
-			    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-			    do // Send 00110000
-			    {
-			      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-			    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
-			    ECanaShadow.CANTA.all = 0;
-			    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
-			    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-		/////////////////
-		////////////////          		
-           		
-           		
-           		
-            }
-            else    /////distance not valid
-            {
-            	distance_valid_flag=FALSE;
-            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
-				//y_bais_dir=CAN_RxBuffer[1]&0x20;
-            	if(x_bias_dir!=0)////lost  on the left should turn right
-            	{
-            		dir_flag_for_guidence=1;/////
-            		
-            	}
-            	else
-            	{
-	            	
-	            		dir_flag_for_guidence=0;/////
+	          if(distance_valid_flag==1)/////distance valid then do the guidence stuff
+	            {
+	           		distance_valid_flag=TRUE;
+	           		
+			////////////////////////////
+			///////send out can msg
+			
+					ECanaMboxes.MBOX26.MDL.all = 0;
+				    ECanaMboxes.MBOX26.MDH.all = 0;
+				    
+				    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
+				    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
+				    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
+				    
+				    if(angle<0)
+				    {
+				   		angle_sendout=angle+TotalLoopCount;
+					
+				    }
+				    else
+				    {
+				    	angle_sendout=angle;
+				    }
+				    
+					ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
+					ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
+					ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
+					
+					ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
+					ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
+				    ECanaShadow.CANTRS.all = 0;
+				    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
+				    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+				    do // Send 00110000
+				    {
+				      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+				    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
+				    ECanaShadow.CANTA.all = 0;
+				    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
+				    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+			/////////////////
+			////////////////          		
+	           		
+	           		
+	           		
+	            }
+	            else    /////distance not valid
+	            {
+	            	distance_valid_flag=FALSE;
+	            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
+					//y_bais_dir=CAN_RxBuffer[1]&0x20;
+	            	if(x_bias_dir!=0)////lost  on the left should turn right
+	            	{
+	            		dir_flag_for_guidence=1;/////
 	            		
-	            	
-            	}
-            	if(y_bias_dir!=0)////lost  on the top should turn down
-            	{
-            		dir1_flag_for_guidence=1;/////
-            		
-            	}
-            	else
-            	{
-	            	
-	           		dir1_flag_for_guidence=0;/////
+	            	}
+	            	else
+	            	{
+		            	
+		            		dir_flag_for_guidence=0;/////
+		            		
+		            	
+	            	}
+	            	if(y_bias_dir!=0)////lost  on the top should turn down
+	            	{
+	            		dir1_flag_for_guidence=1;/////
 	            		
-            	}
-            	
-            	
-           	}
+	            	}
+	            	else
+	            	{
+		            	
+		           		dir1_flag_for_guidence=0;/////
+		            		
+	            	}
+	            	
+	            	
+	           	}
           
 
 		 }
 		 
+		  if (ECanaShadow.CANRMP.bit.RMP3 == 1)//D0  receieve 111216 //from other base--the target infor
+		{
+		  	
+	       ECanaShadow.CANRMP.all = 0;
+	       ECanaShadow.CANRMP.bit.RMP3 = 1;     	 // Clear RMP20
+	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
+	       
+	            CAN_RxBuffer[0]=ECanaMboxes.MBOX3.MDL.byte.BYTE0;
+	            CAN_RxBuffer[1]=ECanaMboxes.MBOX3.MDL.byte.BYTE1;
+	            CAN_RxBuffer[2]=ECanaMboxes.MBOX3.MDL.byte.BYTE2;
+	            
+		 // distance=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
+	            CAN_RxBuffer[3]=ECanaMboxes.MBOX3.MDL.byte.BYTE3;
+				CAN_RxBuffer[4]=ECanaMboxes.MBOX3.MDH.byte.BYTE4;
+			 	//distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
+				CAN_RxBuffer[5]=ECanaMboxes.MBOX3.MDH.byte.BYTE5;
+				CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
+				CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
+				if(CAN_RxBuffer[6]>0)
+				{
+					current_pos.x=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];
+				}
+				else
+				{
+					current_pos.x=-(CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2]);
+				}
+				if(CAN_RxBuffer[7]>0)
+				{
+					current_pos.y=CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5];
+				}
+				else
+				{
+					current_pos.y=-(CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5]);
+				}
+			 	shouldTurnOffFlag=TRUE;
+          
+      	 
+		 }
+		 if(shouldTurnOffFlag==TRUE)
+		 {
+		 //tell its own laser to turn off
+		 }
+		 else
+		 {
+		 	
+		 }
 		 
 		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*TotalLoopCount);
 		 
@@ -880,4 +938,19 @@ float GetDegreeFromCount(long cnt)
 {
 return (float)cnt/((float)TotalLoopCount)*360;
 }
+int TargetInWorkingZone(Coor c)
+{
+	float tX,tY;
+	tX=c.x;
+	tY=c.y;
+	
+	if(tX>10||tY>0)
+	{
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
 
+}
