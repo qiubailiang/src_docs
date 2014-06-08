@@ -403,18 +403,24 @@ void main(void)
 	       ECanaShadow.CANRMP.bit.RMP1 = 1;     	 // Clear RMP20
 	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
 	       
-	            CAN_RxBuffer[0]=ECanaMboxes.MBOX1.MDL.byte.BYTE0;
-	            CAN_RxBuffer[1]=ECanaMboxes.MBOX1.MDL.byte.BYTE1;
-	            CAN_RxBuffer[2]=ECanaMboxes.MBOX1.MDL.byte.BYTE2;
+	       CAN_RxBuffer[0]=ECanaMboxes.MBOX1.MDL.byte.BYTE0;
+	       CAN_RxBuffer[1]=ECanaMboxes.MBOX1.MDL.byte.BYTE1;
+	       CAN_RxBuffer[2]=ECanaMboxes.MBOX1.MDL.byte.BYTE2;
 		 // distance=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
-	            CAN_RxBuffer[3]=ECanaMboxes.MBOX1.MDL.byte.BYTE3;
-				CAN_RxBuffer[4]=ECanaMboxes.MBOX1.MDH.byte.BYTE4;
-			 	distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-				CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
-				//CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
+	       CAN_RxBuffer[3]=ECanaMboxes.MBOX1.MDL.byte.BYTE3;
+		   CAN_RxBuffer[4]=ECanaMboxes.MBOX1.MDH.byte.BYTE4;
+		   CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
+		   CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
+				if(CAN_RxBuffer[5]==1)
+				{
+					
+					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
+					swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					EPwm1Regs.TBPRD=swing_speed;
+				
+				}
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
-			 	swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
-				EPwm1Regs.TBPRD=swing_speed;
+			 	
           
       	 
 		 }
@@ -540,8 +546,8 @@ void main(void)
 				CAN_RxBuffer[4]=ECanaMboxes.MBOX3.MDH.byte.BYTE4;
 			 	//distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
 				CAN_RxBuffer[5]=ECanaMboxes.MBOX3.MDH.byte.BYTE5;
-				CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
-				CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
+				CAN_RxBuffer[6]=ECanaMboxes.MBOX3.MDH.byte.BYTE6;
+				CAN_RxBuffer[7]=ECanaMboxes.MBOX3.MDH.byte.BYTE7;
 				if(CAN_RxBuffer[6]>0)
 				{
 					current_pos.x=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];
