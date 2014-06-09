@@ -157,6 +157,8 @@ long distance;
 long polar_angle_count;
 long scale=5;
 long scaleY=10;
+
+
 long swing_speed=0;
 long swing_speed_y=0;
 float Arc2Degree(float arc);
@@ -184,6 +186,7 @@ void drive(float degree);
 void driveY(float degree);
 void scan();//x scaning
 void scanY();//y scaning
+int TargetInWorkingZone(Coor c);
 
 int PwmOneStepFinishFlag=0;
 int Pwm2OneStepFinishFlag=0;
@@ -202,10 +205,14 @@ Coor next_map_pos;
 struct Coor Map [10]; 
 float baseX=0;
 float baseY=0;
+float initAngle2Y=0;///
 
+float Hx=0;
+float Hy=2000;
 float walkstep=1;
 
 
+int shouldTurnOffFlag=FALSE;
 
 int AutoMode=AutoModeON;
 void main(void)
@@ -276,6 +283,7 @@ void main(void)
      ECanaRegs.CANME.bit.ME0 = 0;//使能邮箱0
      ECanaRegs.CANME.bit.ME1 = 0;//使能邮箱1
      ECanaRegs.CANME.bit.ME2 = 0;//使能邮箱2
+     ECanaRegs.CANME.bit.ME3 = 0;//enable mail box 3
     // Mailboxs can be written to 16-bits or 32-bits at a time
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_L =0x1213 ;//扩展帧ID：0x00111213
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_H=0x01;
@@ -296,20 +304,26 @@ void main(void)
      ECanaMboxes.MBOX2.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX2.MSGID.bit.AME=0;//屏蔽位
 	 
+	 ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x1219;//扩展帧ID：0x00111219
+     ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_H=0x01;
+     ECanaMboxes.MBOX3.MSGID.bit.STDMSGID=0x04;//04
+     ECanaMboxes.MBOX3.MSGID.bit.IDE=1;//扩展帧，如为0
+	 ECanaMboxes.MBOX3.MSGID.bit.AME=0;//屏蔽位
 	 
      ECanaRegs.CANMD.bit.MD0 = 1; //邮箱0设置为接收
      ECanaRegs.CANMD.bit.MD1 = 1; //邮箱1设置为接收
      ECanaRegs.CANMD.bit.MD2 = 1; //邮箱2设置为接收
+     ECanaRegs.CANMD.bit.MD3 = 1; //邮箱2设置为接收
      
      ECanaRegs.CANME.bit.ME0 = 1;//使能邮箱0
      ECanaRegs.CANME.bit.ME1 = 1;//使能邮箱2
      ECanaRegs.CANME.bit.ME2 = 1;//使能邮箱2
-     
+     ECanaRegs.CANME.bit.ME3 = 1;//使能邮箱2
      // Specify that 8 bits will be sent/received
      ECanaMboxes.MBOX0.MSGCTRL.bit.DLC = 8;
      ECanaMboxes.MBOX1.MSGCTRL.bit.DLC = 8;
    	 ECanaMboxes.MBOX2.MSGCTRL.bit.DLC = 8;	
-   	 
+   	 ECanaMboxes.MBOX3.MSGCTRL.bit.DLC = 8;	
    	 
    	 
 /******************************* SEND limitx 30********************************************/
@@ -385,18 +399,24 @@ void main(void)
 	       ECanaShadow.CANRMP.bit.RMP1 = 1;     	 // Clear RMP20
 	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
 	       
-	            CAN_RxBuffer[0]=ECanaMboxes.MBOX1.MDL.byte.BYTE0;
-	            CAN_RxBuffer[1]=ECanaMboxes.MBOX1.MDL.byte.BYTE1;
-	            CAN_RxBuffer[2]=ECanaMboxes.MBOX1.MDL.byte.BYTE2;
+	       CAN_RxBuffer[0]=ECanaMboxes.MBOX1.MDL.byte.BYTE0;
+	       CAN_RxBuffer[1]=ECanaMboxes.MBOX1.MDL.byte.BYTE1;
+	       CAN_RxBuffer[2]=ECanaMboxes.MBOX1.MDL.byte.BYTE2;
 		 // distance=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
-	            CAN_RxBuffer[3]=ECanaMboxes.MBOX1.MDL.byte.BYTE3;
-				CAN_RxBuffer[4]=ECanaMboxes.MBOX1.MDH.byte.BYTE4;
-			 	distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-				CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
-				//CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
+	       CAN_RxBuffer[3]=ECanaMboxes.MBOX1.MDL.byte.BYTE3;
+		   CAN_RxBuffer[4]=ECanaMboxes.MBOX1.MDH.byte.BYTE4;
+		   CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
+		   CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
+				if(CAN_RxBuffer[5]==1)
+				{
+					
+					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
+					swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					EPwm1Regs.TBPRD=swing_speed;
+				
+				}
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
-			 	swing_speed = ((float)distance/(float)(PRD/6+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
-				EPwm1Regs.TBPRD=swing_speed;
+			 	
           
       	 
 		 }
@@ -409,13 +429,16 @@ void main(void)
 	       
 	            CAN_RxBuffer[0]=ECanaMboxes.MBOX2.MDL.byte.BYTE0;
 	            CAN_RxBuffer[1]=ECanaMboxes.MBOX2.MDL.byte.BYTE1;
-	            CAN_RxBuffer[2]=ECanaMboxes.MBOX2.MDL.byte.BYTE2;
+	            CAN_RxBuffer[2]=ECanaMboxes.MBOX2.MDL.byte.BYTE2;////base index:0
 		
 	            CAN_RxBuffer[3]=ECanaMboxes.MBOX2.MDL.byte.BYTE3;
 				CAN_RxBuffer[4]=ECanaMboxes.MBOX2.MDH.byte.BYTE4;
 				CAN_RxBuffer[5]=ECanaMboxes.MBOX2.MDH.byte.BYTE5;
 				CAN_RxBuffer[6]=ECanaMboxes.MBOX2.MDH.byte.BYTE6;
 				CAN_RxBuffer[7]=ECanaMboxes.MBOX2.MDH.byte.BYTE7;
+				
+				if(CAN_RxBuffer[2]==0x00)
+				{
 				
 				distance_valid_flag  =(CAN_RxBuffer[1]>>7);
 				x_bias_dir=CAN_RxBuffer[1]&0x40;
@@ -424,87 +447,125 @@ void main(void)
 				x_bias=CAN_RxBuffer[7];////
 				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
 				
-          if(distance_valid_flag==1)/////distance valid 
-            {
-           		distance_valid_flag=TRUE;
-           		
-		////////////////////////////
-		///////send out can msg
-		
-				ECanaMboxes.MBOX26.MDL.all = 0;
-			    ECanaMboxes.MBOX26.MDH.all = 0;
-			    
-			    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
-			    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
-			    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
-			    
-			    if(angle<0)
-			    {
-			   		angle_sendout=angle+1152000;
+		          if(distance_valid_flag==1)/////distance valid 
+		            {
+		           		distance_valid_flag=TRUE;
+		           		
+				////////////////////////////
+				///////send out can msg
 				
-			    }
-			    else
-			    {
-			    	angle_sendout=angle;
-			    }
-			    
-				ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
-				ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
-				ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
-				
-				ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
-				ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
-			    ECanaShadow.CANTRS.all = 0;
-			    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
-			    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-			    do // Send 00110000
-			    {
-			      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-			    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
-			    ECanaShadow.CANTA.all = 0;
-			    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
-			    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-		/////////////////
-		////////////////          		
-           		
-           		
-           		
-            }
-            else    /////distance not valid
-            {
-            	distance_valid_flag=FALSE;
-            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
-				//y_bais_dir=CAN_RxBuffer[1]&0x20;
-            	if(x_bias_dir!=0)////lost  on the left should turn right
-            	{
-            		dir_flag_for_guidence=1;/////
-            		
-            	}
-            	else
-            	{
-	            	
-	            		dir_flag_for_guidence=0;/////
-	            		
-	            	
-            	}
-            	if(y_bias_dir!=0)////lost  on the top should turn down
-            	{
-            		dir1_flag_for_guidence=1;/////
-            		
-            	}
-            	else
-            	{
-	            	
-	           		dir1_flag_for_guidence=0;/////
-	            		
-            	}
-            	
-            	
-           	}
+						ECanaMboxes.MBOX26.MDL.all = 0;
+					    ECanaMboxes.MBOX26.MDH.all = 0;
+					    
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
+					    
+					    if(angle<0)
+					    {
+					   		angle_sendout=angle+1152000;
+						
+					    }
+					    else
+					    {
+					    	angle_sendout=angle;
+					    }
+					    
+						ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
+						ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
+						ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
+						
+						ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
+						ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
+					    ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+				/////////////////
+				////////////////          		
+		           		
+		           		
+		           		
+		            }
+		            else    /////distance not valid
+		            {
+		            	distance_valid_flag=FALSE;
+		            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
+						//y_bais_dir=CAN_RxBuffer[1]&0x20;
+		            	if(x_bias_dir!=0)////lost  on the left should turn right
+		            	{
+		            		dir_flag_for_guidence=1;/////
+		            		
+		            	}
+		            	else
+		            	{
+			            	
+			            		dir_flag_for_guidence=0;/////
+			            		
+			            	
+		            	}
+		            	if(y_bias_dir!=0)////lost  on the top should turn down
+		            	{
+		            		dir1_flag_for_guidence=1;/////
+		            		
+		            	}
+		            	else
+		            	{
+			            	
+			           		dir1_flag_for_guidence=0;/////
+			            		
+		            	}
+		            	
+		            	
+		           	}
+				}
           
 
 		 }
-		 
+		 if (ECanaShadow.CANRMP.bit.RMP3 == 1)//D0  receieve 111216 //from other base--the target infor
+		{
+		  	
+	       ECanaShadow.CANRMP.all = 0;
+	       ECanaShadow.CANRMP.bit.RMP3 = 1;     	 // Clear RMP20
+	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
+	       
+	            CAN_RxBuffer[0]=ECanaMboxes.MBOX3.MDL.byte.BYTE0;
+	            CAN_RxBuffer[1]=ECanaMboxes.MBOX3.MDL.byte.BYTE1;
+	            CAN_RxBuffer[2]=ECanaMboxes.MBOX3.MDL.byte.BYTE2;
+	            
+		 // distance=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
+	            CAN_RxBuffer[3]=ECanaMboxes.MBOX3.MDL.byte.BYTE3;
+				CAN_RxBuffer[4]=ECanaMboxes.MBOX3.MDH.byte.BYTE4;
+			 	//distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
+				CAN_RxBuffer[5]=ECanaMboxes.MBOX3.MDH.byte.BYTE5;
+				CAN_RxBuffer[6]=ECanaMboxes.MBOX3.MDH.byte.BYTE6;
+				CAN_RxBuffer[7]=ECanaMboxes.MBOX3.MDH.byte.BYTE7;
+				if(CAN_RxBuffer[6]>0)
+				{
+					current_pos.x=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];
+				}
+				else
+				{
+					current_pos.x=-(CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2]);
+				}
+				if(CAN_RxBuffer[7]>0)
+				{
+					current_pos.y=CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5];
+				}
+				else
+				{
+					current_pos.y=-(CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5]);
+				}
+			 	shouldTurnOffFlag=TRUE;
+          
+      	 
+		 }
 		 
 		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*1152000);
 		 
@@ -873,4 +934,9 @@ float GetDegreeFromCount(long cnt)
 {
 return (float)cnt/((float)1152000)*360;
 }
+int TargetInWorkingZone(Coor c)
+{
+	
 
+
+}
