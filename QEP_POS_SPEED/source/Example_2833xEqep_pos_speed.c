@@ -876,12 +876,13 @@ float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step)////return in arcs
 	float step_to_base=sqrt(a*a+Step*Step-2*a*Step*cos(angle_B));
 	// Current_Pos.x Current_Pos.x
 	float angle_to_rotate=acos((step_to_base*step_to_base+a*a-Step*Step)/(2*a*step_to_base));
-	if(Next_Map_Pos.y<Current_Pos.y)
+	///////////////////////////////////////////////
+	if(Next_Map_Pos.x<Current_Pos.x)/////here should be differet because target goes alone y,shouls compare x
 	{
-		dir=0;
+		dir=1;///turn right
 	}
 	else{
-	dir=1;
+	dir=0;
 	
 	}
 	return angle_to_rotate;
@@ -959,3 +960,22 @@ int TargetInWorkingZone(Coor c)
 	}
 
 }
+void follow(float targetX,float targetY)
+{
+    float vtX =targetX-baseX;
+    float vtY =targetY-baseY;
+    float aim_angle_degree=180*(atan(vtX/vtY))/3.14159;
+    if(initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree)
+    {
+	    dir=1;
+
+    }
+    else
+    {
+    	dir=0;
+    }
+    
+    drive(1);
+    
+}
+
