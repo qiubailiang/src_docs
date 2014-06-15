@@ -575,7 +575,7 @@ void main(void)
 		 
 	
 		 
-   	if(AutoMode==AutoModeON)//automode is on 
+   	if(AutoMode==AutoModeON&&shouldTurnOffFlag==FALSE)//automode is on AND no base has capture the target
    	{
    		 
    	 	scan();
@@ -598,8 +598,7 @@ void main(void)
 
    	}
    	else
-   	{
-   		if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
+   		if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)//if the distance is valid,and no other base capture, the target is locked on
 	  	{
 	  		//AutoMode=AutoModeOFF;
 	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
@@ -635,8 +634,14 @@ void main(void)
 			}
 		
 		  }
-		  else
+		  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))
 		  {
+		  			scan();///ACTUALLY should follow
+		  			
+		  }
+		  else //////distance not valid 
+		  {
+		  	shouldTurnOffFlag=FALSE;
 		  	if(dir_flag_for_guidence==0)
 		  	{
 		  		dir=1;
@@ -652,7 +657,7 @@ void main(void)
 		  		AutoMode=AutoModeON;
 			 //scan();//if failed to capture the target,then scan for it 
 		  }
-	  }
+	  
 	  
 	  
 	  
