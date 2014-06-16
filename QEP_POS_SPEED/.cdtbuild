@@ -3,7 +3,7 @@
 
 <ManagedProjectBuildInfo>
 <project id="QEP_POS_SPEED.com.ti.ccstudio.buildDefinitions.C2000.ProjectType.1790055381" name="C2000" projectType="com.ti.ccstudio.buildDefinitions.C2000.ProjectType">
-<configuration artifactExtension="out" artifactName="F:/baoyujian/QEP_POS_SPEED/Debug/QEP_POS_SPEED" description="" id="com.ti.ccstudio.buildDefinitions.C2000.Debug.543405181" name="Debug" parent="com.ti.ccstudio.buildDefinitions.C2000.Debug">
+<configuration artifactExtension="out" artifactName="d:/baoyujian/QEP_POS_SPEED/Debug/QEP_POS_SPEED" description="" id="com.ti.ccstudio.buildDefinitions.C2000.Debug.543405181" name="Debug" parent="com.ti.ccstudio.buildDefinitions.C2000.Debug">
 <toolChain id="com.ti.ccstudio.buildDefinitions.C2000_6.0.exe.DebugToolchain.930148989" name="TI Code Generation Tools" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.0.exe.DebugToolchain" targetTool="com.ti.ccstudio.buildDefinitions.C2000_6.0.exe.linkerDebug.984513775">
 <option id="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS.1513530260" superClass="com.ti.ccstudio.buildDefinitions.core.OPT_TAGS" valueType="stringList">
 <listOptionValue builtIn="false" value="DEVICE_CONFIGURATION_ID=TMS320C28XX"/>
@@ -37,8 +37,8 @@
 <option id="com.ti.ccstudio.buildDefinitions.C2000_6.0.compilerID.FLOAT_SUPPORT.1480811888" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.0.compilerID.FLOAT_SUPPORT" value="com.ti.ccstudio.buildDefinitions.C2000_6.0.compilerID.FLOAT_SUPPORT.fpu32" valueType="enumerated"/>
 </tool>
 <tool id="com.ti.ccstudio.buildDefinitions.C2000_6.0.exe.linkerDebug.984513775" name="C2000 Linker" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.0.exe.linkerDebug">
-<option id="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.OUTPUT_FILE.1593550949" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.OUTPUT_FILE" value="&quot;F:/baoyujian/QEP_POS_SPEED/Debug/QEP_POS_SPEED.out&quot;" valueType="string"/>
-<option id="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.MAP_FILE.1300230156" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.MAP_FILE" value="&quot;F:/baoyujian/QEP_POS_SPEED/Debug/QEP_POS_SPEED.map&quot;" valueType="string"/>
+<option id="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.OUTPUT_FILE.1593550949" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.OUTPUT_FILE" value="&quot;d:/baoyujian/QEP_POS_SPEED/Debug/QEP_POS_SPEED.out&quot;" valueType="string"/>
+<option id="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.MAP_FILE.1300230156" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.MAP_FILE" value="&quot;D:/baoyujian/QEP_POS_SPEED/Debug/QEP_POS_SPEED.map&quot;" valueType="string"/>
 <option id="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.SEARCH_PATH.2099152217" superClass="com.ti.ccstudio.buildDefinitions.C2000_6.0.linkerID.SEARCH_PATH" valueType="stringList">
 <listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/lib&quot;"/>
 <listOptionValue builtIn="false" value="&quot;${CG_TOOL_ROOT}/include&quot;"/>

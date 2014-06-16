@@ -581,7 +581,7 @@ void main(void)
 		 
 	
 		 
-   	if(AutoMode==AutoModeON)//automode is on 
+   	if(AutoMode==AutoModeON&&shouldTurnOffFlag==FALSE)//automode is on AND no base has capture the target
    	{
    		 
    	 	scan();
@@ -604,8 +604,7 @@ void main(void)
 
    	}
    	else
-   	{
-   		if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
+   		if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)//if the distance is valid,and no other base capture, the target is locked on
 	  	{
 	  		//AutoMode=AutoModeOFF;
 	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
@@ -641,8 +640,14 @@ void main(void)
 			}
 		
 		  }
-		  else
+		  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))
 		  {
+		  			scan();///ACTUALLY should follow
+		  			
+		  }
+		  else //////distance not valid 
+		  {
+		  	shouldTurnOffFlag=FALSE;
 		  	if(dir_flag_for_guidence==0)
 		  	{
 		  		dir=1;
@@ -658,7 +663,7 @@ void main(void)
 		  		AutoMode=AutoModeON;
 			 //scan();//if failed to capture the target,then scan for it 
 		  }
-	  }
+	  
 	  
 	  
 	  
@@ -877,12 +882,13 @@ float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step)////return in arcs
 	float step_to_base=sqrt(a*a+Step*Step-2*a*Step*cos(angle_B));
 	// Current_Pos.x Current_Pos.x
 	float angle_to_rotate=acos((step_to_base*step_to_base+a*a-Step*Step)/(2*a*step_to_base));
-	if(Next_Map_Pos.y<Current_Pos.y)
+	///////////////////////////////////////////////
+	if(Next_Map_Pos.x<Current_Pos.x)/////here should be differet because target goes alone y,shouls compare x
 	{
-		dir=0;
+		dir=1;///turn right
 	}
 	else{
-	dir=1;
+	dir=0;
 	
 	}
 	return angle_to_rotate;
@@ -960,3 +966,22 @@ int TargetInWorkingZone(Coor c)
 	}
 
 }
+void follow(float targetX,float targetY)
+{
+    float vtX =targetX-baseX;
+    float vtY =targetY-baseY;
+    float aim_angle_degree=180*(atan(vtX/vtY))/3.14159;
+    if(initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree)
+    {
+	    dir=1;
+
+    }
+    else
+    {
+    	dir=0;
+    }
+    
+    drive(1);
+    
+}
+
