@@ -215,7 +215,7 @@ float Hy=2000;
 float walkstep=1;
 
 int shouldTurnOffFlag=FALSE;
-
+int isFirstScan=TRUE;
 int AutoMode=AutoModeON;
 void main(void)
 { 
@@ -586,7 +586,10 @@ void main(void)
    	{
    		 
    	 	scan();
-   	 	scanY();
+   	 	if(isFirstScan==TRUE)
+   	 	{
+	   	 	scanY();
+   	 	}
    	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
 	  	{
 	  		AutoMode=AutoModeOFF;
@@ -607,6 +610,7 @@ void main(void)
    	else
    		if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)//if the distance is valid,and no other base capture, the target is locked on
 	  	{
+	  		isFirstScan=FALSE;
 	  		//AutoMode=AutoModeOFF;
 	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
