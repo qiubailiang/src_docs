@@ -350,6 +350,9 @@ void main(void)
    {  
    		//float testa=calulate_from_edges((float)3,(float)4,(float)5);
    	 	ECanaShadow.CANRMP.all = ECanaRegs.CANRMP.all;
+   	 	/////////////////////////////////
+   	 	////commands from upposition machine
+   	 	/////////////////////////
    	if (ECanaShadow.CANRMP.bit.RMP0 == 1)//D0  receieve 111213
 		{
 		  	
@@ -391,7 +394,9 @@ void main(void)
             //Dirver (2*canplusecount,dir,F[7]);
             //Dirver1 (2*canplusecount1,dir1,F[7]);
 		 }
-		 
+		 ///////////////////////////////
+		 ///////////From laser distance detector
+		 ///////////////////////////////
 		 if (ECanaShadow.CANRMP.bit.RMP1 == 1)//D0  receieve 111214 //from distance detector
 		{
 		  	
@@ -420,6 +425,9 @@ void main(void)
           
       	 
 		 }
+		 //////////////////////////////////
+		 //////////////////target x bias and y bias from wireless channel
+		 ///////////////////////////////////
 		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 
 		{
 		  	
@@ -544,6 +552,9 @@ void main(void)
           
 
 		 }
+		 ////////////////////////////////////
+		 /////////target coordinates from  other base
+		 //////////////////////////////////
 		 if (ECanaShadow.CANRMP.bit.RMP3 == 1)//D0  receieve 111216 //from other base--the target infor
 		{
 		  	
@@ -578,7 +589,7 @@ void main(void)
 				{
 					current_pos.y=-(CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5]);
 				}
-			 	shouldTurnOffFlag=TRUE;
+			shouldTurnOffFlag=TRUE;
           
       	 
 		 }
@@ -587,84 +598,93 @@ void main(void)
 		 
 	
 		 
-   	if(AutoMode==AutoModeON)//automode is on 
-   	{
-   		 
-   	 	scan();
-   	 	//scanY();
-   	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
-	  	{
-	  		AutoMode=AutoModeOFF;
-	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
-	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
-			  //first get angle ,get ho many angles should turn;
-			  //then drive 
-			drive(get_angle(current_pos,next_map_pos,walkstep));
-			
-		 }
-		  else{
-		  		
-		  		
-			 //scan();//if failed to capture the target,then scan for it 
-		  		}
-
-   	}
-   	else
-   	{
-   		if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
-	  	{
-	  		//AutoMode=AutoModeOFF;
-	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
-	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
-			//first get angle ,get ho many angles should turn;
-		    //then drive 
-			if(x_bias>0xf)
-			{
-			swing_speed=0;
-			}
-			drive(get_angle(current_pos,next_map_pos,walkstep));
-			float turning = ((float)y_bias)/1000;
-			turning=180*turning/3.14159;
-			if(y_bias<=2){
-				swing_speed_y=0;
-			}else{
-			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-			swing_speed_y=PRD*((float)y_bias/18);
-			
-			}
-			EPwm2Regs.TBPRD=swing_speed_y;
-			EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
-			if(y_bias_dir==0)
-			{
-				
-				Driver2(0x00,1);
-			}
-			else
-			{
-		
-				Driver2(0x01,1);
-				
-			}
-		
-		  }
-		  else
-		  {
-		  	if(dir_flag_for_guidence==0)
+	   	if(AutoMode==AutoModeON)//automode is on 
+	   	{
+	   		 
+	   	 	scan();
+	   	 	if(isFirstScan==TRUE)
+	   	 	{
+	   	 		scanY();
+	   	 	}
+	   	 	//scanY();
+	   	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
 		  	{
-		  		dir=1;
-		  	}
-		  	else
-		  	{
-			  	if(dir_flag_for_guidence==1)
-			  	{
-			  		dir=0;
+		  		AutoMode=AutoModeOFF;
+		  		shouldTurnOffFlag=FALSE;
+		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
+		 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
+				  //first get angle ,get ho many angles should turn;
+				  //then drive 
+				drive(get_angle(current_pos,next_map_pos,walkstep));
+				
+			 }
+			  else{
+			  		
+			  		
+				 //scan();//if failed to capture the target,then scan for it 
 			  	}
-		  	
-		  	}/////
-		  		AutoMode=AutoModeON;
-			 //scan();//if failed to capture the target,then scan for it 
+	
+	   	}
+	   	else
+	   	{
+	   		if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)//if the distance is valid, the target is locked on
+		  	{
+		  		//AutoMode=AutoModeOFF;
+		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
+		 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
+				//first get angle ,get how many angles should turn;
+			    //then drive 
+				if(x_bias>0x5f)
+				{
+				swing_speed=0;
+				}
+				drive(get_angle(current_pos,next_map_pos,walkstep));
+				float turning = ((float)y_bias)/1000;
+				turning=180*turning/3.14159;
+				if(y_bias<=2){
+					swing_speed_y=0;
+				}else{
+				//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+				swing_speed_y=PRD*((float)y_bias/18);
+				
+				}
+				EPwm2Regs.TBPRD=swing_speed_y;
+				EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
+				if(y_bias_dir==0)
+				{
+					
+					Driver2(0x00,1);
+				}
+				else
+				{
+			
+					Driver2(0x01,1);
+					
+				}
+				midY=angleY;
+			  }
+			  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))//some laser is spotted by target,But not its own laser
+			  {
+			  	scan();///ACTUALLY should follow
+			  }
+			  
+			  else{//distance not valid so should start scan again
+			  	if(dir_flag_for_guidence==0)
+			  	{
+			  		dir=1;
+			  	}
+			  	else
+			  	{
+				  	if(dir_flag_for_guidence==1)
+				  	{
+				  		dir=0;
+				  	}
+			  	
+			  	}/////
+			  		AutoMode=AutoModeON;
+				 //scan();//if failed to capture the target,then scan for it 
+			  }
 		  }
-	  }
 	  
 	  
 	  
@@ -926,20 +946,24 @@ void scan()
 }
 void scanY()
 {
-		if(GetDegreeFromCount(angleY)>scaleY)
+		if(GetDegreeFromCount(angleY-midY)>scaleY)
    	 	{
    	 		dir1=0;
    	 		
    	 	} 
    	 	else
    	 	{
-   	 		if(GetDegreeFromCount(angleY)<-scaleY)
+   	 		if(GetDegreeFromCount(angleY-midY)<-scaleY)
    	 		{
 	   	 		dir1=1;
 	   	 		
    	 		}
    	 	}
-   	 	driveY(3.14/180);
+   	 	
+   	 	EPwm2Regs.TBPRD = PRD/5; 
+   	 	swing_speed_y=PRD/10;
+   	 	
+   	 	driveY(1);
 }
 float Arc2Degree(float arc)
 {
@@ -952,7 +976,36 @@ return (float)cnt/((float)1152000)*360;
 }
 int TargetInWorkingZone(Coor c)
 {
+	float tX,tY;
+	tX=c.x;
+	tY=c.y;
 	
-
+	if(tX>10||tY>0)
+	{
+		return FALSE;
+	}
+	else
+	{
+		return TRUE;
+	}
 
 }
+void follow(float targetX,float targetY)
+{
+    float vtX =targetX-baseX;
+    float vtY =targetY-baseY;
+    float aim_angle_degree=180*(atan(vtX/vtY))/3.14159;
+    if(initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree)
+    {
+	    dir=1;
+
+    }
+    else
+    {
+    	dir=0;
+    }
+    
+    drive(1);
+    
+}
+
