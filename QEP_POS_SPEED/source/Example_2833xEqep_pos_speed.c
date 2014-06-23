@@ -211,9 +211,9 @@ float Hx=0;
 float Hy=2000;
 float walkstep=1;
 
-
+long midY=0;
 int shouldTurnOffFlag=FALSE;
-
+int isFirstScan=TRUE;
 int AutoMode=AutoModeON;
 void main(void)
 { 
@@ -470,13 +470,29 @@ void main(void)
 					    {
 					    	angle_sendout=angle;
 					    }
-					    
-						ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
-						ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
-						ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE0=((long)current_pos.x)>>16;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=((long)current_pos.x)>>8;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=(long)current_pos.x;
+						ECanaMboxes.MBOX26.MDH.byte.BYTE5=((long)current_pos.y);
+						ECanaMboxes.MBOX26.MDH.byte.BYTE4=((long)current_pos.y)>>8;
+						ECanaMboxes.MBOX26.MDL.byte.BYTE3=((long)current_pos.y)>>16;
+						if(current_pos.x>0)
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x01;
+						}
+						else
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x00;
 						
-						ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
-						ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
+						}
+						if(current_pos.y>0)
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x01;   
+						}
+						else
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x00; 
+						}
 					    ECanaShadow.CANTRS.all = 0;
 					    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
 					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
