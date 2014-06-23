@@ -157,7 +157,8 @@ long angleY=0;  //vertical degree counter
 long distance;
 long polar_angle_count;
 long scale=5;
-long scaleY=10;
+long scaleY=2;
+long midY=0;
 long swing_speed=0;
 long swing_speed_y=0;
 float Arc2Degree(float arc);
@@ -585,7 +586,7 @@ void main(void)
    	{
    		 
    	 	scan();
-   	 	//scanY();
+   	 	scanY();
    	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
 	  	{
 	  		AutoMode=AutoModeOFF;
@@ -638,7 +639,7 @@ void main(void)
 				Driver2(0x00,1);
 				
 			}
-		
+			midY=angleY;
 		  }
 		  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))
 		  {
@@ -660,6 +661,19 @@ void main(void)
 			  	}
 		  	
 		  	}/////
+		  	if(dir1_flag_for_guidence==0)
+		  	{
+		  		dir=1;
+		  	}
+		  	else
+		  	{
+			  	if(dir1_flag_for_guidence==1)
+			  	{
+			  		dir=0;
+			  	}
+		  	
+		  	}/////
+		  	
 		  		AutoMode=AutoModeON;
 			 //scan();//if failed to capture the target,then scan for it 
 		  }
@@ -850,10 +864,12 @@ interrupt  void EPWM2_int(void)
 	}
 	else
 	{
-	GpioDataRegs.GPATOGGLE.bit.GPIO1=1;
-	Pwm2OneStepFinishFlag++;
-	
-	FinishStepFlag2=NOTFINISH;
+	if( EPwm2Regs.CMPA.half.CMPA!=0)
+	{
+		GpioDataRegs.GPATOGGLE.bit.GPIO1=1;
+		Pwm2OneStepFinishFlag++;
+		FinishStepFlag2=NOTFINISH;
+	}
 	}
 }
 
@@ -926,20 +942,24 @@ void scan()
 }
 void scanY()
 {
-		if(GetDegreeFromCount(angleY)>scaleY)
+	
+		if(GetDegreeFromCount(angleY-midY)>scaleY)
    	 	{
    	 		dir1=0;
    	 		
    	 	} 
    	 	else
    	 	{
-   	 		if(GetDegreeFromCount(angleY)<-scaleY)
+   	 		if(GetDegreeFromCount(angleY-midY)<-scaleY)
    	 		{
 	   	 		dir1=1;
 	   	 		
    	 		}
    	 	}
-   	 	driveY(3.14/180);
+   	 	EPwm2Regs.TBPRD = PRD/5; 
+   	 	swing_speed_y=PRD/10;
+   	 	
+   	 	driveY(1);
 }
 float Arc2Degree(float arc)
 {

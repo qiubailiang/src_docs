@@ -33,23 +33,23 @@ ASM_DEPS += \
 ./source/DSP2833x_usDelay.pp 
 
 OBJS += \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_ADC_cal.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_CodeStartBranch.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_CpuTimers.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_DefaultIsr.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_ECan.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_EPwm.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_EQep.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_GlobalVariableDefs.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_PieCtrl.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_PieVect.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_Spi.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_SysCtrl.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_Xintf.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_usDelay.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_2833xEqep_pos_speed.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_EPwmSetup.obj \
-C:/Users/MeAndroid/Documents/GitHub/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_posspeed.obj 
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_ADC_cal.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_CodeStartBranch.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_CpuTimers.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_DefaultIsr.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_ECan.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_EPwm.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_EQep.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_GlobalVariableDefs.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_PieCtrl.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_PieVect.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_Spi.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_SysCtrl.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_Xintf.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/DSP2833x_usDelay.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_2833xEqep_pos_speed.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_EPwmSetup.obj \
+F:/baoyujian/Xeuns\ 1116\ CAN-QEP-POS-SPEED/Debug/Example_posspeed.obj 
 
 C_DEPS += \
 ./source/DSP2833x_CpuTimers.pp \
@@ -68,23 +68,23 @@ C_DEPS += \
 ./source/Example_posspeed.pp 
 
 OBJS__QTD += \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_ADC_cal.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_CodeStartBranch.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_CpuTimers.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_DefaultIsr.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_ECan.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_EPwm.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_EQep.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_GlobalVariableDefs.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieCtrl.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieVect.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_Spi.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_SysCtrl.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_Xintf.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_usDelay.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_2833xEqep_pos_speed.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_EPwmSetup.obj" \
-"C:\Users\MeAndroid\Documents\GitHub\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_posspeed.obj" 
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_ADC_cal.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_CodeStartBranch.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_CpuTimers.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_DefaultIsr.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_ECan.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_EPwm.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_EQep.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_GlobalVariableDefs.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieCtrl.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_PieVect.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_Spi.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_SysCtrl.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_Xintf.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\DSP2833x_usDelay.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_2833xEqep_pos_speed.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_EPwmSetup.obj" \
+"F:\baoyujian\Xeuns 1116 CAN-QEP-POS-SPEED\Debug\Example_posspeed.obj" 
 
 ASM_DEPS__QTD += \
 ".\source\DSP2833x_ADC_cal.pp" \
