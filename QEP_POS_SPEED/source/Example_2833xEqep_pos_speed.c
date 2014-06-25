@@ -157,7 +157,7 @@ long angleY=0;  //vertical degree counter
 long distance;
 long polar_angle_count;
 long scale=5;
-long scaleY=2;
+long scaleY=1;
 long midY=0;
 long swing_speed=0;
 long swing_speed_y=0;
@@ -186,6 +186,7 @@ void drive(float degree);
 void driveY(float degree);
 void scan();//x scaning
 void scanY();//y scaning
+void follow(float targetX,float targetY);
 int TargetInWorkingZone(Coor c);
 
 int PwmOneStepFinishFlag=0;
@@ -453,7 +454,7 @@ void main(void)
 	          if(distance_valid_flag==1)/////distance valid then do the guidence stuff
 	            {
 	           		distance_valid_flag=TRUE;
-	           		
+	           		shouldTurnOffFlag=FALSE;
 			////////////////////////////
 			///////send out can msg
 			
@@ -645,9 +646,10 @@ void main(void)
 			}
 			midY=angleY;
 		  }
-		  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))
+		  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))////should follow
 		  {
-		  			scan();///ACTUALLY should follow
+		  		 follow(current_pos.x,current_pos.y);
+		  			scanY();///ACTUALLY should follow
 		  			
 		  }
 		  else //////distance not valid 
