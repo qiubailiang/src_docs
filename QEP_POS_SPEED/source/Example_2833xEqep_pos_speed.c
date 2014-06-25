@@ -177,7 +177,7 @@ Coor get_next_point_on_trace(struct Coor map [],int length);
 float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step);
 float calulate_from_edges(float a,float b,float c);
 int x_bias=0;
-int y_bias=-50;
+int y_bias=0;
 
 int  x_bias_dir;
 int y_bias_dir;
@@ -203,8 +203,8 @@ int dir1_flag_for_guidence;
 Coor current_pos;
 Coor next_map_pos;
 struct Coor Map [10]; 
-float baseX=0;
-float baseY=0;
+float baseX=500;
+float baseY=-500;
 float initAngle2Y=0;///
 
 float Hx=0;

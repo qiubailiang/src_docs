@@ -218,3 +218,5 @@ QEP_POS_SPEED/Debug/makefile
 *.opt
 *.mk
 *.pp
+QEP_POS_SPEED/Debug/makefile
+*.mk
