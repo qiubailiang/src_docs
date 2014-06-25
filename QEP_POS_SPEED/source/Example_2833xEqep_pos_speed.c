@@ -203,13 +203,13 @@ int dir1_flag_for_guidence;
 Coor current_pos;
 Coor next_map_pos;
 struct Coor Map [10]; 
-float baseX=0;
-float baseY=0;
+float baseX=50;
+float baseY=23000;
 
 float initAngle2Y=0;///
 
-float Hx=0;
-float Hy=2000;
+float Hx=50;
+float Hy=23000;
 
 
 float walkstep=1;
@@ -223,7 +223,7 @@ void main(void)
 	int i=0;
 	for(i=0;i<10;i++)
 	{
-			Map[i].x=0;
+			Map[i].x=300;
 			//Map[i].y=-800+1600/9*i;
 			Map[i].y=-200*i;
 	}
