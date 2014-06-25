@@ -329,9 +329,9 @@ void main(void)
    	 ECanaMboxes.MBOX3.MSGCTRL.bit.DLC = 8;	
    	 
    	 
-/******************************* SEND limitx 30********************************************/
+/******************************* SEND target Coordinates********************************************/
 /* Write to the MSGID field */
-  ECanaMboxes.MBOX26.MSGID.bit.EXTMSGID_L =0x1219;//À©Õ¹Ö¡ID£º0x00110000
+  ECanaMboxes.MBOX26.MSGID.bit.EXTMSGID_L =0x1219;//À©Õ¹Ö¡ID£º0x00111219
      ECanaMboxes.MBOX26.MSGID.bit.EXTMSGID_H=0x01;
      ECanaMboxes.MBOX26.MSGID.bit.STDMSGID=0x04;
      ECanaMboxes.MBOX26.MSGID.bit.IDE=1;
@@ -345,9 +345,23 @@ void main(void)
    ECanaRegs.CANME.all = ECanaShadow.CANME.all;
 /* Write to DLC field in Master Control reg */
    ECanaMboxes.MBOX26.MSGCTRL.bit.DLC = 8;
-////////////////////////////
-     //Driver1(1,4);
-      //	DriveWithDir(stepcount);
+/******************************* SEND laser Off Command********************************************/
+/* Write to the MSGID field */
+  ECanaMboxes.MBOX27.MSGID.bit.EXTMSGID_L =0x0002;//À©Õ¹Ö¡ID£º0x00000002
+     ECanaMboxes.MBOX27.MSGID.bit.EXTMSGID_H=0x00;
+     ECanaMboxes.MBOX27.MSGID.bit.STDMSGID=0x00;
+     ECanaMboxes.MBOX27.MSGID.bit.IDE=1;
+/* Configure Mailbox under test as a Transmit mailbox */
+   ECanaShadow.CANMD.all = ECanaRegs.CANMD.all;
+   ECanaShadow.CANMD.bit.MD27 = 0;
+   ECanaRegs.CANMD.all = ECanaShadow.CANMD.all;
+/* Enable Mailbox under test */
+   ECanaShadow.CANME.all = ECanaRegs.CANME.all;
+   ECanaShadow.CANME.bit.ME27 = 1;
+   ECanaRegs.CANME.all = ECanaShadow.CANME.all;
+/* Write to DLC field in Master Control reg */
+   ECanaMboxes.MBOX27.MSGCTRL.bit.DLC = 8;
+
    initGpio_pwm();
   while(1)
    {  
@@ -600,8 +614,9 @@ void main(void)
 		 
 		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*1152000);
 		 
-	
-		 
+		///////////////////////
+		 //////Below is states transformations
+		 //////////////////////////
 	   	if(AutoMode==AutoModeON)//automode is on 
 	   	{
 	   		 
@@ -692,7 +707,31 @@ void main(void)
 				 //scan();//if failed to capture the target,then scan for it 
 			  }
 		  }
-	  
+		  ///////////////////////////
+		  /////Below codes tell werther target is in its own working area
+		  ///////////////////////////
+	  	if(	TargetInWorkingZone(current_pos)==FALSE)
+	  	{
+	  		////TURN OFF LASER 
+	  		ECanaMboxes.MBOX27.MDH.all=0x1234; 
+	  		ECanaMboxes.MBOX27.MDL.all=0x1234; 
+			ECanaShadow.CANTRS.all = 0;
+		    ECanaShadow.CANTRS.bit.TRS27 = 1; // Set TRS for mailbox under test
+		    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+		    do // Send 00110000
+		    {
+		      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+		    } while(ECanaShadow.CANTA.bit.TA27 == 0 );
+		    ECanaShadow.CANTA.all = 0;
+		    ECanaShadow.CANTA.bit.TA27 = 1; // Clear TA5
+		    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+		    
+		    
+		    ///////////
+		    ////switch state
+		    //////////////
+		    shouldTurnOffFlag=TRUE;
+	  	}
 	  
 	  
    }
