@@ -520,6 +520,7 @@ void main(void)
 		            else    /////distance not valid
 		            {
 		            	distance_valid_flag=FALSE;
+		            	shouldTurnOffFlag=FALSE;
 		            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
 						//y_bais_dir=CAN_RxBuffer[1]&0x20;
 		            	if(x_bias_dir!=0)////lost  on the left should turn right
@@ -611,6 +612,7 @@ void main(void)
 		  	{
 		  		AutoMode=AutoModeOFF;
 		  		shouldTurnOffFlag=FALSE;
+		  		isFirstScan=FALSE;
 		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
 		 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 				  //first get angle ,get ho many angles should turn;
