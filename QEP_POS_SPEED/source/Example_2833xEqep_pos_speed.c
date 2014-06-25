@@ -156,7 +156,7 @@ long angleY=0;  //vertical degree counter
 long distance;
 long polar_angle_count;
 long scale=5;
-long scaleY=10;
+long scaleY=2;
 
 
 long swing_speed=0;
@@ -177,7 +177,7 @@ Coor get_next_point_on_trace(struct Coor map [],int length);
 float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step);
 float calulate_from_edges(float a,float b,float c);
 int x_bias=0;
-int y_bias=0;
+int y_bias=-50;
 
 int  x_bias_dir;
 int y_bias_dir;
@@ -223,16 +223,19 @@ void main(void)
 	{
 			Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=-200;
+			Map[i].y=-200-200;
 	}
 	for(i=0;i<10;i=i+2)
 	{
 			//Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=+200;
+			Map[i].y=-200;
 	}
-	//Map[9].x=2410;
-	//Map[9].y=500;
+	Map[9].x=1010;
+	Map[9].y=-800;
+	
+	Map[9].x=1110;
+	Map[9].y=-1000;
 	
    InitSysCtrl();
    InitECan();
@@ -412,11 +415,11 @@ void main(void)
 		   CAN_RxBuffer[4]=ECanaMboxes.MBOX1.MDH.byte.BYTE4;
 		   CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
 		   CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
-				if(CAN_RxBuffer[5]==1)
+				if(CAN_RxBuffer[5]==0)
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-					swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					swing_speed = ((float)distance/(float)(4*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 					EPwm1Regs.TBPRD=swing_speed;
 				
 				}
@@ -611,6 +614,7 @@ void main(void)
 	   	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
 		  	{
 		  		AutoMode=AutoModeOFF;
+		  		isFirstScan=FALSE;
 		  		shouldTurnOffFlag=FALSE;
 		  		isFirstScan=FALSE;
 		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
@@ -636,7 +640,7 @@ void main(void)
 		 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 				//first get angle ,get how many angles should turn;
 			    //then drive 
-				if(x_bias>0x5f)
+				if(x_bias>0x6f)
 				{
 				swing_speed=0;
 				}
@@ -671,6 +675,7 @@ void main(void)
 			  }
 			  
 			  else{//distance not valid so should start scan again
+			  	shouldTurnOffFlag=FALSE;
 			  	if(dir_flag_for_guidence==0)
 			  	{
 			  		dir=1;
