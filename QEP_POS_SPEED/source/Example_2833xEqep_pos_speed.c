@@ -482,25 +482,22 @@ void main(void)
 						ECanaMboxes.MBOX26.MDL.all = 0;
 					    ECanaMboxes.MBOX26.MDH.all = 0;
 					    
-					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
-					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
-					    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
-					    
-					    if(angle<0)
-					    {
-					   		angle_sendout=angle+1152000;
-						
-					    }
-					    else
-					    {
-					    	angle_sendout=angle;
-					    }
-					    ECanaMboxes.MBOX26.MDL.byte.BYTE0=((long)current_pos.x)>>16;
-					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=((long)current_pos.x)>>8;
-					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=(long)current_pos.x;
-						ECanaMboxes.MBOX26.MDH.byte.BYTE5=((long)current_pos.y);
-						ECanaMboxes.MBOX26.MDH.byte.BYTE4=((long)current_pos.y)>>8;
-						ECanaMboxes.MBOX26.MDL.byte.BYTE3=((long)current_pos.y)>>16;
+//					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
+//					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
+//					    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
+//					    
+//					    if(angle<0)
+//					    {
+//					   		angle_sendout=angle+1152000;
+//						
+//					    }
+//					    else
+//					    {
+//					    	angle_sendout=angle;
+//					    }
+						current_pos.x=(long)current_pos.x;
+						current_pos.y=(long)current_pos.y;
+					   
 						if(current_pos.x>0)
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x01;
@@ -508,7 +505,7 @@ void main(void)
 						else
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x00;
-						
+							current_pos.x=-current_pos.x;
 						}
 						if(current_pos.y>0)
 						{
@@ -517,7 +514,15 @@ void main(void)
 						else
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x00; 
+							current_pos.y=-current_pos.y
 						}
+						 ECanaMboxes.MBOX26.MDL.byte.BYTE0=((long)current_pos.x)>>16;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=((long)current_pos.x)>>8;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=(long)current_pos.x;
+						ECanaMboxes.MBOX26.MDH.byte.BYTE5=((long)current_pos.y);
+						ECanaMboxes.MBOX26.MDH.byte.BYTE4=((long)current_pos.y)>>8;
+						ECanaMboxes.MBOX26.MDL.byte.BYTE3=((long)current_pos.y)>>16;
+						
 					    ECanaShadow.CANTRS.all = 0;
 					    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
 					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
