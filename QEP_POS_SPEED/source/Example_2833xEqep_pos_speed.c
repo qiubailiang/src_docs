@@ -308,7 +308,7 @@ void main(void)
      ECanaMboxes.MBOX2.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX2.MSGID.bit.AME=0;//屏蔽位
 
-	   ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x1216;//扩展帧ID：0x00111216
+	   ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x1219;//扩展帧ID：0x00111216
      ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_H=0x01;
      ECanaMboxes.MBOX3.MSGID.bit.STDMSGID=0x04;//04
      ECanaMboxes.MBOX3.MSGID.bit.IDE=1;//扩展帧，如为0
@@ -474,26 +474,28 @@ void main(void)
 				    {
 				    	angle_sendout=angle;
 				    }
-				    
-					ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
-					ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
-					ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
-					
-					ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
-					ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
-				    ECanaShadow.CANTRS.all = 0;
-				    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
-				    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-				    do // Send 00110000
-				    {
-				      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-				    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
-				    ECanaShadow.CANTA.all = 0;
-				    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
-				    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-			/////////////////
-			////////////////          		
-	           		
+				    ///tempreliy block send msg
+//				    if(shouldTurnOffFlag==FALSE)
+//				    {
+//					ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
+//					ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
+//					ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
+//					
+//					ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
+//					ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
+//				    ECanaShadow.CANTRS.all = 0;
+//				    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
+//				    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+//				    do // Send 00110000
+//				    {
+//				      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+//				    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
+//				    ECanaShadow.CANTA.all = 0;
+//				    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
+//				    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+//			/////////////////
+//			////////////////          		
+//				    }
 	           		
 	           		
 	            }
@@ -949,14 +951,14 @@ void scan()
 void scanY()
 {
 	
-		if(GetDegreeFromCount(angleY-midY)>scaleY)
+		if(GetDegreeFromCount(angleY)>scaleY)
    	 	{
    	 		dir1=0;
    	 		
    	 	} 
    	 	else
    	 	{
-   	 		if(GetDegreeFromCount(angleY-midY)<-scaleY)
+   	 		if(GetDegreeFromCount(angleY)<-scaleY)
    	 		{
 	   	 		dir1=1;
 	   	 		
@@ -982,7 +984,7 @@ int TargetInWorkingZone(Coor c)
 	tX=c.x;
 	tY=c.y;
 	
-	if(tX>10||tY>0)
+	if(tX>1000||tY>0)
 	{
 		return FALSE;
 	}
