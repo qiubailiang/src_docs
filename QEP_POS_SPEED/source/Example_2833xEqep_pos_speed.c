@@ -495,33 +495,33 @@ void main(void)
 //					    {
 //					    	angle_sendout=angle;
 //					    }
-						current_pos.x=(long)current_pos.x;
-						current_pos.y=(long)current_pos.y;
+						long temp_current_x=(long)current_pos.x;
+						long temp_current_y=(long)current_pos.y;
 					   
-						if(current_pos.x>0)
+						if(temp_current_x>0)
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x01;
 						}
 						else
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x00;
-							current_pos.x=-current_pos.x;
+							temp_current_x=-temp_current_x;
 						}
-						if(current_pos.y>0)
+						if(temp_current_y>0)
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x01;   
 						}
 						else
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x00; 
-							current_pos.y=-current_pos.y
+							temp_current_y=-temp_current_y;
 						}
-						 ECanaMboxes.MBOX26.MDL.byte.BYTE0=((long)current_pos.x)>>16;
-					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=((long)current_pos.x)>>8;
-					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=(long)current_pos.x;
-						ECanaMboxes.MBOX26.MDH.byte.BYTE5=((long)current_pos.y);
-						ECanaMboxes.MBOX26.MDH.byte.BYTE4=((long)current_pos.y)>>8;
-						ECanaMboxes.MBOX26.MDL.byte.BYTE3=((long)current_pos.y)>>16;
+						 ECanaMboxes.MBOX26.MDL.byte.BYTE0=((long)temp_current_x)>>16;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=((long)temp_current_x)>>8;
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=(long)temp_current_x;
+						ECanaMboxes.MBOX26.MDH.byte.BYTE5=((long)temp_current_y);
+						ECanaMboxes.MBOX26.MDH.byte.BYTE4=((long)temp_current_y)>>8;
+						ECanaMboxes.MBOX26.MDL.byte.BYTE3=((long)temp_current_y)>>16;
 						
 					    ECanaShadow.CANTRS.all = 0;
 					    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
@@ -1031,7 +1031,7 @@ int TargetInWorkingZone(Coor c)
 	tX=c.x;
 	tY=c.y;
 	
-	if(tX>10||tY>0)
+	if(tX<10&&tY<-5000)
 	{
 		return FALSE;
 	}
