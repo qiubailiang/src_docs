@@ -115,7 +115,7 @@
 #define FALSE 0
 #define TRUE 1
 #define TotalLoopCount 3200000
-
+#define TotalLoopCountV 720000
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -184,6 +184,8 @@ int y_bias_dir;
 
 void drive(float degree);
 void driveY(float degree);
+void stable_2Vertical(float angel_in_degree,float positionCount,long tCount);
+
 void scan();//x scaning
 void scanY();//y scaning
 void follow(float targetX,float targetY);
@@ -651,8 +653,8 @@ void main(void)
 		  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))////should follow
 		  {
 		  		 follow(current_pos.x,current_pos.y);
-		  			scanY();///ACTUALLY should follow
-		  			
+		  			//scanY();///ACTUALLY should follow
+		  			stable_2Vertical((float)0, (float)angleY,(long)TotalLoopCountV);
 		  }
 		  else //////distance not valid 
 		  {
@@ -927,7 +929,7 @@ void drive(float degree)//the degree passed in should be in arcs
 void driveY(float degree)//the degree passed in should be in arcs 
 {
 	float degree_in_degrees=degree/3.14*180;
-	long degree_count=degree_in_degrees/((float)360)*TotalLoopCount;
+	long degree_count=degree_in_degrees/((float)360)*TotalLoopCountV;
 	Driver2(dir1,degree_count);
 
 }
@@ -984,7 +986,7 @@ int TargetInWorkingZone(Coor c)
 	tX=c.x;
 	tY=c.y;
 	
-	if(tX>1000||tY>0)
+	if(tX>1000&&tY>0)
 	{
 		return FALSE;
 	}
@@ -1012,4 +1014,21 @@ void follow(float targetX,float targetY)
     drive(1);
     
 }
+void stable_2Vertical(float angel_in_degree,float positionCount,long tCount)//first, aim;second ,actual positon;third, count of a whole circle
+{
+	float c_angel=(((float)positionCount/((float)tCount))*360);
+	if(c_angel>angel_in_degree)
+	{
+		dir1=0;
+	}
+	else
+	{
+		dir1=1;
+	
+	}
+	if(abs(c_angel-angel_in_degree)>10)
+	{
+		driveY(1);
+	}
 
+}
