@@ -1003,12 +1003,12 @@ void follow(float targetX,float targetY)
     float aim_angle_degree=180*(atan(vtX/vtY))/3.14159;
     if(initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree)
     {
-	    dir=1;
+	    dir=0;
 
     }
     else
     {
-    	dir=0;
+    	dir=1;
     }
     
     drive(1);
