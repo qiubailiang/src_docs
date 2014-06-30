@@ -207,12 +207,12 @@ Coor current_pos;
 Coor next_map_pos;
 struct Coor Map [10]; 
 float baseX=50;
-float baseY=23000;
+float baseY=-3700;
 
 float initAngle2Y=0;///
 
 float Hx=50;
-float Hy=23000;
+float Hy=-3700;
 
 
 float walkstep=1;
@@ -593,7 +593,8 @@ void main(void)
    	 	scan();
    	 	if(isFirstScan==TRUE)
    	 	{
-	   	 	scanY();
+   	 		stable_2Vertical((float)0, (float)angleY,(long)TotalLoopCountV);
+	   	 	//scanY();
    	 	}
    	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
 	  	{
