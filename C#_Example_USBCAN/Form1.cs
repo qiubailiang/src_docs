@@ -1587,6 +1587,10 @@ namespace USBCAN
             String num;
             String X_val;
             String Y_val;
+            Int32 x_IntVal=Convert.ToInt32( MAP_X_TEXT.Text);
+            Int32 y_IntVal=Convert.ToInt32( MAP_Y_TEXT.Text);
+            Boolean XNegFlag=false;
+            Boolean YNegFlag=false;
             Char[] value = (POINT_NUM_TEXT.Text.ToString().Trim().ToCharArray());
             if (value.GetLength(0) > 1)
             {
@@ -1601,8 +1605,24 @@ namespace USBCAN
 
             value = (MAP_Y_TEXT.Text.ToString().Trim().ToCharArray());
             Y_val = value[0].ToString() + value[1].ToString() + " " + value[2].ToString() + value[3].ToString();
+            if (x_IntVal>=0)
+            {
+                XNegFlag = false;
+            }
+            else
+            {
+                XNegFlag = true;
+            }
+            if (y_IntVal >= 0)
+            {
+                YNegFlag = false;
+            }
+            else
+            {
+                YNegFlag = true;
+            }
 
-            TransmitACanMsg("00 11 12 1b", X_val+" " + num+ " "+ Y_val+" "+num+" 00 00");
+            TransmitACanMsg("00 00 00 03", X_val+" " + num+ " "+ Y_val+" "+num+" 00 00");
         }
 
         private void POINT_NUM_TEXT_TextChanged(object sender, EventArgs e)
