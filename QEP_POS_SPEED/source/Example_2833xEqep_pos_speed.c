@@ -215,6 +215,7 @@ long midY=0;
 int shouldTurnOffFlag=FALSE;
 int isFirstScan=TRUE;
 int AutoMode=AutoModeON;
+Uint16 MapState;
 void main(void)
 { 
 	
@@ -347,10 +348,10 @@ void main(void)
    ECanaMboxes.MBOX26.MSGCTRL.bit.DLC = 8;
 /******************************* SEND laser Off Command********************************************/
 /* Write to the MSGID field */
-  ECanaMboxes.MBOX27.MSGID.bit.EXTMSGID_L =0x0002;//扩展帧ID：0x00000002
-     ECanaMboxes.MBOX27.MSGID.bit.EXTMSGID_H=0x00;
-     ECanaMboxes.MBOX27.MSGID.bit.STDMSGID=0x00;
-     ECanaMboxes.MBOX27.MSGID.bit.IDE=1;
+   ECanaMboxes.MBOX27.MSGID.bit.EXTMSGID_L =0x0002;//扩展帧ID：0x00000002
+   ECanaMboxes.MBOX27.MSGID.bit.EXTMSGID_H=0x00;
+   ECanaMboxes.MBOX27.MSGID.bit.STDMSGID=0x00;
+   ECanaMboxes.MBOX27.MSGID.bit.IDE=1;
 /* Configure Mailbox under test as a Transmit mailbox */
    ECanaShadow.CANMD.all = ECanaRegs.CANMD.all;
    ECanaShadow.CANMD.bit.MD27 = 0;
@@ -361,7 +362,23 @@ void main(void)
    ECanaRegs.CANME.all = ECanaShadow.CANME.all;
 /* Write to DLC field in Master Control reg */
    ECanaMboxes.MBOX27.MSGCTRL.bit.DLC = 8;
-
+/******************************* SEND map point cooridinate********************************************/
+/* Write to the MSGID field */
+   ECanaMboxes.MBOX28.MSGID.bit.EXTMSGID_L =0x0003;//扩展帧ID：0x00000003
+   ECanaMboxes.MBOX28.MSGID.bit.EXTMSGID_H=0x00;
+   ECanaMboxes.MBOX28.MSGID.bit.STDMSGID=0x00;
+   ECanaMboxes.MBOX28.MSGID.bit.IDE=1;
+/* Configure Mailbox under test as a Transmit mailbox */
+   ECanaShadow.CANMD.all = ECanaRegs.CANMD.all;
+   ECanaShadow.CANMD.bit.MD28 = 0;
+   ECanaRegs.CANMD.all = ECanaShadow.CANMD.all;
+/* Enable Mailbox under test */
+   ECanaShadow.CANME.all = ECanaRegs.CANME.all;
+   ECanaShadow.CANME.bit.ME28 = 1;
+   ECanaRegs.CANME.all = ECanaShadow.CANME.all;
+/* Write to DLC field in Master Control reg */
+   ECanaMboxes.MBOX28.MSGCTRL.bit.DLC = 8;
+   
    initGpio_pwm();
   while(1)
    {  
@@ -386,30 +403,94 @@ void main(void)
 				CAN_RxBuffer[6]=ECanaMboxes.MBOX0.MDH.byte.BYTE6;
 				CAN_RxBuffer[7]=ECanaMboxes.MBOX0.MDH.byte.BYTE7;
 			
-			long canplusecount=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
-			long canplusecount1=CAN_RxBuffer[4]*65536+CAN_RxBuffer[5]*256+CAN_RxBuffer[6];// 1000000个脉冲电机转动360°
-           int dir=CAN_RxBuffer[3];
-           int dir1=CAN_RxBuffer[7];
-            if(canplusecount==0x1234)/////switch work mode
+		   long canplusecount=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
+		   long canplusecount1=CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5];// 1000000个脉冲电机转动360°
+           int map_dir=CAN_RxBuffer[6]&0x80;////x sign
+           int map_dir1=CAN_RxBuffer[6]&0x40;////y sign 
+           MapState= CAN_RxBuffer[6]&0x30;
+           
+            if(MapState==0x0)/////set map
             {
-           		AutoMode=AutoModeON;
+            	int map_index=CAN_RxBuffer[7];
+            	if(map_index<10)
+            	{
+            		if(map_dir==0){
+            		
+            			Map[map_index].x=-canplusecount;
+            		}
+            		else
+            		{
+            			Map[map_index].x=canplusecount;
+            		}		
+            		if(map_dir1==0){
+            		
+            			Map[map_index].y=-canplusecount1;
+            		}
+            		else
+            		{
+            			Map[map_index].y=canplusecount1;
+            		}		
+					
+            
+            	}
+           		
             }
-            else{
-            	////////mannual mode
+            else if(MapState==0x20)////////Return map
+            {
+            	
+	           int map_return_index=CAN_RxBuffer[7];
+	           if(map_return_index<10)
+	           {
+	         		    long temp_current_x=(long)Map[map_return_index].x;
+						long temp_current_y=(long)Map[map_return_index].y;
+					   
+						if(temp_current_x>0)
+						{
+							ECanaMboxes.MBOX28.MDH.byte.BYTE6=0x01;
+							temp_current_x=(Uint32)temp_current_x;
+						}
+						else
+						{
+							ECanaMboxes.MBOX28.MDH.byte.BYTE6=0x00;
+							temp_current_x=-temp_current_x;
+							temp_current_x=(Uint32)temp_current_x;
+						}
+						if(temp_current_y>0)
+						{
+							ECanaMboxes.MBOX28.MDH.byte.BYTE7=0x01;  
+							 temp_current_y=(Uint32)temp_current_y;
+						}
+						else
+						{
+							ECanaMboxes.MBOX28.MDH.byte.BYTE7=0x00; 
+							temp_current_y=-temp_current_y;
+							temp_current_y=(Uint32)temp_current_y;
+						}
+						ECanaMboxes.MBOX28.MDL.byte.BYTE0=(Uint16)(((Uint32)temp_current_x)>>16);
+					    ECanaMboxes.MBOX28.MDL.byte.BYTE1=(Uint16)(((Uint32)temp_current_x)>>8);
+					    ECanaMboxes.MBOX28.MDL.byte.BYTE2=(Uint16)((Uint32)temp_current_x);
+						ECanaMboxes.MBOX28.MDH.byte.BYTE5=(Uint16)(((Uint32)temp_current_y));
+						ECanaMboxes.MBOX28.MDH.byte.BYTE4=(Uint16)(((Uint32)temp_current_y)>>8);
+						ECanaMboxes.MBOX28.MDL.byte.BYTE3=(Uint16)(((Uint32)temp_current_y)>>16);
+						
+					    ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS28 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA28 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA28 = 1; // Clear TA28
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+	           }
 	           
-	            	AutoMode=AutoModeOFF;
-	            
-	            
-	            Driver1(dir,canplusecount);
-	            
-	            N2=canplusecount1;
-	            Driver2(dir1,canplusecount1);
-	            
+            }
+            else if(MapState==0x30)//Reset Zero
+            {
+            
             
             }
-             
-            //Dirver (2*canplusecount,dir,F[7]);
-            //Dirver1 (2*canplusecount1,dir1,F[7]);
 		 }
 		 ///////////////////////////////
 		 ///////////From laser distance detector
