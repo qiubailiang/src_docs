@@ -156,7 +156,7 @@ long angleY=0;  //vertical degree counter
 long distance;
 long polar_angle_count;
 long scale=5;
-long scaleY=2;
+long scaleY=10;
 
 
 long swing_speed=0;
@@ -164,6 +164,7 @@ long swing_speed_y=0;
 float Arc2Degree(float arc);
 float GetCountFromDegree(float deg);
 float GetDegreeFromCount(long cnt);
+float GetDegreeFromCountY(long cnt);
 void Driver2(int D,Uint32 Deg);
 void DriveWithDir(float dircount);
 typedef struct Coor{
@@ -772,7 +773,7 @@ void main(void)
 					Driver2(0x01,1);
 					
 				}
-				midY=angleY;
+				//midY=angleY;
 			  }
 			  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))//some laser is spotted by target,But not its own laser
 			  {
@@ -1059,7 +1060,7 @@ void drive(float degree)//the degree passed in should be in arcs
 void driveY(float degree)//the degree passed in should be in arcs 
 {
 	float degree_in_degrees=degree/3.14*180;
-	long degree_count=degree_in_degrees/((float)360)*1152000;
+	long degree_count=degree_in_degrees/((float)360)*100000;
 	Driver2(dir1,degree_count);
 
 }
@@ -1082,14 +1083,14 @@ void scan()
 }
 void scanY()
 {
-		if(GetDegreeFromCount(angleY-midY)>scaleY)
+		if(GetDegreeFromCountY(angleY)>scaleY)
    	 	{
    	 		dir1=0;
    	 		
    	 	} 
    	 	else
    	 	{
-   	 		if(GetDegreeFromCount(angleY-midY)<-scaleY)
+   	 		if(GetDegreeFromCountY(angleY)<-scaleY)
    	 		{
 	   	 		dir1=1;
 	   	 		
@@ -1108,7 +1109,11 @@ return arc/3.1415927*180;
 }
 float GetDegreeFromCount(long cnt)
 {
-return (float)cnt/((float)1152000)*360;
+	return (float)cnt/((float)1152000)*360;
+}
+float GetDegreeFromCountY(long cnt)
+{
+	return (float)cnt/((float)100000)*360;
 }
 int TargetInWorkingZone(Coor c)
 {
