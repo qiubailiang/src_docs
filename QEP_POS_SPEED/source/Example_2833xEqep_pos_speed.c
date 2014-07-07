@@ -206,8 +206,8 @@ int dir1_flag_for_guidence;
 Coor current_pos;
 Coor next_map_pos;
 struct Coor Map [10]; 
-float baseX=50;
-float baseY=-3700;
+float baseX=0;
+float baseY=-1900;
 
 float initAngle2Y=0;///
 
@@ -456,7 +456,7 @@ void main(void)
 	          if(distance_valid_flag==1)/////distance valid then do the guidence stuff
 	            {
 	           		distance_valid_flag=TRUE;
-	           		shouldTurnOffFlag=FALSE;
+	           		//shouldTurnOffFlag=FALSE;
 			////////////////////////////
 			///////send out can msg
 			
@@ -1012,7 +1012,7 @@ void follow(float targetX,float targetY)
     	dir=0;
     }
     
-    drive(1);
+    drive(20);
     
 }
 void stable_2Vertical(float angel_in_degree,float positionCount,long tCount)//first, aim;second ,actual positon;third, count of a whole circle
