@@ -654,8 +654,8 @@ void main(void)
 		  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))////should follow
 		  {
 		  		 follow(current_pos.x,current_pos.y);
-		  			//scanY();///ACTUALLY should follow
-		  			stable_2Vertical((float)0, (float)angleY,(long)TotalLoopCountV);
+		  		//scanY();///ACTUALLY should follow
+		  		//stable_2Vertical((float)0, (float)angleY,(long)TotalLoopCountV);
 		  }
 		  else //////distance not valid 
 		  {
@@ -825,13 +825,13 @@ interrupt  void EPWM1_int(void)
 		PwmOneStepFinishFlag++;
 		if(dir==0)
 			{
-				angle--;	
+				angle++;	
 			}
 			else
 			{
 				if(dir==1)
 				{
-					angle++;
+					angle--;
 				}
 			}
 	}
@@ -938,14 +938,14 @@ void scan()
 {
 		if(GetDegreeFromCount(angle)>scale)
    	 	{
-   	 		dir=0;
+   	 		dir=1;
    	 		
    	 	} 
    	 	else
    	 	{
    	 		if(GetDegreeFromCount(angle)<-scale)
    	 		{
-	   	 		dir=1;
+	   	 		dir=0;
 	   	 		
    	 		}
    	 	}
@@ -1004,12 +1004,12 @@ void follow(float targetX,float targetY)
     float aim_angle_degree=180*(atan(vtX/vtY))/3.14159;
     if(initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree)
     {
-	    dir=0;
+	    dir=1;
 
     }
     else
     {
-    	dir=1;
+    	dir=0;
     }
     
     drive(1);
