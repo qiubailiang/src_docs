@@ -188,6 +188,7 @@ void driveY(float degree);
 void scan();//x scaning
 void scanY();//y scaning
 int TargetInWorkingZone(Coor c);
+void follow(float targetX,float targetY);
 
 int PwmOneStepFinishFlag=0;
 int Pwm2OneStepFinishFlag=0;
@@ -208,8 +209,7 @@ float baseX=-1900;
 float baseY=0;
 float initAngle2Y=0;///
 
-float Hx=-1900;
-float Hy=0;
+
 float walkstep=1;
 
 long midY=0;
@@ -777,7 +777,7 @@ void main(void)
 			  }
 			  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))//some laser is spotted by target,But not its own laser
 			  {
-			  	scan();///ACTUALLY should follow
+			  	follow(current_pos.x,current_pos.y);///ACTUALLY should follow
 			  }
 			  
 			  else{//distance not valid so should start scan again
