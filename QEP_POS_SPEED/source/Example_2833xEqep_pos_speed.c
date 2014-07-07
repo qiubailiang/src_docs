@@ -204,12 +204,12 @@ int dir1_flag_for_guidence;
 Coor current_pos;
 Coor next_map_pos;
 struct Coor Map [10]; 
-float baseX=500;
-float baseY=-500;
+float baseX=-1900;
+float baseY=0;
 float initAngle2Y=0;///
 
-float Hx=0;
-float Hy=2000;
+float Hx=-1900;
+float Hy=0;
 float walkstep=1;
 
 long midY=0;
