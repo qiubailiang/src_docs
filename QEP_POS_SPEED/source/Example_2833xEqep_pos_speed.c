@@ -211,8 +211,7 @@ float baseY=-1900;
 
 float initAngle2Y=0;///
 
-float Hx=50;
-float Hy=-3700;
+
 
 
 float walkstep=1;
@@ -649,7 +648,8 @@ void main(void)
 				Driver2(0x00,1);
 				
 			}
-			midY=angleY;
+			///send out the target coordinates
+			
 		  }
 		  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))////should follow
 		  {
@@ -889,8 +889,8 @@ Coor Get_Position(float a,float d)//a is in degrees
 	Coor tempCoor;
 	a=(float)a;
 	d=(float)d;
-	tempCoor.x=d*sin(initAngle2Y+a/((float)180)*3.141593)+Hx;
-	tempCoor.y=d*cos(initAngle2Y+a/((float)180)*3.141593)+Hy;
+	tempCoor.x=d*sin(initAngle2Y+a/((float)180)*3.141593)+baseX;
+	tempCoor.y=d*cos(initAngle2Y+a/((float)180)*3.141593)+baseY;
 	return tempCoor;
 }
 float calulate_from_edges(float a,float b,float c)
