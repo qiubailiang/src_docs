@@ -1139,7 +1139,7 @@ int TargetInWorkingZone(Coor c)
 	tX=c.x;
 	tY=c.y;
 	
-	if(tX<10&&tY<-5000)
+	if(tX<300&&tY<-50)
 	{
 		return FALSE;
 	}
