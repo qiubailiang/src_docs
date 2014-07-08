@@ -427,7 +427,7 @@ void main(void)
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-					swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					swing_speed = ((float)distance/(float)(2*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 					EPwm1Regs.TBPRD=swing_speed;
 				
 				}
@@ -613,7 +613,7 @@ void main(void)
       	 
 		 }
 		 
-		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*TotalLoopCount);
+		 angle=-((long)EQep1Regs.QPOSCNT);
 		 
 	
 		 
@@ -850,22 +850,22 @@ interrupt  void EPWM1_int(void)
 	
 	EPwm1Regs.ETCLR.bit.INT=1;///////////////////////////////////
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;////the two statments are used to clear the flags of interrupt
-	if(EPwm1Regs.CMPA.half.CMPA !=0)
-	{
-		FinishStepFlag=NOTFINISH;
-		PwmOneStepFinishFlag++;
-		if(dir==0)
-			{
-				angle++;	
-			}
-			else
-			{
-				if(dir==1)
-				{
-					angle--;
-				}
-			}
-	}
+//	if(EPwm1Regs.CMPA.half.CMPA !=0)
+//	{
+//		FinishStepFlag=NOTFINISH;
+//		PwmOneStepFinishFlag++;
+//		if(dir==0)
+//			{
+//				angle++;	
+//			}
+//			else
+//			{
+//				if(dir==1)
+//				{
+//					angle--;
+//				}
+//			}
+//	}
 	
 	
 	if(PwmOneStepFinishFlag>N)
