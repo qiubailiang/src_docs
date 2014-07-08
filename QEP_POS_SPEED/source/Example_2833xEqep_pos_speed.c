@@ -116,6 +116,7 @@
 #define TRUE 1
 #define TotalLoopCount 3200000
 #define TotalLoopCountV 720000
+#define baseIndex 1
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -288,7 +289,7 @@ void main(void)
      ECanaRegs.CANME.bit.ME1 = 0;//使能邮箱1
      ECanaRegs.CANME.bit.ME2 = 0;//使能邮箱2
      ECanaRegs.CANME.bit.ME3 = 0;//enable mailbox 3 for reciving msg from other base for target location infor 
-
+	 ECanaRegs.CANME.bit.ME4 = 0;//enable mailbox 4 for switch base signal
     // Mailboxs can be written to 16-bits or 32-bits at a time
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_L =0x1213 ;//扩展帧ID：0x00111213
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_H=0x01;
@@ -309,28 +310,36 @@ void main(void)
      ECanaMboxes.MBOX2.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX2.MSGID.bit.AME=0;//屏蔽位
 
-	   ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x1219;//扩展帧ID：0x00111216
+	 ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x1219;//扩展帧ID：0x00111216
      ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_H=0x01;
      ECanaMboxes.MBOX3.MSGID.bit.STDMSGID=0x04;//04
      ECanaMboxes.MBOX3.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX3.MSGID.bit.AME=0;//屏蔽位
 	 
+	 ECanaMboxes.MBOX4.MSGID.bit.EXTMSGID_L =0x1210;//扩展帧ID：0x00111210 switch base
+     ECanaMboxes.MBOX4.MSGID.bit.EXTMSGID_H=0x01;
+     ECanaMboxes.MBOX4.MSGID.bit.STDMSGID=0x04;//04
+     ECanaMboxes.MBOX4.MSGID.bit.IDE=1;//扩展帧，如为0
+	 ECanaMboxes.MBOX4.MSGID.bit.AME=0;//屏蔽位
+	 
      ECanaRegs.CANMD.bit.MD0 = 1; //邮箱0设置为接收
      ECanaRegs.CANMD.bit.MD1 = 1; //邮箱1设置为接收
      ECanaRegs.CANMD.bit.MD2 = 1; //邮箱2设置为接收
      ECanaRegs.CANMD.bit.MD3 = 1; //Mail box3 set as recive box
+     ECanaRegs.CANMD.bit.MD4 = 1; //Mail box4 set as recive box
      
      ECanaRegs.CANME.bit.ME0 = 1;//使能邮箱0
      ECanaRegs.CANME.bit.ME1 = 1;//使能邮箱2
      ECanaRegs.CANME.bit.ME2 = 1;//使能邮箱2
      ECanaRegs.CANME.bit.ME3 = 1;//使能邮箱3
+     ECanaRegs.CANME.bit.ME4 = 1;//enable mailbox 4
      
      // Specify that 8 bits will be sent/received
      ECanaMboxes.MBOX0.MSGCTRL.bit.DLC = 8;
      ECanaMboxes.MBOX1.MSGCTRL.bit.DLC = 8;
    	 ECanaMboxes.MBOX2.MSGCTRL.bit.DLC = 8;	
    	 ECanaMboxes.MBOX3.MSGCTRL.bit.DLC = 8;	
-   	 
+   	 ECanaMboxes.MBOX4.MSGCTRL.bit.DLC = 8;
    	 
    	 
 /******************************* SEND limitx 30********************************************/
@@ -573,13 +582,35 @@ void main(void)
           
       	 
 		 }
-		 if(shouldTurnOffFlag==TRUE)
-		 {
-		 //tell its own laser to turn off
-		 }
-		 else
-		 {
-		 	
+
+		if (ECanaShadow.CANRMP.bit.RMP4 == 1)//D0  receieve 111210 //from other base--the target infor
+		{
+		  	
+	       ECanaShadow.CANRMP.all = 0;
+	       ECanaShadow.CANRMP.bit.RMP4 = 1;     	 // Clear RMP20
+	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
+	       
+	            CAN_RxBuffer[0]=ECanaMboxes.MBOX4.MDL.byte.BYTE0;
+	            CAN_RxBuffer[1]=ECanaMboxes.MBOX4.MDL.byte.BYTE1;
+	            CAN_RxBuffer[2]=ECanaMboxes.MBOX4.MDL.byte.BYTE2;
+	            
+		 // distance=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
+	            CAN_RxBuffer[3]=ECanaMboxes.MBOX4.MDL.byte.BYTE3;
+				CAN_RxBuffer[4]=ECanaMboxes.MBOX4.MDH.byte.BYTE4;
+			 	//distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
+				CAN_RxBuffer[5]=ECanaMboxes.MBOX4.MDH.byte.BYTE5;
+				CAN_RxBuffer[6]=ECanaMboxes.MBOX4.MDH.byte.BYTE6;
+				CAN_RxBuffer[7]=ECanaMboxes.MBOX4.MDH.byte.BYTE7;
+				if((CAN_RxBuffer[0]+1)==baseIndex)
+				{
+					
+					shouldTurnOffFlag=FALSE;
+				}
+				
+				
+			 
+          
+      	 
 		 }
 		 
 		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*TotalLoopCount);
