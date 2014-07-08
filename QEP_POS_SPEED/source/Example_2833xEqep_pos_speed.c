@@ -114,7 +114,7 @@
 #define AutoModeON 1
 #define FALSE 0
 #define TRUE 1
-
+#define baseIndex 0
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -289,6 +289,7 @@ void main(void)
      ECanaRegs.CANME.bit.ME1 = 0;//使能邮箱1
      ECanaRegs.CANME.bit.ME2 = 0;//使能邮箱2
      ECanaRegs.CANME.bit.ME3 = 0;//enable mail box 3
+     
     // Mailboxs can be written to 16-bits or 32-bits at a time
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_L =0x1213 ;//扩展帧ID：0x00111213
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_H=0x01;
@@ -379,6 +380,22 @@ void main(void)
    ECanaRegs.CANME.all = ECanaShadow.CANME.all;
 /* Write to DLC field in Master Control reg */
    ECanaMboxes.MBOX28.MSGCTRL.bit.DLC = 8;
+   /******************************* SEND switch base signal********************************************/
+/* Write to the MSGID field */
+  ECanaMboxes.MBOX29.MSGID.bit.EXTMSGID_L =0x1210;//extended ID：0x00111210
+     ECanaMboxes.MBOX29.MSGID.bit.EXTMSGID_H=0x01;
+     ECanaMboxes.MBOX29.MSGID.bit.STDMSGID=0x04;
+     ECanaMboxes.MBOX29.MSGID.bit.IDE=1;
+/* Configure Mailbox under test as a Transmit mailbox */
+   ECanaShadow.CANMD.all = ECanaRegs.CANMD.all;
+   ECanaShadow.CANMD.bit.MD29 = 0;
+   ECanaRegs.CANMD.all = ECanaShadow.CANMD.all;
+/* Enable Mailbox under test */
+   ECanaShadow.CANME.all = ECanaRegs.CANME.all;
+   ECanaShadow.CANME.bit.ME29 = 1;
+   ECanaRegs.CANME.all = ECanaShadow.CANME.all;
+/* Write to DLC field in Master Control reg */
+   ECanaMboxes.MBOX29.MSGCTRL.bit.DLC = 8;
    
    initGpio_pwm();
   while(1)
@@ -804,17 +821,18 @@ void main(void)
 	  	if(	TargetInWorkingZone(current_pos)==FALSE)
 	  	{
 	  		////TURN OFF LASER 
-	  		ECanaMboxes.MBOX27.MDH.all=0x1234; 
-	  		ECanaMboxes.MBOX27.MDL.all=0x1234; 
+	  		ECanaMboxes.MBOX29.MDH.all=0; 
+	  		ECanaMboxes.MBOX29.MDL.all=0; 
+	  		ECanaMboxes.MBOX29.MDL.byte.BYTE0=baseIndex;
 			ECanaShadow.CANTRS.all = 0;
-		    ECanaShadow.CANTRS.bit.TRS27 = 1; // Set TRS for mailbox under test
+		    ECanaShadow.CANTRS.bit.TRS29 = 1; // Set TRS for mailbox under test
 		    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
 		    do // Send 00110000
 		    {
 		      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-		    } while(ECanaShadow.CANTA.bit.TA27 == 0 );
+		    } while(ECanaShadow.CANTA.bit.TA29 == 0 );
 		    ECanaShadow.CANTA.all = 0;
-		    ECanaShadow.CANTA.bit.TA27 = 1; // Clear TA5
+		    ECanaShadow.CANTA.bit.TA29 = 1; // Clear TA5
 		    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 		    
 		    
