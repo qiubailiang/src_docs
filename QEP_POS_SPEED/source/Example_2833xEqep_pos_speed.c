@@ -209,9 +209,10 @@ Coor next_map_pos;
 struct Coor Map [10]; 
 float baseX=0;
 float baseY=-1900;
+float baseZ=1000;
 
 float initAngle2Y=0;///
-
+int followZHeight=0;
 
 
 
@@ -290,12 +291,15 @@ void main(void)
      ECanaRegs.CANME.bit.ME2 = 0;//使能邮箱2
      ECanaRegs.CANME.bit.ME3 = 0;//enable mailbox 3 for reciving msg from other base for target location infor 
 	 ECanaRegs.CANME.bit.ME4 = 0;//enable mailbox 4 for switch base signal
+	 ECanaRegs.CANME.bit.ME5 = 0;//enable mailbox 5 for switch base signal
+	 
     // Mailboxs can be written to 16-bits or 32-bits at a time
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_L =0x1213 ;//扩展帧ID：0x00111213
     ECanaMboxes.MBOX0.MSGID.bit.EXTMSGID_H=0x01;
     ECanaMboxes.MBOX0.MSGID.bit.STDMSGID=0x04;
 	ECanaMboxes.MBOX0.MSGID.bit.IDE=1;//扩展帧，如为0
 	ECanaMboxes.MBOX0.MSGID.bit.AME=0;//屏蔽位
+	
 
 	 ECanaMboxes.MBOX1.MSGID.bit.EXTMSGID_L =0x1214;//扩展帧ID：0x00111214
      ECanaMboxes.MBOX1.MSGID.bit.EXTMSGID_H=0x01;
@@ -322,25 +326,32 @@ void main(void)
      ECanaMboxes.MBOX4.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX4.MSGID.bit.AME=0;//屏蔽位
 	 
+	 ECanaMboxes.MBOX5.MSGID.bit.EXTMSGID_L =0x1010;//扩展帧ID：0x00111210 switch base
+     ECanaMboxes.MBOX5.MSGID.bit.EXTMSGID_H=0x01;
+     ECanaMboxes.MBOX5.MSGID.bit.STDMSGID=0x04;//04
+     ECanaMboxes.MBOX5.MSGID.bit.IDE=1;//扩展帧，如为0
+	 ECanaMboxes.MBOX5.MSGID.bit.AME=0;//屏蔽位
+	 
      ECanaRegs.CANMD.bit.MD0 = 1; //邮箱0设置为接收
      ECanaRegs.CANMD.bit.MD1 = 1; //邮箱1设置为接收
      ECanaRegs.CANMD.bit.MD2 = 1; //邮箱2设置为接收
      ECanaRegs.CANMD.bit.MD3 = 1; //Mail box3 set as recive box
      ECanaRegs.CANMD.bit.MD4 = 1; //Mail box4 set as recive box
+     ECanaRegs.CANMD.bit.MD5 = 1; //Mail box5 set as recive box
      
      ECanaRegs.CANME.bit.ME0 = 1;//使能邮箱0
      ECanaRegs.CANME.bit.ME1 = 1;//使能邮箱2
      ECanaRegs.CANME.bit.ME2 = 1;//使能邮箱2
      ECanaRegs.CANME.bit.ME3 = 1;//使能邮箱3
      ECanaRegs.CANME.bit.ME4 = 1;//enable mailbox 4
-     
+     ECanaRegs.CANME.bit.ME5 = 1;//enable mailbox 5
      // Specify that 8 bits will be sent/received
      ECanaMboxes.MBOX0.MSGCTRL.bit.DLC = 8;
      ECanaMboxes.MBOX1.MSGCTRL.bit.DLC = 8;
    	 ECanaMboxes.MBOX2.MSGCTRL.bit.DLC = 8;	
    	 ECanaMboxes.MBOX3.MSGCTRL.bit.DLC = 8;	
    	 ECanaMboxes.MBOX4.MSGCTRL.bit.DLC = 8;
-   	 
+   	 ECanaMboxes.MBOX5.MSGCTRL.bit.DLC = 8;
    	 
 /******************************* SEND limitx 30********************************************/
 /* Write to the MSGID field */
@@ -613,6 +624,28 @@ void main(void)
       	 
 		 }
 		 
+		 if (ECanaShadow.CANRMP.bit.RMP5 == 1)//D0  receieve 111210 //from other base--the target infor
+		{
+		  	
+	       ECanaShadow.CANRMP.all = 0;
+	       ECanaShadow.CANRMP.bit.RMP5 = 1;     	 // Clear RMP20
+	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
+	       
+	            CAN_RxBuffer[0]=ECanaMboxes.MBOX5.MDL.byte.BYTE0;
+	            CAN_RxBuffer[1]=ECanaMboxes.MBOX5.MDL.byte.BYTE1;
+	            CAN_RxBuffer[2]=ECanaMboxes.MBOX5.MDL.byte.BYTE2;
+	            
+		 // distance=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
+	            CAN_RxBuffer[3]=ECanaMboxes.MBOX5.MDL.byte.BYTE3;
+				CAN_RxBuffer[4]=ECanaMboxes.MBOX5.MDH.byte.BYTE4;
+			 	//distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
+				CAN_RxBuffer[5]=ECanaMboxes.MBOX5.MDH.byte.BYTE5;
+				CAN_RxBuffer[6]=ECanaMboxes.MBOX5.MDH.byte.BYTE6;
+				CAN_RxBuffer[7]=ECanaMboxes.MBOX5.MDH.byte.BYTE7;
+				
+          followZHeight=CAN_RxBuffer[0]<<24+CAN_RxBuffer[1]<<16+CAN_RxBuffer[2]<<8+CAN_RxBuffer[3];
+      	 
+		 }
 		 angle=-((long)EQep1Regs.QPOSCNT);
 		 
 	
