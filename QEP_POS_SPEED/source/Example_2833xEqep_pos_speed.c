@@ -207,6 +207,8 @@ Coor next_map_pos;
 struct Coor Map [10]; 
 float baseX=-1900;
 float baseY=0;
+float baseZ=1000;
+
 float initAngle2Y=0;///
 
 
@@ -396,6 +398,22 @@ void main(void)
    ECanaRegs.CANME.all = ECanaShadow.CANME.all;
 /* Write to DLC field in Master Control reg */
    ECanaMboxes.MBOX29.MSGCTRL.bit.DLC = 8;
+      /******************************* SEND target Z coordinate********************************************/
+/* Write to the MSGID field */
+   ECanaMboxes.MBOX30.MSGID.bit.EXTMSGID_L =0x1010;//extended ID£º0x00111010
+   ECanaMboxes.MBOX30.MSGID.bit.EXTMSGID_H=0x01;
+   ECanaMboxes.MBOX30.MSGID.bit.STDMSGID=0x04;
+   ECanaMboxes.MBOX30.MSGID.bit.IDE=1;
+/* Configure Mailbox under test as a Transmit mailbox */
+   ECanaShadow.CANMD.all = ECanaRegs.CANMD.all;
+   ECanaShadow.CANMD.bit.MD30 = 0;
+   ECanaRegs.CANMD.all = ECanaShadow.CANMD.all;
+/* Enable Mailbox under test */
+   ECanaShadow.CANME.all = ECanaRegs.CANME.all;
+   ECanaShadow.CANME.bit.ME30 = 1;
+   ECanaRegs.CANME.all = ECanaShadow.CANME.all;
+/* Write to DLC field in Master Control reg */
+   ECanaMboxes.MBOX30.MSGCTRL.bit.DLC = 8;
    
    initGpio_pwm();
   while(1)
@@ -573,27 +591,14 @@ void main(void)
 				
 		          if(distance_valid_flag==1)/////distance valid 
 		            {
-		           		distance_valid_flag=TRUE;
+		           		
 		           		
 				////////////////////////////
 				///////send out can msg
 				
 						ECanaMboxes.MBOX26.MDL.all = 0;
 					    ECanaMboxes.MBOX26.MDH.all = 0;
-					    
-//					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
-//					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
-//					    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
-//					    
-//					    if(angle<0)
-//					    {
-//					   		angle_sendout=angle+1152000;
-//						
-//					    }
-//					    else
-//					    {
-//					    	angle_sendout=angle;
-//					    }
+					   
 						long temp_current_x=(long)current_pos.x;
 						long temp_current_y=(long)current_pos.y;
 					   
@@ -637,8 +642,29 @@ void main(void)
 					    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
 					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 				/////////////////
-				////////////////          		
+				////////////////          	
+						float angY_d_temp=GetDegreeFromCountY(angleY);
+		           		float dz =distance*sin(angY_d_temp);
+		           		Uint32  zAxis = dz+baseZ;
 		           		
+		           		ECanaMboxes.MBOX30.MDL.byte.BYTE0=(Uint16)(((Uint32)zAxis)>>24);
+					    ECanaMboxes.MBOX30.MDL.byte.BYTE1=(Uint16)(((Uint32)zAxis)>>16);
+					    ECanaMboxes.MBOX30.MDL.byte.BYTE2=(Uint16)(zAxis>>8);
+					    ECanaMboxes.MBOX30.MDL.byte.BYTE3=(Uint16)(zAxis);
+//						ECanaMboxes.MBOX30.MDH.byte.BYTE5=(Uint16)(((Uint32)temp_current_y));
+//						ECanaMboxes.MBOX30.MDH.byte.BYTE4=(Uint16)(((Uint32)temp_current_y)>>8);
+						
+						
+					    ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS30 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA30 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA30 = 1; // Clear TA5
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 		           		
 		           		
 		            }
