@@ -172,7 +172,7 @@ typedef struct Coor{
  float y;
  float z;
  }Coor;
-Coor Get_Position(float a,float d);
+Coor Get_Position(float a,float d,float angCos);
 Coor get_next_point_on_trace(struct Coor map [],int length);
 
 float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step);
@@ -414,6 +414,22 @@ void main(void)
    ECanaRegs.CANME.all = ECanaShadow.CANME.all;
 /* Write to DLC field in Master Control reg */
    ECanaMboxes.MBOX30.MSGCTRL.bit.DLC = 8;
+     /******************************* SEND target coordinates with x and y bias********************************************/
+/* Write to the MSGID field */
+   ECanaMboxes.MBOX31.MSGID.bit.EXTMSGID_L =0x1011;//extended ID£º0x00111011
+   ECanaMboxes.MBOX31.MSGID.bit.EXTMSGID_H=0x01;
+   ECanaMboxes.MBOX31.MSGID.bit.STDMSGID=0x04;
+   ECanaMboxes.MBOX31.MSGID.bit.IDE=1;
+/* Configure Mailbox under test as a Transmit mailbox */
+   ECanaShadow.CANMD.all = ECanaRegs.CANMD.all;
+   ECanaShadow.CANMD.bit.MD31 = 0;
+   ECanaRegs.CANMD.all = ECanaShadow.CANMD.all;
+/* Enable Mailbox under test */
+   ECanaShadow.CANME.all = ECanaRegs.CANME.all;
+   ECanaShadow.CANME.bit.ME31 = 1;
+   ECanaRegs.CANME.all = ECanaShadow.CANME.all;
+/* Write to DLC field in Master Control reg */
+   ECanaMboxes.MBOX31.MSGCTRL.bit.DLC = 8;
    
    initGpio_pwm();
   while(1)
@@ -589,7 +605,7 @@ void main(void)
 				x_bias=CAN_RxBuffer[7];////
 				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
 				
-		          if(distance_valid_flag==1)/////distance valid 
+		          if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE)/////distance valid and itself should work
 		            {
 		           		
 		           		
@@ -666,6 +682,46 @@ void main(void)
 					    ECanaShadow.CANTA.bit.TA30 = 1; // Clear TA5
 					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 		           		
+		           	
+//						ECanaMboxes.MBOX30.MDH.byte.BYTE5=(Uint16)(((Uint32)temp_current_y));
+//						ECanaMboxes.MBOX30.MDH.byte.BYTE4=(Uint16)(((Uint32)temp_current_y)>>8);
+					/////get the x coor and y coordinates from 26 mailbox
+						ECanaMboxes.MBOX31.MDL.byte.BYTE0=ECanaMboxes.MBOX26.MDL.byte.BYTE1;
+					    ECanaMboxes.MBOX31.MDL.byte.BYTE1=ECanaMboxes.MBOX26.MDL.byte.BYTE2;
+						
+						ECanaMboxes.MBOX31.MDL.byte.BYTE2=ECanaMboxes.MBOX26.MDH.byte.BYTE4;
+						ECanaMboxes.MBOX31.MDL.byte.BYTE3=ECanaMboxes.MBOX26.MDH.byte.BYTE5;
+						
+						ECanaMboxes.MBOX31.MDH.byte.BYTE4=x_bias;
+						ECanaMboxes.MBOX31.MDH.byte.BYTE5=y_bias;
+						
+						ECanaMboxes.MBOX31.MDH.byte.BYTE6=0;
+						if(temp_current_x>0)
+						{
+						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x80;
+						}
+						if(temp_current_y>0)
+						{
+						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x40;
+						}
+						if(x_bias_dir>0)
+						{
+						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x20;
+						}
+						if(y_bias_dir>0)
+						{
+						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x10;
+						}
+					    ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS31 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA31 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA31 = 1; // Clear TA5
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 		           		
 		            }
 		            else    /////distance not valid
@@ -764,9 +820,8 @@ void main(void)
 		  	{
 		  		AutoMode=AutoModeOFF;
 		  		isFirstScan=FALSE;
-		  		shouldTurnOffFlag=FALSE;
-		  		isFirstScan=FALSE;
-		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
+		  		
+		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
 		 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 				  //first get angle ,get ho many angles should turn;
 				  //then drive 
@@ -785,7 +840,7 @@ void main(void)
 	   		if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)//if the distance is valid, the target is locked on
 		  	{
 		  		//AutoMode=AutoModeOFF;
-		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
+		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
 		 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 				//first get angle ,get how many angles should turn;
 			    //then drive 
@@ -1059,13 +1114,13 @@ interrupt  void EPWM2_int(void)
 	}
 }
 
-Coor Get_Position(float a,float d)//a is in degrees 
+Coor Get_Position(float a,float d,float angCos)//a is in degrees 
 {
 	Coor tempCoor;
-	a=(float)a;
-	d=(float)d;
-	tempCoor.x=d*cos(a/((float)180)*3.141593)+baseX;
-	tempCoor.y=d*sin(a/((float)180)*3.141593)+baseY;
+	
+	
+	tempCoor.x=angCos*d*cos(a/((float)180)*3.141593)+baseX;
+	tempCoor.y=angCos*d*sin(a/((float)180)*3.141593)+baseY;
 	return tempCoor;
 }
 float calulate_from_edges(float a,float b,float c)
