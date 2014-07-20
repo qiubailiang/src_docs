@@ -719,7 +719,9 @@ void main(void)
 		  {
 		  		 follow(current_pos.x,current_pos.y);
 		  		//scanY();///ACTUALLY should follow
-		  		//stable_2Vertical((float)0, (float)angleY,(long)TotalLoopCountV);
+		  		float temp_aim_angle;
+		  		temp_aim_angle=180*atan((float)(followZHeight-baseZ)/(sqrt(current_pos.x*current_pos.x+current_pos.y*current_pos.y)))/3.14;
+		  		stable_2Vertical(temp_aim_angle, (float)angleY,(long)TotalLoopCountV);
 		  }
 		  else //////distance not valid 
 		  {
