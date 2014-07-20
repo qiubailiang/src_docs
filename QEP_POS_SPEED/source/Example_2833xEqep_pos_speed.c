@@ -1066,17 +1066,28 @@ void follow(float targetX,float targetY)
     float vtX =targetX-baseX;
     float vtY =targetY-baseY;
     float aim_angle_degree=180*(atan(vtX/vtY))/3.14159;
-    if(initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree)
+    if(initAngle2Y+GetDegreeFromCount(angle)-aim_angle_degree<5)
+    {
+	  
+		drive(0);
+    }
+    else if(-(initAngle2Y+GetDegreeFromCount(angle)-aim_angle_degree)<5)
+    {
+    	drive(0);
+    	
+    }
+    else if(initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree)
     {
 	    dir=1;
-
+ 		drive(10);
     }
-    else
+    else  if(initAngle2Y+GetDegreeFromCount(angle)<aim_angle_degree)
     {
     	dir=0;
+    	drive(10);
     }
     
-    drive(20);
+   
     
 }
 void stable_2Vertical(float angel_in_degree,float positionCount,long tCount)//first, aim;second ,actual positon;third, count of a whole circle
