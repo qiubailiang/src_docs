@@ -208,8 +208,8 @@ Coor current_pos;
 Coor next_map_pos;
 struct Coor Map [10]; 
 float baseX=0;
-float baseY=-1900;
-float baseZ=1000;
+float baseY=-9228;
+float baseZ=770;
 
 float initAngle2Y=0;///
 int followZHeight=0;
