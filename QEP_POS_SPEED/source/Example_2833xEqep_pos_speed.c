@@ -111,10 +111,14 @@
 #define WidthOfScreen 100
 #define K 10000
 #define AutoModeOFF 0
-#define AutoModeON 1
+#define ScanMode 1
+#define AdjustMode 2
 #define FALSE 0
 #define TRUE 1
 #define baseIndex 0
+#define TotalLoopCountH 1152000
+#define TotalLoopCountV 400000
+
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -217,7 +221,7 @@ float walkstep=1;
 long midY=0;
 int shouldTurnOffFlag=FALSE;
 int isFirstScan=TRUE;
-int AutoMode=AutoModeON;
+int AutoMode=ScanMode;
 Uint16 MapState;
 void main(void)
 { 
@@ -318,21 +322,30 @@ void main(void)
      ECanaMboxes.MBOX3.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX3.MSGID.bit.AME=0;//屏蔽位
 	 
+	 ECanaMboxes.MBOX4.MSGID.bit.EXTMSGID_L =0x1210 ;//扩展帧ID：0x00111210 //for adjust 0
+     ECanaMboxes.MBOX4.MSGID.bit.EXTMSGID_H=0x01;
+     ECanaMboxes.MBOX4.MSGID.bit.STDMSGID=0x04;
+	 ECanaMboxes.MBOX4.MSGID.bit.IDE=1;//扩展帧，如为0
+   	 ECanaMboxes.MBOX4.MSGID.bit.AME=0;//屏蔽位
+	 
      ECanaRegs.CANMD.bit.MD0 = 1; //邮箱0设置为接收
      ECanaRegs.CANMD.bit.MD1 = 1; //邮箱1设置为接收
      ECanaRegs.CANMD.bit.MD2 = 1; //邮箱2设置为接收
-     ECanaRegs.CANMD.bit.MD3 = 1; //邮箱2设置为接收
+     ECanaRegs.CANMD.bit.MD3 = 1; //邮箱3设置为接收
+     ECanaRegs.CANMD.bit.MD4 = 1; //邮箱4设置为接收
      
      ECanaRegs.CANME.bit.ME0 = 1;//使能邮箱0
      ECanaRegs.CANME.bit.ME1 = 1;//使能邮箱2
      ECanaRegs.CANME.bit.ME2 = 1;//使能邮箱2
      ECanaRegs.CANME.bit.ME3 = 1;//使能邮箱2
+     ECanaRegs.CANME.bit.ME4 = 1;//使能邮箱2
+     
      // Specify that 8 bits will be sent/received
      ECanaMboxes.MBOX0.MSGCTRL.bit.DLC = 8;
      ECanaMboxes.MBOX1.MSGCTRL.bit.DLC = 8;
    	 ECanaMboxes.MBOX2.MSGCTRL.bit.DLC = 8;	
    	 ECanaMboxes.MBOX3.MSGCTRL.bit.DLC = 8;	
-   	 
+   	 ECanaMboxes.MBOX4.MSGCTRL.bit.DLC = 8;	
    	 
 /******************************* SEND target Coordinates********************************************/
 /* Write to the MSGID field */
@@ -543,6 +556,44 @@ void main(void)
             
             
             }
+		 }
+		 ///////////////////////////////
+		 ///adjust zero point
+		 ///////////////////////////////
+		 	if (ECanaShadow.CANRMP.bit.RMP4 == 1)//D0  receieve 111210
+		{
+		  	
+	       ECanaShadow.CANRMP.all = 0;
+	       ECanaShadow.CANRMP.bit.RMP4 = 1;     	 // Clear RMP4
+	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
+	       
+	            CAN_RxBuffer[0]=ECanaMboxes.MBOX4.MDL.byte.BYTE0;
+	            CAN_RxBuffer[1]=ECanaMboxes.MBOX4.MDL.byte.BYTE1;
+	            CAN_RxBuffer[2]=ECanaMboxes.MBOX4.MDL.byte.BYTE2;
+	            CAN_RxBuffer[3]=ECanaMboxes.MBOX4.MDL.byte.BYTE3;
+				CAN_RxBuffer[4]=ECanaMboxes.MBOX4.MDH.byte.BYTE4;
+				CAN_RxBuffer[5]=ECanaMboxes.MBOX4.MDH.byte.BYTE5;
+				CAN_RxBuffer[6]=ECanaMboxes.MBOX4.MDH.byte.BYTE6;
+				CAN_RxBuffer[7]=ECanaMboxes.MBOX4.MDH.byte.BYTE7;
+			if(CAN_RxBuffer[7]==AdjustMode)
+			{
+			   AutoMode=AdjustMode;
+			   long canplusecount=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
+			   long canplusecount1=CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5];// 1000000个脉冲电机转动360°
+	           int adj_dir=CAN_RxBuffer[6]&0x80;////x sign
+	           int adj_dir1=CAN_RxBuffer[6]&0x40;////y sign 
+	           //MapState= CAN_RxBuffer[6]&0x30;
+	           dir=adj_dir;
+	           dir1=adj_dir1;
+	           drive(canplusecount*3.14159/180);
+	           driveY(canplusecount1*3.14159/180);
+			}
+			else
+			{
+				angle=0;
+				angleY=0;
+				AutoMode=ScanMode;
+			}
 		 }
 		 ///////////////////////////////
 		 ///////////From laser distance detector
@@ -802,12 +853,12 @@ void main(void)
       	 
 		 }
 		 
-		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*1152000);
+		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*TotalLoopCountH);
 		 
 		///////////////////////
 		 //////Below is states transformations
 		 //////////////////////////
-	   	if(AutoMode==AutoModeON)//automode is on 
+	   	if(AutoMode==ScanMode)//automode is on 
 	   	{
 	   		 
 	   	 	scan();
@@ -837,71 +888,74 @@ void main(void)
 	   	}
 	   	else
 	   	{
-	   		if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)//if the distance is valid, the target is locked on
-		  	{
-		  		//AutoMode=AutoModeOFF;
-		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
-		 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
-				//first get angle ,get how many angles should turn;
-			    //then drive 
-				if(x_bias>0x6f)
-				{
-				swing_speed=0;
-				}
-				drive(get_angle(current_pos,next_map_pos,walkstep));
-				float turning = ((float)y_bias)/1000;
-				turning=180*turning/3.14159;
-				if(y_bias<=2){
-					swing_speed_y=0;
-				}else{
-				//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-				swing_speed_y=PRD*((float)y_bias/18);
+	   		if(AutoMode==AutoModeOFF)
+	   		{
+		   		if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)//if the distance is valid, the target is locked on
+			  	{
+			  		//AutoMode=AutoModeOFF;
+			 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
+			 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
+					//first get angle ,get how many angles should turn;
+				    //then drive 
+					if(x_bias>0x6f)
+					{
+					swing_speed=0;
+					}
+					drive(get_angle(current_pos,next_map_pos,walkstep));
+					float turning = ((float)y_bias)/1000;
+					turning=180*turning/3.14159;
+					if(y_bias<=2){
+						swing_speed_y=0;
+					}else{
+					//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+					swing_speed_y=PRD*((float)y_bias/18);
+					
+					}
+					EPwm2Regs.TBPRD=swing_speed_y;
+					EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
+					if(y_bias_dir==0)
+					{
+						
+						Driver2(0x00,1);
+					}
+					else
+					{
 				
-				}
-				EPwm2Regs.TBPRD=swing_speed_y;
-				EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
-				if(y_bias_dir==0)
-				{
-					
-					Driver2(0x00,1);
-				}
-				else
-				{
-			
-					Driver2(0x01,1);
-					
-				}
-				//midY=angleY;
-			  }
-			  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))//some laser is spotted by target,But not its own laser
-			  {
-			  	follow(current_pos.x,current_pos.y);///ACTUALLY should follow
-			  }
-			  
-			  else{//distance not valid so should start scan again
-			  	shouldTurnOffFlag=FALSE;
-			  	if(dir_flag_for_guidence==0)
-			  	{
-			  		dir=1;
-			  	}
-			  	else
-			  	{
-				  	if(dir_flag_for_guidence==1)
+						Driver2(0x01,1);
+						
+					}
+					//midY=angleY;
+				  }
+				  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))//some laser is spotted by target,But not its own laser
+				  {
+				  	follow(current_pos.x,current_pos.y);///ACTUALLY should follow
+				  }
+				  
+				  else{//distance not valid so should start scan again
+				  	shouldTurnOffFlag=FALSE;
+				  	if(dir_flag_for_guidence==0)
 				  	{
-				  		dir=0;
+				  		dir=1;
 				  	}
-			  	
-			  	}/////
-			  		AutoMode=AutoModeON;
-				 //scan();//if failed to capture the target,then scan for it 
-			  }
+				  	else
+				  	{
+					  	if(dir_flag_for_guidence==1)
+					  	{
+					  		dir=0;
+					  	}
+				  	
+				  	}/////
+				  		AutoMode=ScanMode;
+					 //scan();//if failed to capture the target,then scan for it 
+				  }
+	   		}
 		  }
 		  ///////////////////////////
 		  /////Below codes tell werther target is in its own working area
 		  ///////////////////////////
 	  	if(	TargetInWorkingZone(current_pos)==FALSE)
 	  	{
-	  		////TURN OFF LASER 
+	  		////HANDLE TO NEXT STATION 
 	  		ECanaMboxes.MBOX29.MDH.all=0; 
 	  		ECanaMboxes.MBOX29.MDL.all=0; 
 	  		ECanaMboxes.MBOX29.MDL.byte.BYTE0=baseIndex;
@@ -916,7 +970,20 @@ void main(void)
 		    ECanaShadow.CANTA.bit.TA29 = 1; // Clear TA5
 		    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 		    
-		    
+		    ////TURN OFF LASER 
+	  		ECanaMboxes.MBOX27.MDH.all=0; 
+	  		ECanaMboxes.MBOX27.MDL.all=0; 
+	  		ECanaMboxes.MBOX27.MDL.byte.BYTE0=baseIndex;
+			ECanaShadow.CANTRS.all = 0;
+		    ECanaShadow.CANTRS.bit.TRS27 = 1; // Set TRS for mailbox under test
+		    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+		    do // Send 00110000
+		    {
+		      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+		    } while(ECanaShadow.CANTA.bit.TA27 == 0 );
+		    ECanaShadow.CANTA.all = 0;
+		    ECanaShadow.CANTA.bit.TA27 = 1; // Clear TA5
+		    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 		    ///////////
 		    ////switch state
 		    //////////////
@@ -1152,14 +1219,14 @@ float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step)////return in arcs
 void drive(float degree)//the degree passed in should be in arcs 
 {
 	float degree_in_degrees=degree/3.14*180;
-	long degree_count=degree_in_degrees/((float)360)*1152000;
+	long degree_count=degree_in_degrees/((float)360)*TotalLoopCountH;
 	Driver1(dir,degree_count);
 
 }
 void driveY(float degree)//the degree passed in should be in arcs 
 {
 	float degree_in_degrees=degree/3.14*180;
-	long degree_count=degree_in_degrees/((float)360)*100000;
+	long degree_count=degree_in_degrees/((float)360)*TotalLoopCountV;
 	Driver2(dir1,degree_count);
 
 }
@@ -1208,11 +1275,11 @@ return arc/3.1415927*180;
 }
 float GetDegreeFromCount(long cnt)
 {
-	return (float)cnt/((float)1152000)*360;
+	return (float)cnt/((float)TotalLoopCountH)*360;
 }
 float GetDegreeFromCountY(long cnt)
 {
-	return (float)cnt/((float)100000)*360;
+	return (float)cnt/((float)TotalLoopCountV)*360;
 }
 int TargetInWorkingZone(Coor c)
 {
