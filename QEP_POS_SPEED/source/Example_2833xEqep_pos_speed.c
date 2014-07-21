@@ -205,7 +205,7 @@ int dir1_flag_for_guidence;
 Coor current_pos;
 Coor next_map_pos;
 struct Coor Map [10]; 
-float baseX=-1900;
+float baseX=-2659;
 float baseY=0;
 float baseZ=1000;
 
@@ -227,7 +227,7 @@ void main(void)
 	{
 			Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=-200-200;
+			Map[i].y=0;
 	}
 	for(i=0;i<10;i=i+2)
 	{
