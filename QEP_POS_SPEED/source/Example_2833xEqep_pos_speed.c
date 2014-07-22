@@ -231,18 +231,18 @@ void main(void)
 	{
 			Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=0;
+			Map[i].y=100;
 	}
 	for(i=0;i<10;i=i+2)
 	{
 			//Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=-200;
+		//	Map[i].y=-200;
 	}
-	Map[9].x=1010;
-	Map[9].y=-800;
+	Map[8].x=1010;
+	Map[8].y=-800;
 	
-	Map[9].x=1110;
+	Map[9].x=110;
 	Map[9].y=-1000;
 	
    InitSysCtrl();
