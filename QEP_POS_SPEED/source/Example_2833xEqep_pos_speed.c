@@ -118,6 +118,7 @@
 #define baseIndex 0
 #define TotalLoopCountH 1152000
 #define TotalLoopCountV 400000
+#define MapPointCountCount 10
 
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
@@ -873,7 +874,7 @@ void main(void)
 		  		isFirstScan=FALSE;
 		  		
 		 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
-		 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
+		 		next_map_pos=get_next_point_on_trace(Map,MapPointCountCount);//search which is the next point on the map
 				  //first get angle ,get ho many angles should turn;
 				  //then drive 
 				drive(get_angle(current_pos,next_map_pos,walkstep));
@@ -894,7 +895,7 @@ void main(void)
 			  	{
 			  		//AutoMode=AutoModeOFF;
 			 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
-			 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
+			 		next_map_pos=get_next_point_on_trace(Map,MapPointCountCount);//search which is the next point on the map
 					//first get angle ,get how many angles should turn;
 				    //then drive 
 					if(x_bias>0x6f)
@@ -1015,8 +1016,10 @@ Coor get_next_point_on_trace(struct Coor map [],int length)
 { 
 	//int i;
 	int temp_pointer=get_nearest_point(map,length);
-	float dis1=(map[temp_pointer].x-baseX)*(map[temp_pointer].x-baseX)+(map[temp_pointer].y-baseY)*(map[temp_pointer].y-baseY);
-	float dis2=(current_pos.x-baseX)*(current_pos.x-baseX)+(current_pos.y-baseY)*(current_pos.y-baseY);
+	float gX=map[MapPointCountCount-1].x;
+	float gY=map[MapPointCountCount-1].y;
+	float dis1=(map[temp_pointer].x-gX)*(map[temp_pointer].x-gX)+(map[temp_pointer].y-gY)*(map[temp_pointer].y-gY);
+	float dis2=(current_pos.x-gX)*(current_pos.x-gX)+(current_pos.y-gY)*(current_pos.y-gY);
 	if(dis1>=dis2&&temp_pointer<length-1)
 	{
 		temp_pointer=temp_pointer+1;
