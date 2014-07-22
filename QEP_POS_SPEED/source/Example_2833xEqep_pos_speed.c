@@ -240,8 +240,8 @@ void main(void)
 			//Map[i].y=-800+1600/9*i;
 		//	Map[i].y=-200;
 	}
-	Map[8].x=1010;
-	Map[8].y=-800;
+	Map[8].x=510;
+	Map[8].y=-500;
 	
 	Map[9].x=110;
 	Map[9].y=-1000;
@@ -1290,7 +1290,7 @@ int TargetInWorkingZone(Coor c)
 	tX=c.x;
 	tY=c.y;
 	
-	if(tX<300&&tY<-50)
+	if(tX<300&&AutoMode==AutoModeOFF)
 	{
 		return FALSE;
 	}
