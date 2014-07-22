@@ -119,7 +119,7 @@
 #define TotalLoopCountH 1152000
 #define TotalLoopCountV 400000
 #define MapPointCountCount 10
-
+#define x_bais_thr 0x72
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -160,7 +160,7 @@ long angleY=0;  //vertical degree counter
 
 long distance;
 long polar_angle_count;
-long scale=5;
+long scale=7;
 long scaleY=10;
 
 
@@ -240,11 +240,14 @@ void main(void)
 			//Map[i].y=-800+1600/9*i;
 		//	Map[i].y=-200;
 	}
-	Map[8].x=510;
-	Map[8].y=-500;
+	Map[7].x=2500;
+	Map[7].y=0;
 	
-	Map[9].x=110;
-	Map[9].y=-1000;
+	Map[8].x=0;
+	Map[8].y=-2000;
+	
+	Map[9].x=0;
+	Map[9].y=-2000;
 	
    InitSysCtrl();
    InitECan();
@@ -618,7 +621,7 @@ void main(void)
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-					swing_speed = ((float)distance/(float)(4*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					swing_speed = ((float)distance/(float)(8*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 					EPwm1Regs.TBPRD=swing_speed;
 				
 				}
@@ -898,9 +901,9 @@ void main(void)
 			 		next_map_pos=get_next_point_on_trace(Map,MapPointCountCount);//search which is the next point on the map
 					//first get angle ,get how many angles should turn;
 				    //then drive 
-					if(x_bias>0x6f)
+					if(x_bias>x_bais_thr)
 					{
-					swing_speed=0;
+					swing_speed=200;
 					}
 					drive(get_angle(current_pos,next_map_pos,walkstep));
 					float turning = ((float)y_bias)/1000;
