@@ -121,6 +121,7 @@
 #define MapPointCountCount 10
 #define x_bais_thr 0x81
 #define scan_speed 700
+#define guidance_speed_low 1400
 #define guidance_speed 700
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
@@ -624,7 +625,15 @@ void main(void)
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
 					//swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
-					swing_speed=guidance_speed;
+					if(distance<7000)
+					{
+						swing_speed=guidance_speed;
+					}
+					else
+					{
+						swing_speed=guidance_speed_low;
+					}
+					
 					EPwm1Regs.TBPRD=swing_speed;
 				
 				}
@@ -902,6 +911,21 @@ void main(void)
 			  		
 				  		if(	TargetInWorkingZone(current_pos)==FALSE)
 				  	{
+				  		
+				  		   ////TURN OFF LASER 
+				  		ECanaMboxes.MBOX27.MDH.all=0; 
+				  		ECanaMboxes.MBOX27.MDL.all=0; 
+				  		ECanaMboxes.MBOX27.MDL.byte.BYTE0=baseIndex;
+						ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS27 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA27 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA27 = 1; // Clear TA5
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 				  		////HANDLE TO NEXT STATION 
 				  		ECanaMboxes.MBOX29.MDH.all=0; 
 				  		ECanaMboxes.MBOX29.MDL.all=0; 
@@ -917,58 +941,47 @@ void main(void)
 					    ECanaShadow.CANTA.bit.TA29 = 1; // Clear TA5
 					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 					    
-					    ////TURN OFF LASER 
-				  		ECanaMboxes.MBOX27.MDH.all=0; 
-				  		ECanaMboxes.MBOX27.MDL.all=0; 
-				  		ECanaMboxes.MBOX27.MDL.byte.BYTE0=baseIndex;
-						ECanaShadow.CANTRS.all = 0;
-					    ECanaShadow.CANTRS.bit.TRS27 = 1; // Set TRS for mailbox under test
-					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-					    do // Send 00110000
-					    {
-					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-					    } while(ECanaShadow.CANTA.bit.TA27 == 0 );
-					    ECanaShadow.CANTA.all = 0;
-					    ECanaShadow.CANTA.bit.TA27 = 1; // Clear TA5
-					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 					    ///////////
 					    ////switch state
 					    //////////////
 					    shouldTurnOffFlag=TRUE;
 				  	}
+			  		else
+			  		{
 			  		
-			  		//AutoMode=AutoModeOFF;
-			 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
-			 		next_map_pos=get_next_point_on_trace(Map,MapPointCountCount);//search which is the next point on the map
-					//first get angle ,get how many angles should turn;
-				    //then drive 
-					if(x_bias>x_bais_thr)
-					{
-					swing_speed=0;
-					}
-					drive(get_angle(current_pos,next_map_pos,walkstep));
-					float turning = ((float)y_bias)/1000;
-					turning=180*turning/3.14159;
-					if(y_bias<=2){
-						swing_speed_y=0;
-					}else{
-					//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-					swing_speed_y=PRD*((float)y_bias/18);
+				 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
+				 		next_map_pos=get_next_point_on_trace(Map,MapPointCountCount);//search which is the next point on the map
+						//first get angle ,get how many angles should turn;
+					    //then drive 
+						if(x_bias>x_bais_thr)
+						{
+						swing_speed=0;
+						}
+						drive(get_angle(current_pos,next_map_pos,walkstep));
+						float turning = ((float)y_bias)/1000;
+						turning=180*turning/3.14159;
+						if(y_bias<=2){
+							swing_speed_y=0;
+						}else{
+						//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+						swing_speed_y=PRD*((float)y_bias/18);
+						
+						}
+						EPwm2Regs.TBPRD=swing_speed_y;
+						EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
+						if(y_bias_dir==0)
+						{
+							
+							Driver2(0x00,1);
+						}
+						else
+						{
 					
-					}
-					EPwm2Regs.TBPRD=swing_speed_y;
-					EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
-					if(y_bias_dir==0)
-					{
+							Driver2(0x01,1);
+							
+						}
 						
-						Driver2(0x00,1);
-					}
-					else
-					{
-				
-						Driver2(0x01,1);
-						
-					}
+			  		}
 					//midY=angleY;
 				  }
 				  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))//some laser is spotted by target,But not its own laser
@@ -1300,8 +1313,9 @@ int TargetInWorkingZone(Coor c)
 	float tX,tY;
 	tX=c.x;
 	tY=c.y;
-	
-	if((tX<900)&&(tY<-700))
+	float gX=Map[MapPointCountCount-1].x;
+	float gY=Map[MapPointCountCount-1].y;
+	if((tX-gX)*(tX-gX)+(tY-gY)*(tY-gY)<=6250000)
 	{
 		return FALSE;
 	}
@@ -1309,6 +1323,14 @@ int TargetInWorkingZone(Coor c)
 	{
 		return TRUE;
 	}
+//	if((tX<900)&&(tY<-700))
+//	{
+//		return FALSE;
+//	}
+//	else
+//	{
+//		return TRUE;
+//	}
 
 }
 void follow(float targetX,float targetY)
