@@ -120,7 +120,7 @@
 #define TotalLoopCountV 400000
 #define MapPointCountCount 10
 #define x_bais_thr 0x81
-#define scan_speed 2000
+#define scan_speed 700
 #define guidance_speed 700
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
@@ -899,6 +899,44 @@ void main(void)
 	   		{
 		   		if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)//if the distance is valid, the target is locked on
 			  	{
+			  		
+				  		if(	TargetInWorkingZone(current_pos)==FALSE)
+				  	{
+				  		////HANDLE TO NEXT STATION 
+				  		ECanaMboxes.MBOX29.MDH.all=0; 
+				  		ECanaMboxes.MBOX29.MDL.all=0; 
+				  		ECanaMboxes.MBOX29.MDL.byte.BYTE0=baseIndex;
+						ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS29 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA29 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA29 = 1; // Clear TA5
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+					    
+					    ////TURN OFF LASER 
+				  		ECanaMboxes.MBOX27.MDH.all=0; 
+				  		ECanaMboxes.MBOX27.MDL.all=0; 
+				  		ECanaMboxes.MBOX27.MDL.byte.BYTE0=baseIndex;
+						ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS27 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA27 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA27 = 1; // Clear TA5
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+					    ///////////
+					    ////switch state
+					    //////////////
+					    shouldTurnOffFlag=TRUE;
+				  	}
+			  		
 			  		//AutoMode=AutoModeOFF;
 			 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
 			 		next_map_pos=get_next_point_on_trace(Map,MapPointCountCount);//search which is the next point on the map
@@ -960,42 +998,7 @@ void main(void)
 		  ///////////////////////////
 		  /////Below codes tell werther target is in its own working area
 		  ///////////////////////////
-	  	if(	TargetInWorkingZone(current_pos)==FALSE)
-	  	{
-	  		////HANDLE TO NEXT STATION 
-	  		ECanaMboxes.MBOX29.MDH.all=0; 
-	  		ECanaMboxes.MBOX29.MDL.all=0; 
-	  		ECanaMboxes.MBOX29.MDL.byte.BYTE0=baseIndex;
-			ECanaShadow.CANTRS.all = 0;
-		    ECanaShadow.CANTRS.bit.TRS29 = 1; // Set TRS for mailbox under test
-		    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-		    do // Send 00110000
-		    {
-		      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-		    } while(ECanaShadow.CANTA.bit.TA29 == 0 );
-		    ECanaShadow.CANTA.all = 0;
-		    ECanaShadow.CANTA.bit.TA29 = 1; // Clear TA5
-		    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-		    
-		    ////TURN OFF LASER 
-	  		ECanaMboxes.MBOX27.MDH.all=0; 
-	  		ECanaMboxes.MBOX27.MDL.all=0; 
-	  		ECanaMboxes.MBOX27.MDL.byte.BYTE0=baseIndex;
-			ECanaShadow.CANTRS.all = 0;
-		    ECanaShadow.CANTRS.bit.TRS27 = 1; // Set TRS for mailbox under test
-		    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-		    do // Send 00110000
-		    {
-		      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-		    } while(ECanaShadow.CANTA.bit.TA27 == 0 );
-		    ECanaShadow.CANTA.all = 0;
-		    ECanaShadow.CANTA.bit.TA27 = 1; // Clear TA5
-		    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-		    ///////////
-		    ////switch state
-		    //////////////
-		    shouldTurnOffFlag=TRUE;
-	  	}
+	  	
 	  
 	  
    }
@@ -1255,6 +1258,7 @@ void scan()
    	 		}
    	 	}
    	 	swing_speed=scan_speed;
+   	 	EPwm1Regs.TBPRD=swing_speed;
    	 	drive(3.14/180);
 }
 void scanY()
@@ -1297,7 +1301,7 @@ int TargetInWorkingZone(Coor c)
 	tX=c.x;
 	tY=c.y;
 	
-	if((tX<800)&&(tY<-1000)&&(AutoMode==AutoModeOFF))
+	if((tX<900)&&(tY<-700))
 	{
 		return FALSE;
 	}
