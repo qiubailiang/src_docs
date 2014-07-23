@@ -1068,16 +1068,18 @@ void follow(float targetX,float targetY)
     float vtX =targetX-baseX;
     float vtY =targetY-baseY;
     float aim_angle_degree=180*(atan(vtX/vtY))/3.14159;
-   
-   if((initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree)&&(initAngle2Y+GetDegreeFromCount(angle)-aim_angle_degree>2))
+   float follow_angle;
+   if((initAngle2Y+GetDegreeFromCount(angle)>aim_angle_degree))
     {
+    	follow_angle=3.14*(initAngle2Y+GetDegreeFromCount(angle)-aim_angle_degree)/180;
 	    dir=1;
- 		drive(1);
+ 		drive(follow_angle);
     }
-    else  if((initAngle2Y+GetDegreeFromCount(angle)<aim_angle_degree)&&(aim_angle_degree-initAngle2Y-GetDegreeFromCount(angle)>2))
+    else  if((initAngle2Y+GetDegreeFromCount(angle)<aim_angle_degree))
     {
+    	follow_angle=-3.14*(initAngle2Y+GetDegreeFromCount(angle)-aim_angle_degree)/180;
     	dir=0;
-    	drive(1);
+    	drive(follow_angle);
     }
     
     
