@@ -119,7 +119,7 @@
 #define TotalLoopCountH 1152000
 #define TotalLoopCountV 400000
 #define MapPointCountCount 10
-#define x_bais_thr 0x72
+#define x_bais_thr 0x70
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -621,7 +621,7 @@ void main(void)
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-					swing_speed = ((float)distance/(float)(8*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					swing_speed = ((float)distance/(float)(15*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 					EPwm1Regs.TBPRD=swing_speed;
 				
 				}
