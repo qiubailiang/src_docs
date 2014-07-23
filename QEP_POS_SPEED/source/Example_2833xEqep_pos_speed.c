@@ -119,7 +119,9 @@
 #define TotalLoopCountH 1152000
 #define TotalLoopCountV 400000
 #define MapPointCountCount 10
-#define x_bais_thr 0x70
+#define x_bais_thr 0x81
+#define scan_speed 2000
+#define guidance_speed 700
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -621,7 +623,8 @@ void main(void)
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-					swing_speed = ((float)distance/(float)(15*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					//swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					swing_speed=guidance_speed;
 					EPwm1Regs.TBPRD=swing_speed;
 				
 				}
@@ -903,7 +906,7 @@ void main(void)
 				    //then drive 
 					if(x_bias>x_bais_thr)
 					{
-					swing_speed=200;
+					swing_speed=0;
 					}
 					drive(get_angle(current_pos,next_map_pos,walkstep));
 					float turning = ((float)y_bias)/1000;
@@ -1251,6 +1254,7 @@ void scan()
 	   	 		
    	 		}
    	 	}
+   	 	swing_speed=scan_speed;
    	 	drive(3.14/180);
 }
 void scanY()
@@ -1293,7 +1297,7 @@ int TargetInWorkingZone(Coor c)
 	tX=c.x;
 	tY=c.y;
 	
-	if(tX<300&&AutoMode==AutoModeOFF)
+	if((tX<800)&&(tY<-1000)&&(AutoMode==AutoModeOFF))
 	{
 		return FALSE;
 	}
