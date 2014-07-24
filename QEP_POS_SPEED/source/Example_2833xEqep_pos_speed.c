@@ -119,9 +119,9 @@
 #define TotalLoopCountH 1152000
 #define TotalLoopCountV 400000
 #define MapPointCountCount 10
-#define x_bais_thr 0x81
-#define scan_speed 700
-#define guidance_speed_low 1400
+#define x_bais_thr 0x86
+#define scan_speed 3000
+#define guidance_speed_low 2500
 #define guidance_speed 700
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
@@ -625,7 +625,7 @@ void main(void)
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
 					//swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
-					if(distance<7000)
+					if(distance<5000)
 					{
 						swing_speed=guidance_speed;
 					}
@@ -1315,7 +1315,7 @@ int TargetInWorkingZone(Coor c)
 	tY=c.y;
 	float gX=Map[MapPointCountCount-1].x;
 	float gY=Map[MapPointCountCount-1].y;
-	if((tX-gX)*(tX-gX)+(tY-gY)*(tY-gY)<=6250000)
+	if((tX-gX)*(tX-gX)+(tY-gY)*(tY-gY)<=4000000)
 	{
 		return FALSE;
 	}
