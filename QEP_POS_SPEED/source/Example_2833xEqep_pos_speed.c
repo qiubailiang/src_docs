@@ -698,7 +698,7 @@ void main(void)
 			}
 			drive(get_angle(current_pos,next_map_pos,walkstep));
 			float turning = ((float)y_bias)/1000;
-			turning=180*turning/3.14159;
+			turning=turning/distance;
 			if(y_bias<=2){
 				
 				swing_speed_y=0;
@@ -711,13 +711,15 @@ void main(void)
 			EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
 			if(y_bias_dir==0)
 			{
-				
-				Driver2(0x01,1);
+				dir1=1;
+				driveY(turning);
+				//Driver2(0x01,1);
 			}
 			else
 			{
-		
-				Driver2(0x00,1);
+				dir1=0;
+				driveY(turning);
+				//Driver2(0x00,1);
 				
 			}
 			///send out the target coordinates
@@ -748,13 +750,13 @@ void main(void)
 		  	}/////
 		  	if(dir1_flag_for_guidence==0)
 		  	{
-		  		dir=1;
+		  		dir1=1;
 		  	}
 		  	else
 		  	{
 			  	if(dir1_flag_for_guidence==1)
 			  	{
-			  		dir=0;
+			  		dir1=0;
 			  	}
 		  	
 		  	}/////
@@ -1001,9 +1003,9 @@ void drive(float degree)//the degree passed in should be in arcs
 	Driver1(dir,degree_count);
 
 }
-void driveY(float degree)//the degree passed in should be in arcs 
+void driveY(float arcs)//the degree passed in should be in arcs 
 {
-	float degree_in_degrees=degree/3.14*180;
+	float degree_in_degrees=arcs/3.14*180;
 	long degree_count=degree_in_degrees/((float)360)*TotalLoopCountV;
 	Driver2(dir1,degree_count);
 
