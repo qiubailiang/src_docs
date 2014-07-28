@@ -215,7 +215,7 @@ Coor next_map_pos;
 struct Coor Map [10]; 
 float baseX=-2659;
 float baseY=0;
-float baseZ=1000;
+float baseZ=630;
 
 float initAngle2Y=0;///
 
@@ -727,7 +727,7 @@ void main(void)
 				/////////////////
 				////////////////          	
 						float angY_d_temp=GetDegreeFromCountY(angleY);
-		           		float dz =distance*sin(angY_d_temp);
+		           		float dz =distance*sin(3.14*angY_d_temp/180);
 		           		Uint32  zAxis = dz+baseZ;
 		           		
 		           		ECanaMboxes.MBOX30.MDL.byte.BYTE0=(Uint16)(((Uint32)zAxis)>>24);
