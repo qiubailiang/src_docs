@@ -157,7 +157,7 @@ long angleY=0;  //vertical degree counter
 
 long distance;
 long polar_angle_count;
-long scale=5;
+long scale=8;
 long scaleY=1;
 long midY=0;
 long swing_speed=0;
@@ -227,7 +227,7 @@ void main(void)
 	int i=0;
 	for(i=0;i<10;i++)
 	{
-			Map[i].x=300;
+			Map[i].x=400;
 			//Map[i].y=-800+1600/9*i;
 			Map[i].y=-200*i;
 	}
@@ -685,18 +685,26 @@ void main(void)
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 			//first get angle ,get ho many angles should turn;
 		    //then drive 
-			if(x_bias>0x2f)
+			if(x_bias>0x1f)
 			{
-			swing_speed=0;
+				if(x_bias_dir!=0&&dir==1)
+				{
+					swing_speed=0;
+				}
+				if(x_bias_dir==0&&dir==0)
+				{
+					swing_speed=0;
+				}
 			}
 			drive(get_angle(current_pos,next_map_pos,walkstep));
 			float turning = ((float)y_bias)/1000;
 			turning=180*turning/3.14159;
 			if(y_bias<=2){
+				
 				swing_speed_y=0;
 			}else{
 			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-			swing_speed_y=PRD*((float)y_bias/18);
+			swing_speed_y=PRD*((float)y_bias/10);
 			
 			}
 			EPwm2Regs.TBPRD=swing_speed_y;
