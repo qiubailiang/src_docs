@@ -685,7 +685,7 @@ void main(void)
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 			//first get angle ,get ho many angles should turn;
 		    //then drive 
-			if(x_bias>0x3f)
+			if(x_bias>0x2f)
 			{
 			swing_speed=0;
 			}
