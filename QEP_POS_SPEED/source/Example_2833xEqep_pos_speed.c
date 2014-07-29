@@ -235,7 +235,7 @@ void main(void)
 	{
 			Map[i].x=36000-i*3600;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=100;
+			Map[i].y=400;
 	}
 	for(i=0;i<10;i=i+2)
 	{
@@ -971,12 +971,12 @@ void main(void)
 						EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
 						if(y_bias_dir==0)
 						{
-							
+							dir1=0;
 							Driver2(0x00,1);
 						}
 						else
 						{
-					
+							dir1=1;
 							Driver2(0x01,1);
 							
 						}
