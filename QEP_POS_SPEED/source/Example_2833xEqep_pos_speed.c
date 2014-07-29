@@ -227,18 +227,23 @@ void main(void)
 	int i=0;
 	for(i=0;i<10;i++)
 	{
-			Map[i].x=400;
+			Map[i].x=300;
 			//Map[i].y=-800+1600/9*i;
-			Map[i].y=-200*i;
+			Map[i].y=-1000*i;
 	}
-	for(i=0;i<10;i=i+2)
+	for(i=0;i<5;i++)
 	{
-			//Map[i].x=36000-i*3600;
-			//Map[i].y=-800+1600/9*i;
+			Map[i].x=1400;
+			
 			//Map[i].x=+200;
 	}
-	//Map[9].x=2410;
-	//Map[9].y=500;
+	Map[0].x=1400;
+	Map[0].y=-100;
+	Map[1].x=1200;
+	Map[1].y=-300;
+	
+	Map[2].x=1200;
+	Map[2].y=-300;
 	
    InitSysCtrl();
    InitECan();
@@ -438,7 +443,7 @@ void main(void)
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-					swing_speed = ((float)distance/(float)(2*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					swing_speed = ((float)distance/(float)(20*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
 					EPwm1Regs.TBPRD=swing_speed;
 				
 				}
@@ -697,7 +702,7 @@ void main(void)
 				}
 			}
 			drive(get_angle(current_pos,next_map_pos,walkstep));
-			float turning = ((float)y_bias)/1000;
+			float turning = ((float)y_bias);
 			turning=turning/distance;
 			if(y_bias<=2){
 				
