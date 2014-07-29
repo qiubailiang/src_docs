@@ -247,10 +247,10 @@ void main(void)
 	Map[7].y=0;
 	
 	Map[8].x=0;
-	Map[8].y=-2000;
+	Map[8].y=-3000;
 	
 	Map[9].x=0;
-	Map[9].y=-2000;
+	Map[9].y=-3000;
 	
    InitSysCtrl();
    InitECan();
@@ -1315,7 +1315,7 @@ int TargetInWorkingZone(Coor c)
 	tY=c.y;
 	float gX=Map[MapPointCountCount-1].x;
 	float gY=Map[MapPointCountCount-1].y;
-	if((tX-gX)*(tX-gX)+(tY-gY)*(tY-gY)<=4890000)
+	if((tX-gX)*(tX-gX)+(tY-gY)*(tY-gY)<=8000000)
 	{
 		return FALSE;
 	}
