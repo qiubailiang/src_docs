@@ -197,7 +197,7 @@ int Pwm2OneStepFinishFlag=0;
 int FinishStepFlag2=FINISH;
 int FinishStepFlag=FINISH;// 0 =finish ;1= not finish
 float stepcount=0;//used to identify when to change direction
-int stepLength=1;
+float stepLength=0.1;
 int pwm2=0;
 float DegreeOfSwing=200;
 int distance_valid_flag=FALSE;
@@ -216,7 +216,7 @@ int followZHeight=0;
 
 
 
-float walkstep=1;
+float walkstep=0.1;
 
 int shouldTurnOffFlag=FALSE;
 int isFirstScan=TRUE;
@@ -443,9 +443,26 @@ void main(void)
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-					swing_speed = ((float)distance/(float)(20*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
-					EPwm1Regs.TBPRD=swing_speed;
-				
+					swing_speed = ((float)distance/(float)(1*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
+					if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)
+					{
+						if(x_bias>0x5f)
+						{
+							if(x_bias_dir!=0&&dir==1)
+							{
+								swing_speed=0;
+							}else
+							if(x_bias_dir==0&&dir==0)
+							{
+								swing_speed=0;
+							}
+							//EPwm1Regs.TBPRD=swing_speed;
+						}
+					}
+					else
+					{
+						EPwm1Regs.TBPRD=swing_speed;
+					}
 				}
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
 			 	
@@ -690,18 +707,24 @@ void main(void)
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 			//first get angle ,get ho many angles should turn;
 		    //then drive 
-			if(x_bias>0x1f)
+			if(x_bias>0x5f)
 			{
 				if(x_bias_dir!=0&&dir==1)
 				{
 					swing_speed=0;
-				}
+				}else
 				if(x_bias_dir==0&&dir==0)
 				{
 					swing_speed=0;
 				}
+				drive(get_angle(current_pos,next_map_pos,walkstep));
 			}
-			drive(get_angle(current_pos,next_map_pos,walkstep));
+			else
+			{
+				
+				drive(get_angle(current_pos,next_map_pos,walkstep));
+			}
+			
 			float turning = ((float)y_bias);
 			turning=turning/distance;
 			if(y_bias<=2){
@@ -736,7 +759,7 @@ void main(void)
 		  		//scanY();///ACTUALLY should follow
 		  		float temp_aim_angle;
 		  		temp_aim_angle=180*atan((float)(followZHeight-baseZ)/(sqrt(current_pos.x*current_pos.x+current_pos.y*current_pos.y)))/3.14;
-		  		stable_2Vertical(temp_aim_angle, (float)angleY,(long)TotalLoopCountV);
+		  		//stable_2Vertical(temp_aim_angle, (float)angleY,(long)TotalLoopCountV);
 		  }
 		  else //////distance not valid 
 		  {
@@ -918,12 +941,12 @@ interrupt  void EPWM1_int(void)
 //	}
 	
 	
-	if(PwmOneStepFinishFlag>N)
-	{
-	PwmOneStepFinishFlag=0;	
-	FinishStepFlag=FINISH;
-	  EPwm1Regs.CMPA.half.CMPA =0; 
-	}
+//	if(PwmOneStepFinishFlag>N)
+//	{
+//	PwmOneStepFinishFlag=0;	
+//	FinishStepFlag=FINISH;
+//	  EPwm1Regs.CMPA.half.CMPA =0; 
+//	}
 }
 
 interrupt  void EPWM2_int(void)
