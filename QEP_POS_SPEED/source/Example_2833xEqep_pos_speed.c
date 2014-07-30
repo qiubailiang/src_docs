@@ -119,10 +119,10 @@
 #define TotalLoopCountH 1152000
 #define TotalLoopCountV 400000
 #define MapPointCountCount 10
-#define x_bais_thr 0x86
+#define x_bais_thr 0x80
 #define scan_speed 3500
 #define guidance_speed_low 2500
-#define guidance_speed 400
+#define guidance_speed 800
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -869,7 +869,7 @@ void main(void)
       	 
 		 }
 		 
-		// angle=((long)EQep1Regs.QPOSCNT)*360/(4*TotalLoopCountH);
+		 angle=((long)EQep1Regs.QPOSCNT);
 		 
 		///////////////////////
 		 //////Below is states transformations
@@ -1158,17 +1158,17 @@ interrupt  void EPWM1_int(void)
 	{
 		FinishStepFlag=NOTFINISH;
 		PwmOneStepFinishFlag++;
-		if(dir==0)
-			{
-				angle--;	
-			}
-			else
-			{
-				if(dir==1)
-				{
-					angle++;
-				}
-			}
+//		if(dir==0)
+//			{
+//				angle--;	
+//			}
+//			else
+//			{
+//				if(dir==1)
+//				{
+//					angle++;
+//				}
+//			}
 	}
 	
 	
@@ -1301,8 +1301,8 @@ void scanY()
    	 		}
    	 	}
    	 	
-   	 	EPwm2Regs.TBPRD = PRD/5; 
-   	 	swing_speed_y=PRD/10;
+   	 	EPwm2Regs.TBPRD = PRD/15; 
+   	 	swing_speed_y=EPwm2Regs.TBPRD/2;
    	 	
    	 	driveY(1);
 }
