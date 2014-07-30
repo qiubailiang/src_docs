@@ -1038,8 +1038,19 @@ Coor get_next_point_on_trace(struct Coor map [],int length)
 { 
 	//int i;
 	int temp_pointer=get_nearest_point(map,length);
-	float gX=map[MapPointCountCount-1].x;
-	float gY=map[MapPointCountCount-1].y;
+	float gX;
+	float gY;
+	if(temp_pointer<length-1)
+	{
+		gX=map[temp_pointer+1].x;
+		gY=map[temp_pointer+1].y;
+		
+	}
+	else
+	{
+		gX=map[MapPointCountCount-1].x;
+		gY=map[MapPointCountCount-1].y;
+	}
 	float dis1=(map[temp_pointer].x-gX)*(map[temp_pointer].x-gX)+(map[temp_pointer].y-gY)*(map[temp_pointer].y-gY);
 	float dis2=(current_pos.x-gX)*(current_pos.x-gX)+(current_pos.y-gY)*(current_pos.y-gY);
 	if(dis1>=dis2&&temp_pointer<length-1)
