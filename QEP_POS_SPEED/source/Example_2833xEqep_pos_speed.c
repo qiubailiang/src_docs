@@ -243,6 +243,8 @@ void main(void)
 			//Map[i].y=-800+1600/9*i;
 		//	Map[i].y=-200;
 	}
+	Map[6].x=5000;
+	Map[6].y=300;
 	Map[7].x=2500;
 	Map[7].y=0;
 	
@@ -1301,7 +1303,7 @@ void scanY()
    	 		}
    	 	}
    	 	
-   	 	EPwm2Regs.TBPRD = PRD/15; 
+   	 	EPwm2Regs.TBPRD = PRD/10; 
    	 	swing_speed_y=EPwm2Regs.TBPRD/2;
    	 	
    	 	driveY(1);
@@ -1326,7 +1328,7 @@ int TargetInWorkingZone(Coor c)
 	tY=c.y;
 	float gX=Map[MapPointCountCount-1].x;
 	float gY=Map[MapPointCountCount-1].y;
-	if((tX-gX)*(tX-gX)+(tY-gY)*(tY-gY)<=8000000)
+	if((tX-gX)*(tX-gX)+(tY-gY)*(tY-gY)<=8500000)
 	{
 		return FALSE;
 	}
