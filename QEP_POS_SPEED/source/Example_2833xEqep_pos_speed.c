@@ -217,7 +217,7 @@ int followZHeight=0;
 
 
 float walkstep=0.1;
-
+int SelfShouldWork=FALSE;
 int shouldTurnOffFlag=FALSE;
 int isFirstScan=TRUE;
 int AutoMode=AutoModeON;
@@ -227,22 +227,22 @@ void main(void)
 	int i=0;
 	for(i=0;i<10;i++)
 	{
-			Map[i].x=300;
+			Map[i].x=0;
 			//Map[i].y=-800+1600/9*i;
 			Map[i].y=-1000*i;
 	}
 	for(i=0;i<5;i++)
 	{
-			Map[i].x=400;
+			Map[i].x=0;
 			
 			//Map[i].x=+200;
 	}
 	Map[0].x=1400;
 	Map[0].y=-100;
-	Map[1].x=1200;
+	Map[1].x=500;
 	Map[1].y=-300;
 	
-	Map[2].x=300;
+	Map[2].x=0;
 	Map[2].y=-3000;
 	
    InitSysCtrl();
@@ -576,45 +576,47 @@ void main(void)
           
 
 		 }
-		 
-		  if (ECanaShadow.CANRMP.bit.RMP3 == 1)//D0  receieve 111216 //from other base--the target infor
+		 if(SelfShouldWork!=TRUE)
 		{
-		  	
-	       ECanaShadow.CANRMP.all = 0;
-	       ECanaShadow.CANRMP.bit.RMP3 = 1;     	 // Clear RMP20
-	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
-	       
-	            CAN_RxBuffer[0]=ECanaMboxes.MBOX3.MDL.byte.BYTE0;
-	            CAN_RxBuffer[1]=ECanaMboxes.MBOX3.MDL.byte.BYTE1;
-	            CAN_RxBuffer[2]=ECanaMboxes.MBOX3.MDL.byte.BYTE2;
-	            
-		 // distance=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
-	            CAN_RxBuffer[3]=ECanaMboxes.MBOX3.MDL.byte.BYTE3;
-				CAN_RxBuffer[4]=ECanaMboxes.MBOX3.MDH.byte.BYTE4;
-			 	//distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-				CAN_RxBuffer[5]=ECanaMboxes.MBOX3.MDH.byte.BYTE5;
-				CAN_RxBuffer[6]=ECanaMboxes.MBOX3.MDH.byte.BYTE6;
-				CAN_RxBuffer[7]=ECanaMboxes.MBOX3.MDH.byte.BYTE7;
-				if(CAN_RxBuffer[6]>0)
-				{
-					current_pos.x=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];
-				}
-				else
-				{
-					current_pos.x=-(CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2]);
-				}
-				if(CAN_RxBuffer[7]>0)
-				{
-					current_pos.y=CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5];
-				}
-				else
-				{
-					current_pos.y=-(CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5]);
-				}
-			 	shouldTurnOffFlag=TRUE;
-          
-      	 
-		 }
+			  if (ECanaShadow.CANRMP.bit.RMP3 == 1)//D0  receieve 111216 //from other base--the target infor
+			{
+			  	
+		       ECanaShadow.CANRMP.all = 0;
+		       ECanaShadow.CANRMP.bit.RMP3 = 1;     	 // Clear RMP20
+		       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
+		       
+		            CAN_RxBuffer[0]=ECanaMboxes.MBOX3.MDL.byte.BYTE0;
+		            CAN_RxBuffer[1]=ECanaMboxes.MBOX3.MDL.byte.BYTE1;
+		            CAN_RxBuffer[2]=ECanaMboxes.MBOX3.MDL.byte.BYTE2;
+		            
+			 // distance=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];// 9440000个脉冲电机转动360°
+		            CAN_RxBuffer[3]=ECanaMboxes.MBOX3.MDL.byte.BYTE3;
+					CAN_RxBuffer[4]=ECanaMboxes.MBOX3.MDH.byte.BYTE4;
+				 	//distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
+					CAN_RxBuffer[5]=ECanaMboxes.MBOX3.MDH.byte.BYTE5;
+					CAN_RxBuffer[6]=ECanaMboxes.MBOX3.MDH.byte.BYTE6;
+					CAN_RxBuffer[7]=ECanaMboxes.MBOX3.MDH.byte.BYTE7;
+					if(CAN_RxBuffer[6]>0)
+					{
+						current_pos.x=CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2];
+					}
+					else
+					{
+						current_pos.x=-(CAN_RxBuffer[0]*65536+CAN_RxBuffer[1]*256+CAN_RxBuffer[2]);
+					}
+					if(CAN_RxBuffer[7]>0)
+					{
+						current_pos.y=CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5];
+					}
+					else
+					{
+						current_pos.y=-(CAN_RxBuffer[3]*65536+CAN_RxBuffer[4]*256+CAN_RxBuffer[5]);
+					}
+				 	shouldTurnOffFlag=TRUE;
+	          
+	      	 
+			 }
+		}
 
 		if (ECanaShadow.CANRMP.bit.RMP4 == 1)//D0  receieve 111210 //from other base--the target infor
 		{
@@ -638,6 +640,7 @@ void main(void)
 				{
 					
 					shouldTurnOffFlag=FALSE;
+					SelfShouldWork=TRUE;
 				}
 				
 				
