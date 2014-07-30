@@ -233,7 +233,7 @@ void main(void)
 	}
 	for(i=0;i<5;i++)
 	{
-			Map[i].x=1400;
+			Map[i].x=400;
 			
 			//Map[i].x=+200;
 	}
@@ -242,8 +242,8 @@ void main(void)
 	Map[1].x=1200;
 	Map[1].y=-300;
 	
-	Map[2].x=1200;
-	Map[2].y=-300;
+	Map[2].x=300;
+	Map[2].y=-3000;
 	
    InitSysCtrl();
    InitECan();
