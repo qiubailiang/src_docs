@@ -239,10 +239,10 @@ void main(void)
 	}
 	Map[0].x=1400;
 	Map[0].y=-100;
-	Map[1].x=500;
-	Map[1].y=-300;
+	Map[1].x=800;
+	Map[1].y=-1500;
 	
-	Map[2].x=0;
+	Map[2].x=500;
 	Map[2].y=-3000;
 	
    InitSysCtrl();
