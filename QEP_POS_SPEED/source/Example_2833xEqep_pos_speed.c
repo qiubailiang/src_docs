@@ -226,6 +226,7 @@ long midY=0;
 int shouldTurnOffFlag=FALSE;
 int isFirstScan=TRUE;
 int AutoMode=ScanMode;
+int  OutOfWork=FALSE;
 Uint16 MapState;
 void main(void)
 { 
@@ -246,7 +247,7 @@ void main(void)
 	Map[6].x=5000;
 	Map[6].y=300;
 	Map[7].x=2500;
-	Map[7].y=0;
+	Map[7].y=-200;
 	
 	Map[8].x=0;
 	Map[8].y=-3000;
@@ -674,7 +675,7 @@ void main(void)
 				x_bias=CAN_RxBuffer[7];////
 				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
 				
-		          if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE)/////distance valid and itself should work
+		          if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE&&OutOfWork==FALSE)/////distance valid and itself should work
 		            {
 		           		
 		           		
@@ -947,6 +948,7 @@ void main(void)
 					    ////switch state
 					    //////////////
 					    shouldTurnOffFlag=TRUE;
+					    OutOfWork=TRUE;
 				  	}
 			  		else
 			  		{
