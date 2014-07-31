@@ -710,7 +710,7 @@ void main(void)
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 			//first get angle ,get ho many angles should turn;
 		    //then drive 
-			if(x_bias>0x5f)
+			if(x_bias>0x5f&&x_bias<0x82)
 			{
 				if(x_bias_dir!=0&&dir==1)
 				{
@@ -721,6 +721,20 @@ void main(void)
 					swing_speed=0;
 				}
 				drive(get_angle(current_pos,next_map_pos,walkstep));
+			}
+			else if(x_bias>0x82)
+			{
+				get_angle(current_pos,next_map_pos,walkstep);// Here just use the side effect to get the original dir
+				if(dir==1)
+				{
+					dir=0;
+				}
+				else
+				{
+					dir=1;
+				}
+				drive((float)(3.14/180));
+				
 			}
 			else
 			{
