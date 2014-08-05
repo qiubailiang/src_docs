@@ -710,39 +710,35 @@ void main(void)
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 			//first get angle ,get ho many angles should turn;
 		    //then drive 
-			if(x_bias>0x5f&&x_bias<0x82)
-			{
-				if(x_bias_dir!=0&&dir==1)
-				{
-					swing_speed=0;
-				}else
-				if(x_bias_dir==0&&dir==0)
-				{
-					swing_speed=0;
-				}
-				drive(get_angle(current_pos,next_map_pos,walkstep));
-			}
-			else if(x_bias>0x82)
-			{
-				get_angle(current_pos,next_map_pos,walkstep);// Here just use the side effect to get the original dir
-				if(dir==1)
-				{
-					dir=0;
-				}
-				else
-				{
-					dir=1;
-				}
-				drive((float)(3.14/180));
+			/////////////////////////////////////////////////////////
+			float turning = ((float)x_bias);
+			turning=turning/distance;
+			if(x_bias<=2){
 				
+				swing_speed=0;
+			}else{
+			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+			swing_speed=PRD*((float)x_bias/10);
+			
+			}
+			EPwm1Regs.TBPRD=swing_speed;
+			EPwm1Regs.CMPA.half.CMPA=swing_speed/20;
+			if(x_bias_dir==0)
+			{
+				dir=1;
+				drive(turning);
+				//Driver2(0x01,1);
 			}
 			else
 			{
+				dir=0;
+				drive(turning);
+				//Driver2(0x00,1);
 				
-				drive(get_angle(current_pos,next_map_pos,walkstep));
 			}
-			
-			float turning = ((float)y_bias);
+			////////////////////////
+	////////////////////////////////////
+			turning = ((float)y_bias);
 			turning=turning/distance;
 			if(y_bias<=2){
 				
