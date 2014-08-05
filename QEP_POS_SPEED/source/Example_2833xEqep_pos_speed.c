@@ -957,34 +957,33 @@ void main(void)
 				 		next_map_pos=get_next_point_on_trace(Map,MapPointCountCount);//search which is the next point on the map
 						//first get angle ,get how many angles should turn;
 					    //then drive 
-						if(x_bias>0x5f&&x_bias<x_bais_thr)
+						//
+						//Just follow on x direction
+							if(x_bias<=2)
 						{
-							if(x_bias_dir!=0&&dir==1)
-							{
-								swing_speed=0;
-							}else
-							if(x_bias_dir==0&&dir==0)
-							{
-								swing_speed=0;
-							}
-							drive(get_angle(current_pos,next_map_pos,walkstep));
+							swing_speed=0;
 						}
-						else if(x_bias>=x_bais_thr)
+						else
 						{
-							get_angle(current_pos,next_map_pos,walkstep);// Here just use the side effect of function get_angle to get the original dir
-							if(dir==1)
-							{
-								dir=0;
-							}
-							else
-							{
-								dir=1;
-							}
-							drive((float)(3.14/180));
+							//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+							swing_speed=PRD*((float)x_bias/18);
+						
 						}
-						drive(get_angle(current_pos,next_map_pos,walkstep));
-						float turning = ((float)y_bias)/1000;
-						turning=180*turning/3.14159;
+						EPwm1Regs.TBPRD=swing_speed;
+						EPwm1Regs.CMPA.half.CMPA=swing_speed/20;
+						if(x_bias_dir==0)
+						{
+							dir=0;
+							
+						}
+						else
+						{
+							dir=1;
+							
+						}
+						Driver1(dir,1);
+						////////////////////////////////////
+						
 						if(y_bias<=2)
 						{
 							swing_speed_y=0;
