@@ -119,7 +119,7 @@
 #define TotalLoopCountH 1152000
 #define TotalLoopCountV 400000
 #define MapPointCountCount 10
-#define x_bais_thr 0x80
+#define x_bais_thr 0x82
 #define scan_speed 3500
 #define guidance_speed_low 2500
 #define guidance_speed 800
@@ -957,18 +957,42 @@ void main(void)
 				 		next_map_pos=get_next_point_on_trace(Map,MapPointCountCount);//search which is the next point on the map
 						//first get angle ,get how many angles should turn;
 					    //then drive 
-						if(x_bias>x_bais_thr)
+						if(x_bias>0x5f&&x_bias<x_bais_thr)
 						{
-						swing_speed=0;
+							if(x_bias_dir!=0&&dir==1)
+							{
+								swing_speed=0;
+							}else
+							if(x_bias_dir==0&&dir==0)
+							{
+								swing_speed=0;
+							}
+							drive(get_angle(current_pos,next_map_pos,walkstep));
+						}
+						else if(x_bias>=x_bais_thr)
+						{
+							get_angle(current_pos,next_map_pos,walkstep);// Here just use the side effect of function get_angle to get the original dir
+							if(dir==1)
+							{
+								dir=0;
+							}
+							else
+							{
+								dir=1;
+							}
+							drive((float)(3.14/180));
 						}
 						drive(get_angle(current_pos,next_map_pos,walkstep));
 						float turning = ((float)y_bias)/1000;
 						turning=180*turning/3.14159;
-						if(y_bias<=2){
+						if(y_bias<=2)
+						{
 							swing_speed_y=0;
-						}else{
-						//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-						swing_speed_y=PRD*((float)y_bias/18);
+						}
+						else
+						{
+							//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+							swing_speed_y=PRD*((float)y_bias/18);
 						
 						}
 						EPwm2Regs.TBPRD=swing_speed_y;
@@ -976,17 +1000,16 @@ void main(void)
 						if(y_bias_dir==0)
 						{
 							dir1=0;
-							Driver2(0x00,1);
+							
 						}
 						else
 						{
 							dir1=1;
-							Driver2(0x01,1);
 							
 						}
+						Driver2(dir1,1);
 						
 			  		}
-					//midY=angleY;
 				  }
 				  else if((distance_valid_flag==TRUE&&shouldTurnOffFlag==TRUE))//some laser is spotted by target,But not its own laser
 				  {
