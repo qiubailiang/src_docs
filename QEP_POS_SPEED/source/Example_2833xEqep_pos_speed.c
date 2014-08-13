@@ -313,9 +313,9 @@ void main(void)
 	 ECanaMboxes.MBOX1.MSGID.bit.AME=0;//屏蔽位
 	 
     
-     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_L =0x1215;//扩展帧ID：0x00111215
-     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_H=0x01;
-     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x04;//04
+     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_L =0x0017;//扩展帧ID：0x0017
+     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_H=0x00;
+     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x00;//04
      ECanaMboxes.MBOX2.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX2.MSGID.bit.AME=0;//屏蔽位
 
@@ -470,7 +470,7 @@ void main(void)
       	 
 		 }
 		 
-		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 
+		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111217
 		{
 		  	
 	       ECanaShadow.CANRMP.all = 0;
@@ -487,12 +487,31 @@ void main(void)
 				CAN_RxBuffer[6]=ECanaMboxes.MBOX2.MDH.byte.BYTE6;
 				CAN_RxBuffer[7]=ECanaMboxes.MBOX2.MDH.byte.BYTE7;
 				
-				distance_valid_flag  =(CAN_RxBuffer[1]>>7);
-				x_bias_dir=CAN_RxBuffer[1]&0x40;
-				y_bias_dir=CAN_RxBuffer[1]&0x20;
 				
-				x_bias=CAN_RxBuffer[7];////
-				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
+				
+				distance_valid_flag  =(CAN_RxBuffer[2]);
+				
+				if(CAN_RxBuffer[1]==1)
+				{
+					x_bias_dir=1;
+				}
+				else
+				{
+					x_bias_dir=0;
+				}
+				if(CAN_RxBuffer[5]==1)
+				{
+					y_bias_dir=1;
+				}
+				else
+				{
+					y_bias_dir=0;
+				}
+				
+				
+				x_bias=CAN_RxBuffer[0];////
+				y_bias=CAN_RxBuffer[4];/////0001 1111
+				
 				
 	          if(distance_valid_flag==1)/////distance valid then do the guidence stuff
 	            {
@@ -518,27 +537,27 @@ void main(void)
 				    	angle_sendout=angle;
 				    }
 				    ///tempreliy block send msg
-//				    if(shouldTurnOffFlag==FALSE)
-//				    {
-//					ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
-//					ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
-//					ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
-//					
-//					ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
-//					ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
-//				    ECanaShadow.CANTRS.all = 0;
-//				    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
-//				    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-//				    do // Send 00110000
-//				    {
-//				      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-//				    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
-//				    ECanaShadow.CANTA.all = 0;
-//				    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
-//				    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-//			/////////////////
-//			////////////////          		
-//				    }
+				    if(shouldTurnOffFlag==FALSE)
+				    {
+					ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
+					ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
+					ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
+					
+					ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
+					ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
+				    ECanaShadow.CANTRS.all = 0;
+				    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
+				    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+				    do // Send 00110000
+				    {
+				      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+				    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
+				    ECanaShadow.CANTA.all = 0;
+				    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
+				    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+			/////////////////
+			////////////////          		
+				    }
 	           		
 	           		
 	            }
