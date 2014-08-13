@@ -320,9 +320,9 @@ void main(void)
 	 ECanaMboxes.MBOX1.MSGID.bit.AME=0;//屏蔽位
 	 
     
-     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_L =0x1215;//扩展帧ID：0x00111215
-     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_H=0x01;
-     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x04;//04
+     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_L =0x0015;//扩展帧ID：0x00111215
+     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_H=0x00;
+     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x00;//04
      ECanaMboxes.MBOX2.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX2.MSGID.bit.AME=0;//屏蔽位
 	 
@@ -648,7 +648,7 @@ void main(void)
 		 //////////////////////////////////
 		 //////////////////target x bias and y bias from wireless channel
 		 ///////////////////////////////////
-		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 
+		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 0x000015 
 		{
 		  	
 	       ECanaShadow.CANRMP.all = 0;
@@ -668,12 +668,28 @@ void main(void)
 				if(CAN_RxBuffer[2]==0x00)
 				{
 				
-				distance_valid_flag  =(CAN_RxBuffer[1]>>7);
-				x_bias_dir=CAN_RxBuffer[1]&0x40;
-				y_bias_dir=CAN_RxBuffer[1]&0x20;
+				distance_valid_flag  =(CAN_RxBuffer[2]);
 				
-				x_bias=CAN_RxBuffer[7];////
-				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
+				if(CAN_RxBuffer[1]==1)
+				{
+					x_bias_dir=1;
+				}
+				else
+				{
+					x_bias_dir=0;
+				}
+				if(CAN_RxBuffer[5]==1)
+				{
+					y_bias_dir=1;
+				}
+				else
+				{
+					y_bias_dir=0;
+				}
+				
+				
+				x_bias=CAN_RxBuffer[0];////
+				y_bias=CAN_RxBuffer[4];/////0001 1111
 				
 		          if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE&&OutOfWork==FALSE)/////distance valid and itself should work
 		            {
