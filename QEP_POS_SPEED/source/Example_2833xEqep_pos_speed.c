@@ -665,8 +665,7 @@ void main(void)
 				CAN_RxBuffer[6]=ECanaMboxes.MBOX2.MDH.byte.BYTE6;
 				CAN_RxBuffer[7]=ECanaMboxes.MBOX2.MDH.byte.BYTE7;
 				
-				if(CAN_RxBuffer[2]==0x00)
-				{
+				
 				
 				distance_valid_flag  =(CAN_RxBuffer[2]);
 				
