@@ -513,54 +513,123 @@ void main(void)
 				y_bias=CAN_RxBuffer[4];/////0001 1111
 				
 				
-	          if(distance_valid_flag==1)/////distance valid then do the guidence stuff
-	            {
-	           		distance_valid_flag=TRUE;
-	           		//shouldTurnOffFlag=FALSE;
-			////////////////////////////
-			///////send out can msg
-			
-					ECanaMboxes.MBOX26.MDL.all = 0;
-				    ECanaMboxes.MBOX26.MDH.all = 0;
-				    
-				    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
-				    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
-				    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
-				    
-				    if(angle<0)
-				    {
-				   		angle_sendout=angle+TotalLoopCount;
-					
-				    }
-				    else
-				    {
-				    	angle_sendout=angle;
-				    }
-				    ///tempreliy block send msg
-				    if(shouldTurnOffFlag==FALSE)
-				    {
-					ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
-					ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
-					ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
-					
-					ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
-					ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
-				    ECanaShadow.CANTRS.all = 0;
-				    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
-				    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-				    do // Send 00110000
-				    {
-				      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-				    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
-				    ECanaShadow.CANTA.all = 0;
-				    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
-				    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-			/////////////////
-			////////////////          		
-				    }
-	           		
-	           		
-	            }
+ 				if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE)/////distance valid and itself should work
+		        {
+		           		
+		           		
+				////////////////////////////
+				///////send out can msg
+				
+						ECanaMboxes.MBOX26.MDL.all = 0;
+					    ECanaMboxes.MBOX26.MDH.all = 0;
+					   
+						long temp_current_x=(long)current_pos.x;
+						long temp_current_y=(long)current_pos.y;
+					   
+						if(current_pos.x>0)
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x01;
+							temp_current_x=(Uint32)temp_current_x;
+						}
+						else
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x00;
+							temp_current_x=-temp_current_x;
+							temp_current_x=(Uint32)temp_current_x;
+						}
+						if(current_pos.y>0)
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x01;  
+							 temp_current_y=(Uint32)temp_current_y;
+						}
+						else
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x00; 
+							temp_current_y=-temp_current_y;
+							temp_current_y=(Uint32)temp_current_y;
+						}
+						ECanaMboxes.MBOX26.MDL.byte.BYTE0=(Uint16)(((Uint32)temp_current_x)>>16);
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=(Uint16)(((Uint32)temp_current_x)>>8);
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=(Uint16)((Uint32)temp_current_x);
+						ECanaMboxes.MBOX26.MDH.byte.BYTE5=(Uint16)(((Uint32)temp_current_y));
+						ECanaMboxes.MBOX26.MDH.byte.BYTE4=(Uint16)(((Uint32)temp_current_y)>>8);
+						ECanaMboxes.MBOX26.MDL.byte.BYTE3=(Uint16)(((Uint32)temp_current_y)>>16);
+						
+					    ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+				/////////////////
+				////////////////          	
+//						float angY_d_temp=GetDegreeFromCountY(angleY);
+//		           		float dz =distance*sin(3.14*angY_d_temp/180);
+//		           		Uint32  zAxis = dz+baseZ;
+//		           		
+//		           		ECanaMboxes.MBOX30.MDL.byte.BYTE0=(Uint16)(((Uint32)zAxis)>>24);
+//					    ECanaMboxes.MBOX30.MDL.byte.BYTE1=(Uint16)(((Uint32)zAxis)>>16);
+//					    ECanaMboxes.MBOX30.MDL.byte.BYTE2=(Uint16)(zAxis>>8);
+//					    ECanaMboxes.MBOX30.MDL.byte.BYTE3=(Uint16)(zAxis);
+//
+//						
+//					    ECanaShadow.CANTRS.all = 0;
+//					    ECanaShadow.CANTRS.bit.TRS30 = 1; // Set TRS for mailbox under test
+//					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+//					    do // Send 00110000
+//					    {
+//					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+//					    } while(ECanaShadow.CANTA.bit.TA30 == 0 );
+//					    ECanaShadow.CANTA.all = 0;
+//					    ECanaShadow.CANTA.bit.TA30 = 1; // Clear TA5
+//					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+//		           		
+//		           	
+////						ECanaMboxes.MBOX30.MDH.byte.BYTE5=(Uint16)(((Uint32)temp_current_y));
+////						ECanaMboxes.MBOX30.MDH.byte.BYTE4=(Uint16)(((Uint32)temp_current_y)>>8);
+//					/////get the x coor and y coordinates from 26 mailbox
+//						ECanaMboxes.MBOX31.MDL.byte.BYTE0=ECanaMboxes.MBOX26.MDL.byte.BYTE1;
+//					    ECanaMboxes.MBOX31.MDL.byte.BYTE1=ECanaMboxes.MBOX26.MDL.byte.BYTE2;
+//						
+//						ECanaMboxes.MBOX31.MDL.byte.BYTE2=ECanaMboxes.MBOX26.MDH.byte.BYTE4;
+//						ECanaMboxes.MBOX31.MDL.byte.BYTE3=ECanaMboxes.MBOX26.MDH.byte.BYTE5;
+//						
+//						ECanaMboxes.MBOX31.MDH.byte.BYTE4=x_bias;
+//						ECanaMboxes.MBOX31.MDH.byte.BYTE5=y_bias;
+//						
+//						ECanaMboxes.MBOX31.MDH.byte.BYTE6=0;
+//						if(temp_current_x>0)
+//						{
+//						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x80;
+//						}
+//						if(temp_current_y>0)
+//						{
+//						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x40;
+//						}
+//						if(x_bias_dir>0)
+//						{
+//						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x20;
+//						}
+//						if(y_bias_dir>0)
+//						{
+//						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x10;
+//						}
+//					    ECanaShadow.CANTRS.all = 0;
+//					    ECanaShadow.CANTRS.bit.TRS31 = 1; // Set TRS for mailbox under test
+//					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+//					    do // Send 00110000
+//					    {
+//					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+//					    } while(ECanaShadow.CANTA.bit.TA31 == 0 );
+//					    ECanaShadow.CANTA.all = 0;
+//					    ECanaShadow.CANTA.bit.TA31 = 1; // Clear TA5
+//					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
+		           		
+		        }
 	            else    /////distance not valid
 	            {
 	            	distance_valid_flag=FALSE;
