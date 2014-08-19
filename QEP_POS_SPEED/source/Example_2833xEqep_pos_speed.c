@@ -512,7 +512,23 @@ void main(void)
 				x_bias=CAN_RxBuffer[0];////
 				y_bias=CAN_RxBuffer[4];/////0001 1111
 				
+				if(CAN_RxBuffer[3]==1)
+				{
+					dir_flag_for_guidence=0;
+				}
+				else
+				{
+					dir_flag_for_guidence=1;
+				}
+				if(CAN_RxBuffer[7]==1)
+				{
 				
+					dir1_flag_for_guidence=1;
+				}
+				else
+				{
+					dir1_flag_for_guidence=0;
+				}			
  				if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE)/////distance valid and itself should work
 		        {
 		           		
@@ -635,29 +651,8 @@ void main(void)
 	            	distance_valid_flag=FALSE;
 	            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
 					//y_bais_dir=CAN_RxBuffer[1]&0x20;
-	            	if(x_bias_dir!=0)////lost  on the left should turn right
-	            	{
-	            		dir_flag_for_guidence=1;/////
-	            		
-	            	}
-	            	else
-	            	{
-		            	
-		            		dir_flag_for_guidence=0;/////
-		            		
-		            	
-	            	}
-	            	if(y_bias_dir!=0)////lost  on the top should turn down
-	            	{
-	            		dir1_flag_for_guidence=1;/////
-	            		
-	            	}
-	            	else
-	            	{
-		            	
-		           		dir1_flag_for_guidence=0;/////
-		            		
-	            	}
+	            	
+	            	
 	            	
 	            	
 	           	}
@@ -832,12 +827,12 @@ void main(void)
 			
 			float turning = ((float)y_bias);
 			turning=turning/distance;
-			if(y_bias<=2){
+			if(y_bias<=8){
 				
 				swing_speed_y=0;
 			}else{
 			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-			swing_speed_y=PRD*((float)y_bias/10);
+			swing_speed_y=PRD*((float)y_bias/5);
 			
 			}
 			EPwm2Regs.TBPRD=swing_speed_y;
