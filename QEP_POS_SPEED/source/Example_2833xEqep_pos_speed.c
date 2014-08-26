@@ -165,6 +165,7 @@ long swing_speed_y=0;
 float Arc2Degree(float arc);
 float GetCountFromDegree(float deg);
 float GetDegreeFromCount(long cnt);
+float GetDegreeFromCountY(long cnt);
 void Driver2(int D,Uint32 Deg);
 void DriveWithDir(float dircount);
 typedef struct Coor{
@@ -172,7 +173,7 @@ typedef struct Coor{
  float y;
  float z;
  }Coor;
-Coor Get_Position(float a,float d);
+Coor Get_Position(float a,float d,float angCos);
 Coor get_next_point_on_trace(struct Coor map [],int length);
 
 float get_angle(Coor Current_Pos,Coor Next_Map_Pos,float Step);
@@ -701,7 +702,7 @@ void main(void)
    	 	if(distance_valid_flag==TRUE)//if the distance is valid, the target is locked on
 	  	{
 	  		AutoMode=AutoModeOFF;
-	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
+	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 			  //first get angle ,get ho many angles should turn;
 			  //then drive 
@@ -720,7 +721,7 @@ void main(void)
 	  	{
 	  		isFirstScan=FALSE;
 	  		//AutoMode=AutoModeOFF;
-	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance);//translate the pol coordinate to rectangular coordinate
+	 		current_pos=Get_Position(GetDegreeFromCount(angle),distance,cos(3.14*GetDegreeFromCountY(angleY)/180));//translate the pol coordinate to rectangular coordinate
 	 		next_map_pos=get_next_point_on_trace(Map,10);//search which is the next point on the map
 			//first get angle ,get ho many angles should turn;
 		    //then drive 
@@ -1015,15 +1016,17 @@ interrupt  void EPWM2_int(void)
 	}
 }
 
-Coor Get_Position(float a,float d)//a is in degrees 
+
+Coor Get_Position(float a,float d,float angCos)//a is in degrees 
 {
 	Coor tempCoor;
-	a=(float)a;
-	d=(float)d;
-	tempCoor.x=d*sin(initAngle2Y+a/((float)180)*3.141593)+baseX;
-	tempCoor.y=d*cos(initAngle2Y+a/((float)180)*3.141593)+baseY;
+	
+	
+	tempCoor.x=angCos*d*cos(a/((float)180)*3.141593)+baseX;
+	tempCoor.y=angCos*d*sin(a/((float)180)*3.141593)+baseY;
 	return tempCoor;
 }
+
 float calulate_from_edges(float a,float b,float c)
 {
 	float temp=acos((a*a+b*b-c*c)/(2*a*b));
@@ -1168,4 +1171,8 @@ void stable_2Vertical(float angel_in_degree,float positionCount,long tCount)//fi
 		driveY(1);
 	}
 
+}
+float GetDegreeFromCountY(long cnt)
+{
+	return (float)cnt/((float)TotalLoopCountV)*360;
 }
