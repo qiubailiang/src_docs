@@ -313,15 +313,15 @@ void main(void)
 	 ECanaMboxes.MBOX1.MSGID.bit.AME=0;//屏蔽位
 	 
     
-     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_L =0x1215;//扩展帧ID：0x00111215
-     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_H=0x01;
-     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x04;//04
+     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_L =0x0017;//扩展帧ID：0x00000017  machine version
+     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_H=0x00;
+     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x00;//0
      ECanaMboxes.MBOX2.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX2.MSGID.bit.AME=0;//屏蔽位
 
-	 ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x1219;//扩展帧ID：0x00111216
-     ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_H=0x01;
-     ECanaMboxes.MBOX3.MSGID.bit.STDMSGID=0x04;//04
+	 ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x0019;//扩展帧ID：0x00000019  target coordinates
+     ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_H=0x00;
+     ECanaMboxes.MBOX3.MSGID.bit.STDMSGID=0x00;//
      ECanaMboxes.MBOX3.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX3.MSGID.bit.AME=0;//屏蔽位
 	 
@@ -470,12 +470,12 @@ void main(void)
       	 
 		 }
 		 
-		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 
+		if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111217
 		{
 		  	
-	       ECanaShadow.CANRMP.all = 0;
-	       ECanaShadow.CANRMP.bit.RMP2 = 1;     	 // Clear RMP20
-	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
+				ECanaShadow.CANRMP.all = 0;
+				ECanaShadow.CANRMP.bit.RMP2 = 1;     	 // Clear RMP20
+				ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
 	       
 	            CAN_RxBuffer[0]=ECanaMboxes.MBOX2.MDL.byte.BYTE0;
 	            CAN_RxBuffer[1]=ECanaMboxes.MBOX2.MDL.byte.BYTE1;
@@ -487,98 +487,112 @@ void main(void)
 				CAN_RxBuffer[6]=ECanaMboxes.MBOX2.MDH.byte.BYTE6;
 				CAN_RxBuffer[7]=ECanaMboxes.MBOX2.MDH.byte.BYTE7;
 				
-				distance_valid_flag  =(CAN_RxBuffer[1]>>7);
-				x_bias_dir=CAN_RxBuffer[1]&0x40;
-				y_bias_dir=CAN_RxBuffer[1]&0x20;
+				distance_valid_flag  =(CAN_RxBuffer[2]);
 				
-				x_bias=CAN_RxBuffer[7];////
-				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
+				if(CAN_RxBuffer[1]==1)
+				{
+					x_bias_dir=1;
+				}
+				else
+				{
+					x_bias_dir=0;
+				}
+				if(CAN_RxBuffer[5]==1)
+				{
+					y_bias_dir=1;
+				}
+				else
+				{
+					y_bias_dir=0;
+				}
 				
-	          if(distance_valid_flag==1)/////distance valid then do the guidence stuff
-	            {
-	           		distance_valid_flag=TRUE;
-	           		//shouldTurnOffFlag=FALSE;
-			////////////////////////////
-			///////send out can msg
+				
+				x_bias=CAN_RxBuffer[0];////
+				y_bias=CAN_RxBuffer[4];/////0001 1111
+				
+				if(CAN_RxBuffer[3]==1)
+				{
+					dir_flag_for_guidence=0;
+				}
+				else
+				{
+					dir_flag_for_guidence=1;
+				}
+				if(CAN_RxBuffer[7]==1)
+				{
+				
+					dir1_flag_for_guidence=1;
+				}
+				else
+				{
+					dir1_flag_for_guidence=0;
+				}			
+ 				if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE)/////distance valid and itself should work
+		        {
+		           		
+		           		
+				////////////////////////////
+				///////send out can msg
+				
+						ECanaMboxes.MBOX26.MDL.all = 0;
+					    ECanaMboxes.MBOX26.MDH.all = 0;
+					   
+						long temp_current_x=(long)current_pos.x;
+						long temp_current_y=(long)current_pos.y;
+					   
+						if(current_pos.x>0)
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x01;
+							temp_current_x=(Uint32)temp_current_x;
+						}
+						else
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE6=0x00;
+							temp_current_x=-temp_current_x;
+							temp_current_x=(Uint32)temp_current_x;
+						}
+						if(current_pos.y>0)
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x01;  
+							 temp_current_y=(Uint32)temp_current_y;
+						}
+						else
+						{
+							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x00; 
+							temp_current_y=-temp_current_y;
+							temp_current_y=(Uint32)temp_current_y;
+						}
+						ECanaMboxes.MBOX26.MDL.byte.BYTE0=(Uint16)(((Uint32)temp_current_x)>>16);
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE1=(Uint16)(((Uint32)temp_current_x)>>8);
+					    ECanaMboxes.MBOX26.MDL.byte.BYTE2=(Uint16)((Uint32)temp_current_x);
+						ECanaMboxes.MBOX26.MDH.byte.BYTE5=(Uint16)(((Uint32)temp_current_y));
+						ECanaMboxes.MBOX26.MDH.byte.BYTE4=(Uint16)(((Uint32)temp_current_y)>>8);
+						ECanaMboxes.MBOX26.MDL.byte.BYTE3=(Uint16)(((Uint32)temp_current_y)>>16);
+						
+					    ECanaShadow.CANTRS.all = 0;
+					    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
+					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
+					    do // Send 00110000
+					    {
+					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
+					    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
+					    ECanaShadow.CANTA.all = 0;
+					    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
+					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
 			
-					ECanaMboxes.MBOX26.MDL.all = 0;
-				    ECanaMboxes.MBOX26.MDH.all = 0;
-				    
-				    ECanaMboxes.MBOX26.MDL.byte.BYTE2=distance;
-				    ECanaMboxes.MBOX26.MDL.byte.BYTE1=distance>>8;
-				    ECanaMboxes.MBOX26.MDL.byte.BYTE0=distance>>16;
-				    
-				    if(angle<0)
-				    {
-				   		angle_sendout=angle+TotalLoopCount;
-					
-				    }
-				    else
-				    {
-				    	angle_sendout=angle;
-				    }
-				    ///tempreliy block send msg
-//				    if(shouldTurnOffFlag==FALSE)
-//				    {
-//					ECanaMboxes.MBOX26.MDH.byte.BYTE5=angle_sendout;
-//					ECanaMboxes.MBOX26.MDH.byte.BYTE4=angle_sendout>>8;
-//					ECanaMboxes.MBOX26.MDL.byte.BYTE3=angle_sendout>>16;
-//					
-//					ECanaMboxes.MBOX26.MDH.byte.BYTE6=0xf1;
-//					ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x1f;   
-//				    ECanaShadow.CANTRS.all = 0;
-//				    ECanaShadow.CANTRS.bit.TRS26 = 1; // Set TRS for mailbox under test
-//				    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-//				    do // Send 00110000
-//				    {
-//				      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-//				    } while(ECanaShadow.CANTA.bit.TA26 == 0 );
-//				    ECanaShadow.CANTA.all = 0;
-//				    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
-//				    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-//			/////////////////
-//			////////////////          		
-//				    }
-	           		
-	           		
-	            }
+		           		
+		        }
 	            else    /////distance not valid
 	            {
 	            	distance_valid_flag=FALSE;
-	            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
-					//y_bais_dir=CAN_RxBuffer[1]&0x20;
-	            	if(x_bias_dir!=0)////lost  on the left should turn right
-	            	{
-	            		dir_flag_for_guidence=1;/////
-	            		
-	            	}
-	            	else
-	            	{
-		            	
-		            		dir_flag_for_guidence=0;/////
-		            		
-		            	
-	            	}
-	            	if(y_bias_dir!=0)////lost  on the top should turn down
-	            	{
-	            		dir1_flag_for_guidence=1;/////
-	            		
-	            	}
-	            	else
-	            	{
-		            	
-		           		dir1_flag_for_guidence=0;/////
-		            		
-	            	}
-	            	
-	            	
+	            
 	           	}
           
 
-		 }
+		}
 		 if(SelfShouldWork!=TRUE)
 		{
-			  if (ECanaShadow.CANRMP.bit.RMP3 == 1)//D0  receieve 111216 //from other base--the target infor
+			  if (ECanaShadow.CANRMP.bit.RMP3 == 1)//D0  receieve 111219 //from other base--the target infor
 			{
 			  	
 		       ECanaShadow.CANRMP.all = 0;
