@@ -733,21 +733,20 @@ void main(void)
 				swing_speed=0;
 			}else{
 			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-			swing_speed=PRD;
-			
+			swing_speed=((float)x_bias/(float)(PRD/4+x_bias))*PRD;
 			}
 			EPwm1Regs.TBPRD=swing_speed;
 			EPwm1Regs.CMPA.half.CMPA=swing_speed/20;
 			if(x_bias_dir==0)
 			{
 				dir=1;
-				drive(3.14/180);
+				drive(2*3.14/180);
 				//Driver2(0x01,1);
 			}
 			else
 			{
 				dir=0;
-				drive(3.14/180);
+				drive(2*3.14/180);
 				//Driver2(0x00,1);
 				
 			}
@@ -760,8 +759,8 @@ void main(void)
 				swing_speed_y=0;
 			}else{
 			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-			swing_speed_y=PRD*((float)y_bias/10);
-			
+			//swing_speed_y=PRD*((float)y_bias/10);
+			swing_speed_y=PRD*2;
 			}
 			EPwm2Regs.TBPRD=swing_speed_y;
 			EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
@@ -794,13 +793,13 @@ void main(void)
 		  	shouldTurnOffFlag=FALSE;
 		  	if(dir_flag_for_guidence==0)
 		  	{
-		  		dir=1;
+		  		dir=0;
 		  	}
 		  	else
 		  	{
 			  	if(dir_flag_for_guidence==1)
 			  	{
-			  		dir=0;
+			  		dir=1;
 			  	}
 		  	
 		  	}/////
