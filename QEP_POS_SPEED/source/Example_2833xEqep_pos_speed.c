@@ -733,7 +733,7 @@ void main(void)
 				swing_speed=0;
 			}else{
 			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-			swing_speed=PRD*((float)x_bias/10);
+			swing_speed=PRD;
 			
 			}
 			EPwm1Regs.TBPRD=swing_speed;
@@ -741,13 +741,13 @@ void main(void)
 			if(x_bias_dir==0)
 			{
 				dir=1;
-				drive(turning);
+				drive(3.14/180);
 				//Driver2(0x01,1);
 			}
 			else
 			{
 				dir=0;
-				drive(turning);
+				drive(3.14/180);
 				//Driver2(0x00,1);
 				
 			}
