@@ -379,6 +379,9 @@ void main(void)
      //Driver1(1,4);
       //	DriveWithDir(stepcount);
    initGpio_pwm();
+   
+   
+   swing_speed=PRD/4;
   while(1)
    {  
    		//float testa=calulate_from_edges((float)3,(float)4,(float)5);
@@ -444,26 +447,21 @@ void main(void)
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
-					swing_speed = ((float)distance/(float)(1*PRD+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
-					if(distance_valid_flag==TRUE&&shouldTurnOffFlag==FALSE)
+					
+					if(distance>10000)
 					{
-						if(x_bias>0x5f)
-						{
-							if(x_bias_dir!=0&&dir==1)
-							{
-								swing_speed=0;
-							}else
-							if(x_bias_dir==0&&dir==0)
-							{
-								swing_speed=0;
-							}
-							//EPwm1Regs.TBPRD=swing_speed;
-						}
+						swing_speed=PRD/4;
 					}
-					else
+					else if(distance>5000&&distance<10000)
 					{
-						EPwm1Regs.TBPRD=swing_speed;
+						swing_speed=PRD/6;
+					
 					}
+					else{
+					
+						swing_speed=PRD/7;
+					}
+
 				}
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
 			 	
@@ -729,25 +727,26 @@ void main(void)
 			/////////////////////////////////////////////////////////
 			float turning = ((float)x_bias);
 			turning=turning/distance;
-			if(x_bias<=2){
+			if(x_bias<=8){
 				
 				swing_speed=0;
 			}else{
 			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-			swing_speed=((float)x_bias/(float)(PRD/4+x_bias))*PRD;
+			//swing_speed=((float)x_bias/(float)(PRD+x_bias))*PRD;
+			swing_speed=PRD/6;
 			}
 			EPwm1Regs.TBPRD=swing_speed;
-			EPwm1Regs.CMPA.half.CMPA=swing_speed/20;
+			EPwm1Regs.CMPA.half.CMPA=swing_speed/2;
 			if(x_bias_dir==0)
 			{
 				dir=1;
-				drive(2*3.14/180);
+				drive(turning/10);
 				//Driver2(0x01,1);
 			}
 			else
 			{
 				dir=0;
-				drive(2*3.14/180);
+				drive(turning/10);
 				//Driver2(0x00,1);
 				
 			}
@@ -791,6 +790,10 @@ void main(void)
 		  }
 		  else //////distance not valid 
 		  {
+		  	swing_speed=PRD;
+		  	EPwm1Regs.TBPRD=swing_speed;
+			EPwm1Regs.CMPA.half.CMPA=swing_speed/2;
+			
 		  	shouldTurnOffFlag=FALSE;
 		  	if(dir_flag_for_guidence==0)
 		  	{
@@ -1022,8 +1025,8 @@ Coor Get_Position(float a,float d,float angCos)//a is in degrees
 	Coor tempCoor;
 	
 	
-	tempCoor.x=angCos*d*cos(a/((float)180)*3.141593)+baseX;
-	tempCoor.y=angCos*d*sin(a/((float)180)*3.141593)+baseY;
+	tempCoor.x=angCos*d*sin(a/((float)180)*3.141593)+baseX;
+	tempCoor.y=angCos*d*cos(a/((float)180)*3.141593)+baseY;
 	return tempCoor;
 }
 
