@@ -537,9 +537,10 @@ void main(void)
 				
 						ECanaMboxes.MBOX26.MDL.all = 0;
 					    ECanaMboxes.MBOX26.MDH.all = 0;
-					   
+					   ////////
+					   ///transformation of coordinates
 						long temp_current_x=(long)current_pos.x;
-						long temp_current_y=(long)current_pos.y;
+						long temp_current_y=(long)(-current_pos.y);
 					   
 						if(current_pos.x>0)
 						{
