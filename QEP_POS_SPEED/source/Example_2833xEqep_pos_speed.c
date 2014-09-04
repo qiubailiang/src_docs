@@ -733,8 +733,16 @@ void main(void)
 			}else{
 			//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
 			//swing_speed=((float)x_bias/(float)(PRD+x_bias))*PRD;
-			swing_speed=PRD/6;
+				if(x_bias>8&&x_bias<0xA3)
+				{
+					swing_speed=PRD/4;
+				}
+				else
+				{
+					swing_speed=PRD/6;
+				}
 			}
+			
 			EPwm1Regs.TBPRD=swing_speed;
 			EPwm1Regs.CMPA.half.CMPA=swing_speed/2;
 			if(x_bias_dir==0)
@@ -790,7 +798,7 @@ void main(void)
 		  }
 		  else //////distance not valid 
 		  {
-		  	swing_speed=PRD;
+		  	swing_speed=PRD/6;
 		  	EPwm1Regs.TBPRD=swing_speed;
 			EPwm1Regs.CMPA.half.CMPA=swing_speed/2;
 			
