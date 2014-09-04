@@ -551,7 +551,7 @@ void main(void)
 							temp_current_x=-temp_current_x;
 							temp_current_x=(Uint32)temp_current_x;
 						}
-						if(current_pos.y>0)
+						if(temp_current_y>0)
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x01;  
 							 temp_current_y=(Uint32)temp_current_y;
