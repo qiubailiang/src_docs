@@ -623,7 +623,7 @@ void main(void)
 		   CAN_RxBuffer[4]=ECanaMboxes.MBOX1.MDH.byte.BYTE4;
 		   CAN_RxBuffer[5]=ECanaMboxes.MBOX1.MDH.byte.BYTE5;
 		   CAN_RxBuffer[6]=ECanaMboxes.MBOX1.MDH.byte.BYTE6;
-				if(CAN_RxBuffer[5]==0)
+				if(CAN_RxBuffer[5]==1)//index to indentify base number
 				{
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
@@ -690,11 +690,11 @@ void main(void)
 				
 				if(CAN_RxBuffer[3]==1)
 				{
-					dir_flag_for_guidence=0;
+					dir_flag_for_guidence=1;
 				}
 				else
 				{
-					dir_flag_for_guidence=1;
+					dir_flag_for_guidence=0;
 				}
 				if(CAN_RxBuffer[7]==1)
 				{
@@ -904,19 +904,19 @@ void main(void)
 						else
 						{
 							//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-							swing_speed=PRD*((float)x_bias/18);
+							swing_speed=PRD*((float)x_bias/30);
 						
 						}
 						EPwm1Regs.TBPRD=swing_speed;
-						EPwm1Regs.CMPA.half.CMPA=swing_speed/20;
+						EPwm1Regs.CMPA.half.CMPA=swing_speed/2;
 						if(x_bias_dir==0)
 						{
-							dir=0;
+							dir=1;
 							
 						}
 						else
 						{
-							dir=1;
+							dir=0;
 							
 						}
 						Driver1(dir,1);
@@ -933,7 +933,7 @@ void main(void)
 						
 						}
 						EPwm2Regs.TBPRD=swing_speed_y;
-						EPwm2Regs.CMPA.half.CMPA=swing_speed_y/20;
+						EPwm2Regs.CMPA.half.CMPA=swing_speed_y/2;
 						if(y_bias_dir==0)
 						{
 							dir1=0;
@@ -1118,30 +1118,7 @@ interrupt  void EPWM1_int(void)
 	
 	EPwm1Regs.ETCLR.bit.INT=1;///////////////////////////////////
 	PieCtrlRegs.PIEACK.all = PIEACK_GROUP3;////the two statments are used to clear the flags of interrupt
-	if(EPwm1Regs.CMPA.half.CMPA !=0)
-	{
-		FinishStepFlag=NOTFINISH;
-		PwmOneStepFinishFlag++;
-//		if(dir==0)
-//			{
-//				angle--;	
-//			}
-//			else
-//			{
-//				if(dir==1)
-//				{
-//					angle++;
-//				}
-//			}
-	}
-	
-	
-	if(PwmOneStepFinishFlag>N)
-	{
-	PwmOneStepFinishFlag=0;	
-	FinishStepFlag=FINISH;
-	  EPwm1Regs.CMPA.half.CMPA =0; 
-	}
+
 }
 
 interrupt  void EPWM2_int(void)
