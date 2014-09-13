@@ -651,13 +651,13 @@ void main(void)
 		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 
 		{
 		  	
-	       ECanaShadow.CANRMP.all = 0;
-	       ECanaShadow.CANRMP.bit.RMP2 = 1;     	 // Clear RMP20
-	       ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
+	      ECanaShadow.CANRMP.all = 0;
+				ECanaShadow.CANRMP.bit.RMP2 = 1;     	 // Clear RMP20
+				ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
 	       
 	            CAN_RxBuffer[0]=ECanaMboxes.MBOX2.MDL.byte.BYTE0;
 	            CAN_RxBuffer[1]=ECanaMboxes.MBOX2.MDL.byte.BYTE1;
-	            CAN_RxBuffer[2]=ECanaMboxes.MBOX2.MDL.byte.BYTE2;////base index:0
+	            CAN_RxBuffer[2]=ECanaMboxes.MBOX2.MDL.byte.BYTE2;
 		
 	            CAN_RxBuffer[3]=ECanaMboxes.MBOX2.MDL.byte.BYTE3;
 				CAN_RxBuffer[4]=ECanaMboxes.MBOX2.MDH.byte.BYTE4;
@@ -665,18 +665,48 @@ void main(void)
 				CAN_RxBuffer[6]=ECanaMboxes.MBOX2.MDH.byte.BYTE6;
 				CAN_RxBuffer[7]=ECanaMboxes.MBOX2.MDH.byte.BYTE7;
 				
-				if(CAN_RxBuffer[2]==0x00)
+				distance_valid_flag  =(CAN_RxBuffer[2]);
+				
+				if(CAN_RxBuffer[1]==1)
+				{
+					x_bias_dir=1;
+				}
+				else
+				{
+					x_bias_dir=0;
+				}
+				if(CAN_RxBuffer[5]==1)
+				{
+					y_bias_dir=1;
+				}
+				else
+				{
+					y_bias_dir=0;
+				}
+				
+				
+				x_bias=CAN_RxBuffer[0];////
+				y_bias=CAN_RxBuffer[4];/////0001 1111
+				
+				if(CAN_RxBuffer[3]==1)
+				{
+					dir_flag_for_guidence=0;
+				}
+				else
+				{
+					dir_flag_for_guidence=1;
+				}
+				if(CAN_RxBuffer[7]==1)
 				{
 				
-				distance_valid_flag  =(CAN_RxBuffer[1]>>7);
-				x_bias_dir=CAN_RxBuffer[1]&0x40;
-				y_bias_dir=CAN_RxBuffer[1]&0x20;
-				
-				x_bias=CAN_RxBuffer[7];////
-				y_bias=CAN_RxBuffer[1]&(0x1f);/////0001 1111
-				
-		          if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE&&OutOfWork==FALSE)/////distance valid and itself should work
-		            {
+					dir1_flag_for_guidence=1;
+				}
+				else
+				{
+					dir1_flag_for_guidence=0;
+				}			
+ 				if(distance_valid_flag==1&&shouldTurnOffFlag==FALSE)/////distance valid and itself should work
+		        {
 		           		
 		           		
 				////////////////////////////
@@ -684,9 +714,10 @@ void main(void)
 				
 						ECanaMboxes.MBOX26.MDL.all = 0;
 					    ECanaMboxes.MBOX26.MDH.all = 0;
-					   
+					   ////////
+					   ///transformation of coordinates
 						long temp_current_x=(long)current_pos.x;
-						long temp_current_y=(long)current_pos.y;
+						long temp_current_y=(long)(-current_pos.y);
 					   
 						if(current_pos.x>0)
 						{
@@ -699,7 +730,7 @@ void main(void)
 							temp_current_x=-temp_current_x;
 							temp_current_x=(Uint32)temp_current_x;
 						}
-						if(current_pos.y>0)
+						if(temp_current_y>0)
 						{
 							ECanaMboxes.MBOX26.MDH.byte.BYTE7=0x01;  
 							 temp_current_y=(Uint32)temp_current_y;
@@ -727,107 +758,14 @@ void main(void)
 					    ECanaShadow.CANTA.all = 0;
 					    ECanaShadow.CANTA.bit.TA26 = 1; // Clear TA5
 					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-				/////////////////
-				////////////////          	
-						float angY_d_temp=GetDegreeFromCountY(angleY);
-		           		float dz =distance*sin(3.14*angY_d_temp/180);
-		           		Uint32  zAxis = dz+baseZ;
+			
 		           		
-		           		ECanaMboxes.MBOX30.MDL.byte.BYTE0=(Uint16)(((Uint32)zAxis)>>24);
-					    ECanaMboxes.MBOX30.MDL.byte.BYTE1=(Uint16)(((Uint32)zAxis)>>16);
-					    ECanaMboxes.MBOX30.MDL.byte.BYTE2=(Uint16)(zAxis>>8);
-					    ECanaMboxes.MBOX30.MDL.byte.BYTE3=(Uint16)(zAxis);
-//						ECanaMboxes.MBOX30.MDH.byte.BYTE5=(Uint16)(((Uint32)temp_current_y));
-//						ECanaMboxes.MBOX30.MDH.byte.BYTE4=(Uint16)(((Uint32)temp_current_y)>>8);
-						
-						
-					    ECanaShadow.CANTRS.all = 0;
-					    ECanaShadow.CANTRS.bit.TRS30 = 1; // Set TRS for mailbox under test
-					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-					    do // Send 00110000
-					    {
-					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-					    } while(ECanaShadow.CANTA.bit.TA30 == 0 );
-					    ECanaShadow.CANTA.all = 0;
-					    ECanaShadow.CANTA.bit.TA30 = 1; // Clear TA5
-					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-		           		
-		           	
-//						ECanaMboxes.MBOX30.MDH.byte.BYTE5=(Uint16)(((Uint32)temp_current_y));
-//						ECanaMboxes.MBOX30.MDH.byte.BYTE4=(Uint16)(((Uint32)temp_current_y)>>8);
-					/////get the x coor and y coordinates from 26 mailbox
-						ECanaMboxes.MBOX31.MDL.byte.BYTE0=ECanaMboxes.MBOX26.MDL.byte.BYTE1;
-					    ECanaMboxes.MBOX31.MDL.byte.BYTE1=ECanaMboxes.MBOX26.MDL.byte.BYTE2;
-						
-						ECanaMboxes.MBOX31.MDL.byte.BYTE2=ECanaMboxes.MBOX26.MDH.byte.BYTE4;
-						ECanaMboxes.MBOX31.MDL.byte.BYTE3=ECanaMboxes.MBOX26.MDH.byte.BYTE5;
-						
-						ECanaMboxes.MBOX31.MDH.byte.BYTE4=x_bias;
-						ECanaMboxes.MBOX31.MDH.byte.BYTE5=y_bias;
-						
-						ECanaMboxes.MBOX31.MDH.byte.BYTE6=0;
-						if(temp_current_x>0)
-						{
-						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x80;
-						}
-						if(temp_current_y>0)
-						{
-						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x40;
-						}
-						if(x_bias_dir>0)
-						{
-						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x20;
-						}
-						if(y_bias_dir>0)
-						{
-						ECanaMboxes.MBOX31.MDH.byte.BYTE6=ECanaMboxes.MBOX31.MDH.byte.BYTE6|0x10;
-						}
-					    ECanaShadow.CANTRS.all = 0;
-					    ECanaShadow.CANTRS.bit.TRS31 = 1; // Set TRS for mailbox under test
-					    ECanaRegs.CANTRS.all = ECanaShadow.CANTRS.all;
-					    do // Send 00110000
-					    {
-					      ECanaShadow.CANTA.all = ECanaRegs.CANTA.all;
-					    } while(ECanaShadow.CANTA.bit.TA31 == 0 );
-					    ECanaShadow.CANTA.all = 0;
-					    ECanaShadow.CANTA.bit.TA31 = 1; // Clear TA5
-					    ECanaRegs.CANTA.all = ECanaShadow.CANTA.all;
-		           		
-		            }
-		            else    /////distance not valid
-		            {
-		            	distance_valid_flag=FALSE;
-		            	shouldTurnOffFlag=FALSE;
-		            	//x_bais_dir=CAN_RxBuffer[1]&0x40;
-						//y_bais_dir=CAN_RxBuffer[1]&0x20;
-		            	if(x_bias_dir!=0)////lost  on the left should turn right
-		            	{
-		            		dir_flag_for_guidence=1;/////
-		            		
-		            	}
-		            	else
-		            	{
-			            	
-			            		dir_flag_for_guidence=0;/////
-			            		
-			            	
-		            	}
-		            	if(y_bias_dir!=0)////lost  on the top should turn down
-		            	{
-		            		dir1_flag_for_guidence=1;/////
-		            		
-		            	}
-		            	else
-		            	{
-			            	
-			           		dir1_flag_for_guidence=0;/////
-			            		
-		            	}
-		            	
-		            	
-		           	}
-				}
-          
+		        }
+	            else    /////distance not valid
+	            {
+	            	distance_valid_flag=FALSE;
+	            
+	           	}
 
 		 }
 		 ////////////////////////////////////
