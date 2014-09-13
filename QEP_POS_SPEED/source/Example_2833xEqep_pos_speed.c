@@ -320,15 +320,15 @@ void main(void)
 	 ECanaMboxes.MBOX1.MSGID.bit.AME=0;//屏蔽位
 	 
     
-     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_L =0x1215;//扩展帧ID：0x00111215
-     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_H=0x01;
-     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x04;//04
+     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_L =0x0017;//扩展帧ID：0x00111215
+     ECanaMboxes.MBOX2.MSGID.bit.EXTMSGID_H=0x00;
+     ECanaMboxes.MBOX2.MSGID.bit.STDMSGID=0x00;//04
      ECanaMboxes.MBOX2.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX2.MSGID.bit.AME=0;//屏蔽位
 	 
-	 ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x1219;//扩展帧ID：0x00111219
-     ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_H=0x01;
-     ECanaMboxes.MBOX3.MSGID.bit.STDMSGID=0x04;//04
+	 ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_L =0x0019;//扩展帧ID：0x00111219
+     ECanaMboxes.MBOX3.MSGID.bit.EXTMSGID_H=0x00;
+     ECanaMboxes.MBOX3.MSGID.bit.STDMSGID=0x00;//04
      ECanaMboxes.MBOX3.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX3.MSGID.bit.AME=0;//屏蔽位
 	 
