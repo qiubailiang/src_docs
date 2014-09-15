@@ -326,9 +326,9 @@ void main(void)
      ECanaMboxes.MBOX3.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX3.MSGID.bit.AME=0;//屏蔽位
 	 
-	 ECanaMboxes.MBOX4.MSGID.bit.EXTMSGID_L =0x1210;//扩展帧ID：0x00111210 switch base
-     ECanaMboxes.MBOX4.MSGID.bit.EXTMSGID_H=0x01;
-     ECanaMboxes.MBOX4.MSGID.bit.STDMSGID=0x04;//04
+	 ECanaMboxes.MBOX4.MSGID.bit.EXTMSGID_L =0x0010;//扩展帧ID：0x00000010 switch base
+     ECanaMboxes.MBOX4.MSGID.bit.EXTMSGID_H=0x00;
+     ECanaMboxes.MBOX4.MSGID.bit.STDMSGID=0x00;//04
      ECanaMboxes.MBOX4.MSGID.bit.IDE=1;//扩展帧，如为0
 	 ECanaMboxes.MBOX4.MSGID.bit.AME=0;//屏蔽位
 	 
@@ -632,7 +632,7 @@ void main(void)
 			 }
 		}
 
-		if (ECanaShadow.CANRMP.bit.RMP4 == 1)//D0  receieve 111210 //from other base--the target infor
+		if (ECanaShadow.CANRMP.bit.RMP4 == 1)//D0  receieve 0x000010 //from other base--the target infor
 		{
 		  	
 	       ECanaShadow.CANRMP.all = 0;
@@ -663,7 +663,7 @@ void main(void)
       	 
 		 }
 		 
-		 if (ECanaShadow.CANRMP.bit.RMP5 == 1)//D0  receieve 111210 //from other base--the target infor
+		 if (ECanaShadow.CANRMP.bit.RMP5 == 1)//D0  receieve 0x1010 //from other base--the laser bean Z
 		{
 		  	
 	       ECanaShadow.CANRMP.all = 0;
