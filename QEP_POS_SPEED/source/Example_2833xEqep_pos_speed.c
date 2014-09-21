@@ -122,7 +122,7 @@
 #define x_bais_thr 0x82
 #define scan_speed 3500
 #define guidance_speed_low 2500
-#define guidance_speed PRD/14
+#define guidance_speed 800
 Uint16    *ExRamStart = (Uint16 *)0x100000;
 
 void initEpwm();
@@ -628,12 +628,21 @@ void main(void)
 					
 					distance=CAN_RxBuffer[0]*10000+CAN_RxBuffer[1]*1000+CAN_RxBuffer[2]*100+CAN_RxBuffer[3]*10+CAN_RxBuffer[4];// 9440000个脉冲电机转动360°
 					//swing_speed = ((float)distance/(float)(PRD/4+distance))*PRD  ;  //CHANGE THE SWINGING VELOCITY
-				
+					if(distance<9000)
+					{
+						swing_speed=guidance_speed;
+					}
+					else
+					{
+						swing_speed=guidance_speed_low;
+					}
+					
+					EPwm1Regs.TBPRD=swing_speed;
 				
 				}
 				//CAN_RxBuffer[7]=ECanaMboxes.MBOX1.MDH.byte.BYTE7;
 			 	
-          		
+          
       	 
 		 }
 		 //////////////////////////////////
@@ -755,10 +764,7 @@ void main(void)
 	            else    /////distance not valid
 	            {
 	            	distance_valid_flag=FALSE;
-	            	swing_speed=guidance_speed;
-					EPwm1Regs.TBPRD=swing_speed;
-					EPwm1Regs.CMPA.half.CMPA=swing_speed/2;
-	            	
+	            
 	           	}
 
 		 }
@@ -891,27 +897,18 @@ void main(void)
 					    //then drive 
 						//
 						//Just follow on x direction
-						
-						if(x_bias<=8){
-				
+							if(x_bias<=2)
+						{
 							swing_speed=0;
 						}
 						else
 						{
-						//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
-						//swing_speed=((float)x_bias/(float)(PRD+x_bias))*PRD;
-							if(x_bias>8&&x_bias<0xA3)
-							{
-								swing_speed=PRD/10;
-							}
-							else
-							{
-								swing_speed=PRD/14;
-							}
+							//swing_speed_y=((float)y_bias/(float)(PRD/4+y_bias))*PRD;
+							swing_speed=PRD*((float)x_bias/30);
+						
 						}
 						EPwm1Regs.TBPRD=swing_speed;
-						EPwm1Regs.CMPA.half.CMPA=swing_speed/2;		
-								
+						EPwm1Regs.CMPA.half.CMPA=swing_speed/2;
 						if(x_bias_dir==0)
 						{
 							dir=1;
@@ -958,7 +955,6 @@ void main(void)
 				  
 				  else{//distance not valid so should start scan again
 				  	shouldTurnOffFlag=FALSE;
-				  	
 				  	if(dir_flag_for_guidence==0)
 				  	{
 				  		dir=1;
