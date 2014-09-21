@@ -533,7 +533,7 @@ void main(void)
 						if(temp_current_y>0)
 						{
 							ECanaMboxes.MBOX28.MDH.byte.BYTE7=0x01;  
-							 temp_current_y=(Uint32)temp_current_y;
+							temp_current_y=(Uint32)temp_current_y;
 						}
 						else
 						{
@@ -642,7 +642,7 @@ void main(void)
 		  if (ECanaShadow.CANRMP.bit.RMP2 == 1)//D0  receieve 111215 
 		{
 		  	
-	      ECanaShadow.CANRMP.all = 0;
+			  	ECanaShadow.CANRMP.all = 0;
 				ECanaShadow.CANRMP.bit.RMP2 = 1;     	 // Clear RMP20
 				ECanaRegs.CANRMP.all = ECanaShadow.CANRMP.all;
 	       
@@ -1251,6 +1251,60 @@ void scanY()
    	 	
    	 	driveY(1);
 }
+
+void epwm(float x_bisa,float distance)
+{
+	int t=2;
+	if(distance<1000)
+		{
+		swing_speed=PRD/(4*t);
+		}
+	if(distance>=1000&&distance<5000)
+	{
+		if(x_bisa<=20)
+			{swing_speed=PRD/(4*t);}
+		if(x_bisa>20&&x_bisa<=100)
+			{swing_speed=PRD/(5*t);}
+		if(x_bisa>100&&x_bisa<=170)
+			{swing_speed=PRD/(6*t);}
+	}
+	if(distance>=5000&&distance<10000)
+		{
+		if(x_bisa<=20)
+			{swing_speed=PRD/(5*t);}
+		if(x_bisa>20&&x_bisa<=100)
+			{swing_speed=PRD/(6*t);}
+		if(x_bisa>100&&x_bisa<=170)
+			{swing_speed=PRD/(7*t);}
+		}
+
+	if(distance>=10000&&distance<15000)
+	{
+		if(x_bisa<=20)
+			{swing_speed=PRD/(6*t);}
+		if(x_bisa>20&&x_bisa<=100)
+			{swing_speed=PRD/(7*t);}
+		if(x_bisa>100&&x_bisa<=170)
+			{swing_speed=PRD/(8*t);}
+	}
+	if(distance>=15000&&distance<25000)
+	{
+		if(x_bisa<=20)
+			{swing_speed=PRD/(7*t);}
+		if(x_bisa>20&&x_bisa<=100)
+			{swing_speed=PRD/(8*t);}
+		if(x_bisa>100&&x_bisa<=170)
+			{swing_speed=PRD/(9*t);}
+	}
+	if(distance>=25000)
+		{
+		swing_speed=PRD/(10*t);
+		}
+	EPwm1Regs.TBPRD=swing_speed;
+	EPwm1Regs.CMPA.half.CMPA=swing_speed/2;
+}
+
+
 float Arc2Degree(float arc)
 {
 
@@ -1307,4 +1361,6 @@ void follow(float targetX,float targetY)
     drive(1);
     
 }
+
+
 
